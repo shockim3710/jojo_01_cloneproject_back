@@ -21,7 +21,7 @@ public class CategoryXlController {
     }
 
     @GetMapping("/categoryXl/getAll")
-    public List<CategoryXl> getAll() {
-        return iCategoryXlService.getAll();
+    public List<CategoryXl> getAllCategory() {
+        return iCategoryXlService.getAllCategory();
     }
 }

@@ -21,7 +21,7 @@ public class CategoryLController {
     }
 
     @GetMapping("/categoryL/getAll")
-    public List<CategoryL> getAll() {
-        return iCategoryLService.getAll();
+    public List<CategoryL> getAllCategory() {
+        return iCategoryLService.getAllCategory();
     }
 }

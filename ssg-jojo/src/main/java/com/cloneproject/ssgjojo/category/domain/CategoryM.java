@@ -1,9 +1,18 @@
 package com.cloneproject.ssgjojo.category.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "m_category")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class CategoryM {
 
     @Id
@@ -11,5 +20,6 @@ public class CategoryM {
 
     private Long id;
     private String mName;
-    private String mImgPath;
+
+//    private CategoryL categoryL;
 }

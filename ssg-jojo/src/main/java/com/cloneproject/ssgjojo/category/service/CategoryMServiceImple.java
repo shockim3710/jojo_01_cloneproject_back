@@ -32,7 +32,7 @@ public class CategoryMServiceImple implements ICategoryMService {
     }
 
     @Override
-    public List<CategoryM> getAll() {
+    public List<CategoryM> getAllCategory() {
         return iCategoryRepositoryM.findAll();
     }
 

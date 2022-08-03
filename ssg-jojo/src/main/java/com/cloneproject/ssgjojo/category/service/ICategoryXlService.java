@@ -9,7 +9,7 @@ public interface ICategoryXlService {
     CategoryXl addCategory(CategoryXl categoryXl);
     CategoryXl getCategoryById(Long id);
     CategoryXl editCategory(CategoryXl categoryXl);
-    List<CategoryXl> getAll();
+    List<CategoryXl> getAllCategory();
 
     void deleteCategory(Long id);
 

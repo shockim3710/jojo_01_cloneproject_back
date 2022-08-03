@@ -10,7 +10,7 @@ public interface ICategoryMService {
     CategoryM addCategory(CategoryM categoryM);
     CategoryM getCategoryById(Long id);
     CategoryM editCategory(CategoryM categoryM);
-    List<CategoryM> getAll();
+    List<CategoryM> getAllCategory();
 
     void deleteCategory(Long id);
 }

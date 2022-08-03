@@ -31,7 +31,7 @@ public class CategoryXlServiceImple implements ICategoryXlService{
     }
 
     @Override
-    public List<CategoryXl> getAll() {
+    public List<CategoryXl> getAllCategory() {
         log.info("getAll category");
         return iCategoryRepositoryXl.findAll();
     }
