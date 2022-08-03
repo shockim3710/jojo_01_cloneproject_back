@@ -15,7 +15,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 @Entity // DB가 해당 객체를 인식 가능
-@DynamicInsert
 
 public class User {
 
@@ -39,18 +38,14 @@ public class User {
     private String phone; // 전화번호
 
     @Column(nullable = false)
-    private String email; // 이메일
-
-    @ColumnDefault("'Membership'")
-    private String isMembership; // 비회원 여부
-
-    private String leaveDate; // 탈퇴 날짜
-
-    private String joinDate; // 가입 날짜
-
-    @ColumnDefault("'Friends'")
-    private String membershipLevel; // 회원 등급
+    private String lName; // 이메일
 
     @Column(nullable = false)
     private String gender; // 성별
+
+    private String membershipLevel; // 회원 등급
+
+    private String joinDate; // 가입 날짜
+
+    private String leaveDate; // 탈퇴 날짜
 }

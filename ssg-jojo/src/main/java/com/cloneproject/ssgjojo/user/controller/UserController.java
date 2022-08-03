@@ -1,6 +1,7 @@
 package com.cloneproject.ssgjojo.user.controller;
 
 import com.cloneproject.ssgjojo.user.domain.User;
+import com.cloneproject.ssgjojo.user.dto.UserDtoInput;
 import com.cloneproject.ssgjojo.user.service.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -16,9 +17,9 @@ public class UserController {
     private final IUserService iUserService;
 
     @PostMapping("/user/signup") // 회원가입
-    public User addUser(@RequestBody User user) {
+    public User addUser(@RequestBody UserDtoInput userDtoInput) {
 
-        return iUserService.addUser(user);
+        return iUserService.addUser(userDtoInput);
     }
 
     @GetMapping("/user/get/{id}") // 마이페이지
