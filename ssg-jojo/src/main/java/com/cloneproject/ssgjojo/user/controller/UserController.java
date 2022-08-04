@@ -2,6 +2,7 @@ package com.cloneproject.ssgjojo.user.controller;
 
 import com.cloneproject.ssgjojo.user.domain.User;
 import com.cloneproject.ssgjojo.user.dto.UserDtoInput;
+import com.cloneproject.ssgjojo.user.dto.UserDtoOutput;
 import com.cloneproject.ssgjojo.user.service.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -23,24 +24,23 @@ public class UserController {
     }
 
     @GetMapping("/user/get/{id}") // 마이페이지
-    public User getUser(@PathVariable Long id) {
+    public UserDtoOutput getUser(@PathVariable Long id) {
         return iUserService.getUserById(id);
     }
 
     @GetMapping("/user/getAll") // 회원 조회
-    public List<User> getAll() {
-
+    public List<UserDtoOutput> getAll() {
         return iUserService.getAll();
     }
 
-    @DeleteMapping("/user/delete/{id}") // 회원 탈퇴
-    public void deleteUser(@PathVariable Long id) {
-        iUserService.deleteUser(id);
+    @PutMapping("/user/edit") // 회원 정보 수정
+    public User editUser(@RequestBody UserDtoOutput userDtoOutput) {
+        return iUserService.editUser(userDtoOutput);
     }
 
-    @PutMapping("/user/edit") // 회원 정보 수정
-    public User editUser(@RequestBody User user) {
-        return iUserService.editUser(user);
+    @PutMapping("/user/delete") // 회원 탈퇴
+    public void deleteUser(@PathVariable UserDtoInput userDtoInput) {
+        iUserService.deleteUser(userDtoInput);
     }
 
 }

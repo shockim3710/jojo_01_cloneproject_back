@@ -5,6 +5,7 @@ import lombok.Data;
 @Data
 public class UserDtoInput {
 
+    private Long id; // 기본키
     private String userId; // 아이디
     private String password; // 비밀번호
     private String name; // 이름
@@ -13,9 +14,5 @@ public class UserDtoInput {
     private String email; // 이메일
     private String gender; // 성별
     private String membershipLevel; // 회원 등급
-    private String joinDate; // 가입 날짜
-//    private String leaveDate; // 탈퇴 날짜
-
-
-
+    private Boolean isLeave; // 탈퇴 여부
 }
