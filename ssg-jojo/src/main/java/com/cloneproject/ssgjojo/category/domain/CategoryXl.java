@@ -19,6 +19,6 @@ public class CategoryXl {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     private Long id;
-    private String xlName;
+    private String xlcategoryname;
     private String xlImgPath;
 }

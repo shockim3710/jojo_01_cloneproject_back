@@ -1,6 +1,7 @@
 package com.cloneproject.ssgjojo.category.controller;
 
 import com.cloneproject.ssgjojo.category.domain.CategoryL;
+import com.cloneproject.ssgjojo.category.dto.CategoryLDto;
 import com.cloneproject.ssgjojo.category.service.ICategoryLService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -16,8 +17,9 @@ public class CategoryLController {
     private final ICategoryLService iCategoryLService;
 
     @PostMapping("/categoryL/add")
-    public CategoryL addCategory(@RequestBody CategoryL categoryL) {
-        return iCategoryLService.addCategory(categoryL);
+    public CategoryL addCategory(@RequestBody CategoryLDto categoryLDto) {
+
+        return iCategoryLService.addCategory(categoryLDto);
     }
 
     @GetMapping("/categoryL/getAll")

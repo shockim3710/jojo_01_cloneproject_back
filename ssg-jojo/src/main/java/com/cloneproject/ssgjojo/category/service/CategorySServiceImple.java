@@ -1,6 +1,9 @@
 package com.cloneproject.ssgjojo.category.service;
 
+import com.cloneproject.ssgjojo.category.domain.CategoryM;
 import com.cloneproject.ssgjojo.category.domain.CategoryS;
+import com.cloneproject.ssgjojo.category.dto.CategorySDto;
+import com.cloneproject.ssgjojo.category.repository.ICategoryRepositoryM;
 import com.cloneproject.ssgjojo.category.repository.ICategoryRepositoryS;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,10 +17,16 @@ import java.util.List;
 public class CategorySServiceImple implements ICategorySService{
 
     private final ICategoryRepositoryS iCategoryRepositoryS;
+    private final ICategoryRepositoryM iCategoryRepositoryM;
 
     @Override
-    public CategoryS addCategory(CategoryS categoryS) {
-        return iCategoryRepositoryS.save(categoryS);
+    public CategoryS addCategory(CategorySDto categorySDto) {
+
+        //       return iCategoryRepositoryS.save(categoryS);
+        return iCategoryRepositoryS.save(CategoryS.builder()
+                .scategoryname(categorySDto.getScategoryname())
+                .categoryM(iCategoryRepositoryM.findById(categorySDto.getCategoryM()).get())
+                .build());
     }
 
     @Override

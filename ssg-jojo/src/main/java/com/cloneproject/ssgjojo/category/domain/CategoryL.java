@@ -19,7 +19,8 @@ public class CategoryL {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     private Long id;
-    private String lName;
+    private String lcategoryname;
 
-//    private CategoryXl categoryXl;
+    @ManyToOne
+    private CategoryXl categoryXl;
 }

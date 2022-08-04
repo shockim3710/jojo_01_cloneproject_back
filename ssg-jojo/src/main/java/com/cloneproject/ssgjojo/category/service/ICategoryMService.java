@@ -2,12 +2,13 @@ package com.cloneproject.ssgjojo.category.service;
 
 import com.cloneproject.ssgjojo.category.domain.CategoryM;
 import com.cloneproject.ssgjojo.category.domain.CategoryXl;
+import com.cloneproject.ssgjojo.category.dto.CategoryMDto;
 
 import java.util.List;
 
 public interface ICategoryMService {
 
-    CategoryM addCategory(CategoryM categoryM);
+    CategoryM addCategory(CategoryMDto categoryMDto);
     CategoryM getCategoryById(Long id);
     CategoryM editCategory(CategoryM categoryM);
     List<CategoryM> getAllCategory();
