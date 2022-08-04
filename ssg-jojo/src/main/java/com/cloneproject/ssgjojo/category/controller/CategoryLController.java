@@ -26,4 +26,9 @@ public class CategoryLController {
     public List<CategoryL> getAllCategory() {
         return iCategoryLService.getAllCategory();
     }
+
+    @PutMapping("/categoryL/edit")
+    public CategoryL editCategory(@RequestBody CategoryLDto categoryLDto) {
+        return iCategoryLService.editCategory(categoryLDto);
+    }
 }

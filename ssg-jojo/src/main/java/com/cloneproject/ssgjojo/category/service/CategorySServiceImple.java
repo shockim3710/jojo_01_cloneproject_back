@@ -22,7 +22,7 @@ public class CategorySServiceImple implements ICategorySService{
     @Override
     public CategoryS addCategory(CategorySDto categorySDto) {
 
-        //       return iCategoryRepositoryS.save(categoryS);
+//      return iCategoryRepositoryS.save(categoryS);
         return iCategoryRepositoryS.save(CategoryS.builder()
                 .scategoryname(categorySDto.getScategoryname())
                 .categoryM(iCategoryRepositoryM.findById(categorySDto.getCategoryM()).get())
@@ -35,8 +35,13 @@ public class CategorySServiceImple implements ICategorySService{
     }
 
     @Override
-    public CategoryS editCategory(CategoryS categoryS) {
-        return iCategoryRepositoryS.save(categoryS);
+    public CategoryS editCategory(CategorySDto categorySDto) {
+
+//      return iCategoryRepositoryS.save(categoryS);
+        return iCategoryRepositoryS.save(CategoryS.builder()
+                .scategoryname(categorySDto.getScategoryname())
+                .categoryM(iCategoryRepositoryM.findById(categorySDto.getCategoryM()).get())
+                .build());
     }
 
     @Override

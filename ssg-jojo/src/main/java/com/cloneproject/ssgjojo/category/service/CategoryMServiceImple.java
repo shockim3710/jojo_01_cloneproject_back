@@ -36,8 +36,13 @@ public class CategoryMServiceImple implements ICategoryMService {
     }
 
     @Override
-    public CategoryM editCategory(CategoryM categoryM) {
-        return iCategoryRepositoryM.save(categoryM);
+    public CategoryM editCategory(CategoryMDto categoryMDto) {
+
+//      return iCategoryRepositoryM.save(categoryM);
+        return iCategoryRepositoryM.save(CategoryM.builder()
+                .mcategoryname(categoryMDto.getMcategoryname())
+                .categoryL(iCategoryRepositoryL.findById(categoryMDto.getCategoryL()).get())
+                .build());
     }
 
     @Override

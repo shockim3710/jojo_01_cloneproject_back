@@ -1,7 +1,6 @@
 package com.cloneproject.ssgjojo.category.service;
 
 import com.cloneproject.ssgjojo.category.domain.CategoryL;
-import com.cloneproject.ssgjojo.category.domain.CategoryXl;
 import com.cloneproject.ssgjojo.category.dto.CategoryLDto;
 import com.cloneproject.ssgjojo.category.repository.ICategoryRepositoryL;
 import com.cloneproject.ssgjojo.category.repository.ICategoryRepositoryXl;
@@ -44,10 +43,13 @@ public class CategoryLServiceImple implements ICategoryLService {
 //    }
 
     @Override
-    public CategoryLDto editCategory(CategoryLDto categoryLDto) {
+    public CategoryL editCategory(CategoryLDto categoryLDto) {
 
 //      return iCategoryRepositoryL.save(categoryL);
-        return null;
+        return iCategoryRepositoryL.save(CategoryL.builder()
+                .lcategoryname(categoryLDto.getLcategoryname())
+                .categoryXl(iCategoryRepositoryXl.findById(categoryLDto.getCategoryXl()).get())
+                .build());
     }
 
     @Override

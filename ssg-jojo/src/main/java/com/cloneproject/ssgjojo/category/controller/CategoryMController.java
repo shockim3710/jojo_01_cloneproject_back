@@ -25,4 +25,9 @@ public class CategoryMController {
     public List<CategoryM> getAllCategory() {
         return iCategoryMService.getAllCategory();
     }
+
+    @PutMapping("/categoryM/edit")
+    public CategoryM editCategory(@RequestBody CategoryMDto categoryMDto) {
+        return iCategoryMService.editCategory(categoryMDto);
+    }
 }

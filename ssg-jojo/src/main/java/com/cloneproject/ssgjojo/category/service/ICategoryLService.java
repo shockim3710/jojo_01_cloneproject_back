@@ -9,7 +9,7 @@ public interface ICategoryLService {
 
     CategoryL addCategory(CategoryLDto categoryLDto);
 //    CategoryLDto getCategoryById(Long id);
-    CategoryLDto editCategory(CategoryLDto categoryLDto);
+    CategoryL editCategory(CategoryLDto categoryLDto);
     List<CategoryL> getAllCategory();
 
     void deleteCategory(Long id);
