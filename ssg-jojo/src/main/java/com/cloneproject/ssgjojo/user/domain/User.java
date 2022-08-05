@@ -21,6 +21,7 @@ public class User extends BaseTimeEntity {
     private Long id; // 기본키
 
     @Column(nullable = false)
+
     private String userId; // 아이디
 
     @Column(nullable = false)

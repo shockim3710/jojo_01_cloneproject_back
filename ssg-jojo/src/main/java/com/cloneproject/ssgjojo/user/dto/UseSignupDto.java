@@ -4,18 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.LastModifiedDate;
-
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserGetAllDto {
+public class UseSignupDto {
 
-    private Long id; // 기본키
     private String userId; // 아이디
     private String password; // 비밀번호
     private String name; // 이름

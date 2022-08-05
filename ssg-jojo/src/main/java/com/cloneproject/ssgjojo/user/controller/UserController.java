@@ -17,9 +17,9 @@ public class UserController {
     private final IUserService iUserService;
 
     @PostMapping("/user/signup") // 회원가입
-    public User addUser(@RequestBody UserSignupDto userSignupDto) {
+    public User addUser(@RequestBody UseSignupDto useSignupDto) {
 
-        return iUserService.addUser(userSignupDto);
+        return iUserService.addUser(useSignupDto);
     }
 
     @GetMapping("/user/get/{id}") // 마이페이지
@@ -37,9 +37,14 @@ public class UserController {
         return iUserService.editUser(userEditDto);
     }
 
+//    @PutMapping("/user/delete") // 회원 탈퇴
+//    public void deleteUser(@PathVariable UserEditDto userEditDto) {
+//        iUserService.deleteUser(userEditDto);
+//    }
+
     @PutMapping("/user/delete") // 회원 탈퇴
-    public void deleteUser(@PathVariable UserDeleteDto userDeleteDto) {
-        iUserService.deleteUser(userDeleteDto);
+    public User deleteUser(@RequestBody UserEditDto userEditDto) {
+        return iUserService.deleteUser(userEditDto);
     }
 
 }
