@@ -33,7 +33,6 @@ public class CategoryLv1ServiceImple implements ICategoryLv1Service {
 
     @Override
     public List<CategoryLv1> getAllCategory() {
-        log.info("getAll category");
         return iCategoryLv1Repository.findAll();
     }
 

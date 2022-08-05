@@ -39,6 +39,7 @@ public class CategoryLv3ServiceImple implements ICategoryLv3Service {
 
 //      return iCategoryRepositoryM.save(categoryM);
         return iCategoryLv3Repository.save(CategoryLv3.builder()
+                .id(categoryLv3Dto.getId())
                 .lv3name(categoryLv3Dto.getLv3name())
                 .categoryLv2(iCategoryLv2Repository.findById(categoryLv3Dto.getCategoryLv2()).get())
                 .build());

@@ -1,5 +1,6 @@
 package com.cloneproject.ssgjojo.categoryLv2.service;
 
+import com.cloneproject.ssgjojo.categoryLv1.domain.CategoryLv1;
 import com.cloneproject.ssgjojo.categoryLv2.domain.CategoryLv2;
 import com.cloneproject.ssgjojo.categoryLv2.dto.CategoryLv2Dto;
 import com.cloneproject.ssgjojo.categoryLv2.repository.ICategoryLv2Repository;
@@ -32,22 +33,17 @@ public class CategoryLv2ServiceImple implements ICategoryLv2Service {
                  .build());
     }
 
-//    @Override
-//    public CategoryLDto getCategoryById(Long id) {
-//
-//        CategoryL categoryL = iCategoryRepositoryL.findById(id).get();
-//        return CategoryLDto.builder()
-//                .id(categoryL.getId())
-//                .xlcategoryname(categoryL.getCategoryXl().getxlcategoryname())
-////              .xlId((categoryL.getCategoryXl().getId()))
-//                .build();
-//    }
+    @Override
+    public CategoryLv2 getCategoryById(Long id) {
+        return iCategoryLv2Repository.findById(id).get();
+    }
 
     @Override
     public CategoryLv2 editCategory(CategoryLv2Dto categoryLv2Dto) {
 
 //      return iCategoryRepositoryL.save(categoryL);
         return iCategoryLv2Repository.save(CategoryLv2.builder()
+                .id(categoryLv2Dto.getId())
                 .lv2name(categoryLv2Dto.getLv2name())
                 .categoryLv1(iCategoryLv1Repository.findById(categoryLv2Dto.getCategoryLv1()).get())
                 .build());

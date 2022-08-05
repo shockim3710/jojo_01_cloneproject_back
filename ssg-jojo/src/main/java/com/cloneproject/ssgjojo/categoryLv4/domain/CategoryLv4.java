@@ -19,7 +19,6 @@ public class CategoryLv4 {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     private Long id;
     private String lv4name;
 

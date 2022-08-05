@@ -1,5 +1,6 @@
 package com.cloneproject.ssgjojo.categoryLv3.controller;
 
+import com.cloneproject.ssgjojo.categoryLv2.domain.CategoryLv2;
 import com.cloneproject.ssgjojo.categoryLv3.domain.CategoryLv3;
 import com.cloneproject.ssgjojo.categoryLv3.dto.CategoryLv3Dto;
 import com.cloneproject.ssgjojo.categoryLv3.service.ICategoryLv3Service;
@@ -29,5 +30,15 @@ public class CategoryLv3Controller {
     @PutMapping("/category/Lv3/edit")
     public CategoryLv3 editCategory(@RequestBody CategoryLv3Dto categoryLv3Dto) {
         return iCategoryLv3Service.editCategory(categoryLv3Dto);
+    }
+
+    @DeleteMapping("/category/Lv3/{id}")
+    public void deleteCategory(@PathVariable Long id) {
+        iCategoryLv3Service.deleteCategory(id);
+    }
+
+    @GetMapping("/category/Lv3/{id}")
+    public CategoryLv3 getCategoryById(@PathVariable Long id) {
+        return iCategoryLv3Service.getCategoryById(id);
     }
 }
