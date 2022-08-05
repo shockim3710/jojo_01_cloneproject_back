@@ -1,17 +1,16 @@
 package com.cloneproject.ssgjojo.user.service;
 
 import com.cloneproject.ssgjojo.user.domain.User;
-import com.cloneproject.ssgjojo.user.dto.UserDtoInput;
-import com.cloneproject.ssgjojo.user.dto.UserDtoOutput;
+import com.cloneproject.ssgjojo.user.dto.*;
 
 import java.util.List;
 
 public interface IUserService {
 
-    User addUser(UserDtoInput userDtoInput);
-    UserDtoOutput getUserById(Long id);
-    User editUser(UserDtoOutput userDtoOutput);
-    List<UserDtoOutput> getAll();
+    User addUser(UserSignupDto userSignupDto);
+    UserGetIdDto getUserById(Long id);
+    User editUser(UserEditDto userEditDto);
+    List<UserGetAllDto> getAll();
 
-    User deleteUser(UserDtoInput userDtoInput);
+    User deleteUser(UserDeleteDto userDeleteDto);
 }
