@@ -28,12 +28,12 @@ public class UserController {
     }
 
     @GetMapping("/user/getAll") // 회원 조회
-    public List<UserGetAllDto> getAll() {
+    public List<UserEditGetAllDto> getAll() {
         return iUserService.getAll();
     }
 
     @PutMapping("/user/edit") // 회원 정보 수정
-    public User editUser(@RequestBody UserEditDto userEditDto) {
+    public User editUser(@RequestBody UserEditGetAllDto userEditDto) {
         return iUserService.editUser(userEditDto);
     }
 
@@ -42,9 +42,9 @@ public class UserController {
 //        iUserService.deleteUser(userEditDto);
 //    }
 
-    @PutMapping("/user/delete") // 회원 탈퇴
-    public User deleteUser(@RequestBody UserEditDto userEditDto) {
-        return iUserService.deleteUser(userEditDto);
+    @PutMapping("/user/delete/{id}") // 회원 탈퇴
+    public User deleteUser(@PathVariable Long id) {
+        return iUserService.deleteUser(id);
     }
 
 }

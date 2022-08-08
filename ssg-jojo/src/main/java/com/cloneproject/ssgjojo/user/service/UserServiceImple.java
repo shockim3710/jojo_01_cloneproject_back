@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,12 +58,12 @@ public class UserServiceImple implements IUserService{
 
 
     @Override
-    public List<UserGetAllDto> getAll() { // 회원 조회
+    public List<UserEditGetAllDto> getAll() { // 회원 조회
         List<User> userList = iUserRepository.findAll();
-        List<UserGetAllDto> userDtoUserGetAllDtoList = new ArrayList<>();
+        List<UserEditGetAllDto> userDtoUserGetAllDtoList = new ArrayList<>();
 
         userList.forEach( user -> {
-            userDtoUserGetAllDtoList.add(UserGetAllDto.builder()
+            userDtoUserGetAllDtoList.add(UserEditGetAllDto.builder()
                     .userId(user.getUserId())
                     .id(user.getId())
                     .birth(user.getBirth())
@@ -80,8 +81,10 @@ public class UserServiceImple implements IUserService{
         return userDtoUserGetAllDtoList;
     }
 
+
+
     @Override
-    public User editUser(UserEditDto userEditDto) { // 회원 정보 수정
+    public User editUser(UserEditGetAllDto userEditDto) { // 회원 정보 수정
         userEditDto.setIsLeave(false);
 
         return iUserRepository.save(User.builder()
@@ -99,20 +102,23 @@ public class UserServiceImple implements IUserService{
     }
 
     @Override
-    public User deleteUser(UserEditDto userEditDto) { // 회원 탈퇴
-        userEditDto.setIsLeave(true);
+    @Transactional
+    public User deleteUser(Long id) { // 회원 탈퇴
+        if(iUserRepository.findById(id).isEmpty())
+            throw new IllegalArgumentException("존재하지않는 유저입니다.");
 
-        return iUserRepository.save(User.builder()
-                .id(userEditDto.getId())
-                .userId(userEditDto.getUserId())
-                .password(userEditDto.getPassword())
-                .name(userEditDto.getName())
-                .birth(userEditDto.getBirth())
-                .phone(userEditDto.getPhone())
-                .email(userEditDto.getEmail())
-                .gender(userEditDto.getGender())
-                .membershipLevel(userEditDto.getMembershipLevel())
+        User user = iUserRepository.findById(id).get();
+        user.setIsLeave(true);
+
+        return user;
+
+
+        /*
+         * ExceptionHandler를 활용해서 서비스에서 던져주면 컨트롤러에서 처리할 수 있음
+         */
+        /*return iUserRepository.save(User.builder()
                 .isLeave(userEditDto.getIsLeave()) // (회원 탈퇴)
-                .build());
+                .build());*/
     }
+
 }
