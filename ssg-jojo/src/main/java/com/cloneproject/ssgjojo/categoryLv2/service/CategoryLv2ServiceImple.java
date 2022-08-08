@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -25,12 +26,15 @@ public class CategoryLv2ServiceImple implements ICategoryLv2Service {
     @Override
     public CategoryLv2 addCategory(CategoryLv2Dto categoryLv2Dto) {
 
-//       return iCategoryRepositoryL.save(categoryLDto);
+        Optional<CategoryLv1> temp = iCategoryLv1Repository.findById(categoryLv2Dto.getCategoryLv1());
+        if(temp.isPresent()) {
+            return iCategoryLv2Repository.save(CategoryLv2.builder()
+                    .lv2name(categoryLv2Dto.getLv2name())
+                    .categoryLv1(iCategoryLv1Repository.findById(categoryLv2Dto.getCategoryLv1()).get())
+                    .build());
+        }
 
-         return iCategoryLv2Repository.save(CategoryLv2.builder()
-                 .lv2name(categoryLv2Dto.getLv2name())
-                 .categoryLv1(iCategoryLv1Repository.findById(categoryLv2Dto.getCategoryLv1()).get())
-                 .build());
+        return null;
     }
 
     @Override
@@ -41,12 +45,17 @@ public class CategoryLv2ServiceImple implements ICategoryLv2Service {
     @Override
     public CategoryLv2 editCategory(CategoryLv2Dto categoryLv2Dto) {
 
-//      return iCategoryRepositoryL.save(categoryL);
-        return iCategoryLv2Repository.save(CategoryLv2.builder()
-                .id(categoryLv2Dto.getId())
-                .lv2name(categoryLv2Dto.getLv2name())
-                .categoryLv1(iCategoryLv1Repository.findById(categoryLv2Dto.getCategoryLv1()).get())
-                .build());
+        Optional<CategoryLv1> categoryLv1 = iCategoryLv1Repository.findById(categoryLv2Dto.getCategoryLv1());
+        Optional<CategoryLv2> categoryLv2 = iCategoryLv2Repository.findById(categoryLv2Dto.getId());
+        if(categoryLv1.isPresent() && categoryLv2.isPresent()) {
+            return iCategoryLv2Repository.save(CategoryLv2.builder()
+                    .id(categoryLv2Dto.getId())
+                    .lv2name(categoryLv2Dto.getLv2name())
+                    .categoryLv1(iCategoryLv1Repository.findById(categoryLv2Dto.getCategoryLv1()).get())
+                    .build());
+        }
+
+        return null;
     }
 
     @Override
@@ -57,6 +66,9 @@ public class CategoryLv2ServiceImple implements ICategoryLv2Service {
 
     @Override
     public void deleteCategory(Long id) {
-        iCategoryLv2Repository.deleteById(id);
+        Optional<CategoryLv2> temp = iCategoryLv2Repository.findById(id);
+        if(temp.isPresent()) {
+            iCategoryLv2Repository.deleteById(id);
+        }
     }
 }
