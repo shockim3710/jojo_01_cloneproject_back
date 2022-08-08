@@ -3,7 +3,6 @@ package com.cloneproject.ssgjojo.user.service;
 import com.cloneproject.ssgjojo.user.domain.User;
 import com.cloneproject.ssgjojo.user.dto.*;
 import com.cloneproject.ssgjojo.user.repository.IUserRepository;
-import com.cloneproject.ssgjojo.util.BaseTimeEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -14,7 +13,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class IUserServiceImple implements IUserService{
+public class UserServiceImple implements IUserService{
 
     private final IUserRepository iUserRepository;
 
