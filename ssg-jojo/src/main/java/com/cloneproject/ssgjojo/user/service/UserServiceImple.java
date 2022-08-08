@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -40,19 +41,23 @@ public class UserServiceImple implements IUserService{
 
     @Override
     public UserGetIdDto getUserById(Long id) { // 마이페이지
+        Optional<User> user = iUserRepository.findById(id);
 
-        User user = iUserRepository.findById(id).get();
-        return UserGetIdDto.builder()
-                .id(user.getId())
-                .userId(user.getUserId())
-                .password(user.getPassword())
-                .name(user.getName())
-                .birth(user.getBirth())
-                .phone(user.getPhone())
-                .email(user.getEmail())
-                .gender(user.getGender())
-                .membershipLevel(user.getMembershipLevel())
-                .build();
+        if(user.isPresent()) {
+            return UserGetIdDto.builder()
+                    .id(user.get().getId())
+                    .userId(user.get().getUserId())
+                    .password(user.get().getPassword())
+                    .name(user.get().getName())
+                    .birth(user.get().getBirth())
+                    .phone(user.get().getPhone())
+                    .email(user.get().getEmail())
+                    .gender(user.get().getGender())
+                    .membershipLevel(user.get().getMembershipLevel())
+                    .build();
+        }
+        
+        return null;
     }
 
 
@@ -85,32 +90,42 @@ public class UserServiceImple implements IUserService{
 
     @Override
     public User editUser(UserEditGetAllDto userEditDto) { // 회원 정보 수정
+
+        Optional<User> user = iUserRepository.findById(userEditDto.getId());
+
         userEditDto.setIsLeave(false);
 
-        return iUserRepository.save(User.builder()
-                .id(userEditDto.getId())
-                .userId(userEditDto.getUserId())
-                .password(userEditDto.getPassword()) // (회원 정보 수정)
-                .name(userEditDto.getName()) // (회원 정보 수정)
-                .birth(userEditDto.getBirth()) // (회원 정보 수정)
-                .phone(userEditDto.getPhone()) // (회원 정보 수정)
-                .email(userEditDto.getEmail()) // (회원 정보 수정)
-                .gender(userEditDto.getGender()) // (회원 정보 수정)
-                .membershipLevel(userEditDto.getMembershipLevel())
-                .isLeave(userEditDto.getIsLeave())
-                .build());
+        if(user.isPresent()) {
+            return iUserRepository.save(User.builder()
+                    .id(userEditDto.getId())
+                    .userId(userEditDto.getUserId())
+                    .password(userEditDto.getPassword()) // (회원 정보 수정)
+                    .name(userEditDto.getName()) // (회원 정보 수정)
+                    .birth(userEditDto.getBirth()) // (회원 정보 수정)
+                    .phone(userEditDto.getPhone()) // (회원 정보 수정)
+                    .email(userEditDto.getEmail()) // (회원 정보 수정)
+                    .gender(userEditDto.getGender()) // (회원 정보 수정)
+                    .membershipLevel(userEditDto.getMembershipLevel())
+                    .isLeave(userEditDto.getIsLeave())
+                    .build());
+        }
+
+        return null;
     }
 
     @Override
     @Transactional
     public User deleteUser(Long id) { // 회원 탈퇴
-        if(iUserRepository.findById(id).isEmpty())
-            throw new IllegalArgumentException("존재하지않는 유저입니다.");
+//        if(iUserRepository.findById(id).isEmpty())
+//            throw new IllegalArgumentException("존재하지않는 유저입니다.");
 
-        User user = iUserRepository.findById(id).get();
-        user.setIsLeave(true);
+        Optional<User> user = iUserRepository.findById(id);
 
-        return user;
+        if(user.isPresent()) {
+            user.get().setIsLeave(true);
+            return user.get();
+        }
+        return null;
 
 
         /*

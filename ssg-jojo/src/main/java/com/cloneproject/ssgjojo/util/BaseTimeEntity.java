@@ -25,6 +25,4 @@ public abstract class BaseTimeEntity {
     @JsonIgnore
     @UpdateTimestamp
     private Timestamp modifiedDate;
-
-
 }

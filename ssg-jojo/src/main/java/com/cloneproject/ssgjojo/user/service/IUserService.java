@@ -3,8 +3,8 @@ package com.cloneproject.ssgjojo.user.service;
 import com.cloneproject.ssgjojo.user.domain.User;
 import com.cloneproject.ssgjojo.user.dto.*;
 
-import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 public interface IUserService {
 
