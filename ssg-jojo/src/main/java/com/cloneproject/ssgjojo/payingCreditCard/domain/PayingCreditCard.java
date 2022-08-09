@@ -5,10 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Data
@@ -19,6 +16,10 @@ public class PayingCreditCard {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String creditCardName;
-    private String creditCardCompany;
+
+    @Column(nullable = false)
+    private String creditCardName;         // 신용카드 이름
+
+    @Column(nullable = false)
+    private String creditCardCompany;      // 신용카드 회사명
 }
