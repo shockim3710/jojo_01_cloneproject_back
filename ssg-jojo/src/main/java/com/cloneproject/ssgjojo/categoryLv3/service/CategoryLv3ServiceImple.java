@@ -39,7 +39,12 @@ public class CategoryLv3ServiceImple implements ICategoryLv3Service {
 
     @Override
     public CategoryLv3 getCategoryById(Long id) {
-        return iCategoryLv3Repository.findById(id).get();
+        Optional<CategoryLv3> categoryLv3 = iCategoryLv3Repository.findById(id);
+
+        if(categoryLv3.isPresent())
+            return categoryLv3.get();
+
+        return null;
     }
 
     @Override

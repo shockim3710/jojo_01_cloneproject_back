@@ -6,6 +6,7 @@ import com.cloneproject.ssgjojo.categoryLv2.dto.CategoryLv2Dto;
 import com.cloneproject.ssgjojo.categoryLv2.repository.ICategoryLv2Repository;
 import com.cloneproject.ssgjojo.categoryLv1.repository.ICategoryLv1Repository;
 import com.cloneproject.ssgjojo.categoryLv2.service.ICategoryLv2Service;
+import com.cloneproject.ssgjojo.categoryLv3.domain.CategoryLv3;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,7 +40,12 @@ public class CategoryLv2ServiceImple implements ICategoryLv2Service {
 
     @Override
     public CategoryLv2 getCategoryById(Long id) {
-        return iCategoryLv2Repository.findById(id).get();
+        Optional<CategoryLv2> categoryLv2 = iCategoryLv2Repository.findById(id);
+
+        if(categoryLv2.isPresent())
+            return categoryLv2.get();
+
+        return null;
     }
 
     @Override
@@ -60,7 +66,6 @@ public class CategoryLv2ServiceImple implements ICategoryLv2Service {
 
     @Override
     public List<CategoryLv2> getAllCategory() {
-        log.info("getAll category");
         return iCategoryLv2Repository.findAll();
     }
 

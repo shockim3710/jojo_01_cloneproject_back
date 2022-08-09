@@ -25,7 +25,12 @@ public class CategoryLv1ServiceImple implements ICategoryLv1Service {
 
     @Override
     public CategoryLv1 getCategoryById(Long id) {
-        return iCategoryLv1Repository.findById(id).get();
+        Optional<CategoryLv1> categoryLv1 = iCategoryLv1Repository.findById(id);
+
+        if(categoryLv1.isPresent())
+            return categoryLv1.get();
+
+        return null;
     }
 
     @Override
