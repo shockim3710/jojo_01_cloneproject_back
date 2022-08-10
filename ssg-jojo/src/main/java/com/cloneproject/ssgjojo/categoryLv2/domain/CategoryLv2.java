@@ -20,8 +20,9 @@ public class CategoryLv2 {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     private Long id;
+
+    @Column(nullable = false)
     private String lv2name;
 
     @ManyToOne
