@@ -3,7 +3,6 @@ package com.cloneproject.ssgjojo.loginHistory.controller;
 import com.cloneproject.ssgjojo.loginHistory.domain.LogInHistory;
 import com.cloneproject.ssgjojo.loginHistory.dto.LogInHistoryDto;
 import com.cloneproject.ssgjojo.loginHistory.service.ILogInHistoryService;
-import com.cloneproject.ssgjojo.review.domain.Review;
 import com.cloneproject.ssgjojo.user.repository.IUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

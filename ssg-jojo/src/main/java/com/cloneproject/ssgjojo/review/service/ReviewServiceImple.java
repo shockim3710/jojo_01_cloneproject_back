@@ -95,8 +95,6 @@ public class ReviewServiceImple implements IReviewService {
             if(review.get().getUser().getId() == reviewDeleteDto.getUserId()) {
                 iReviewRepository.deleteById(reviewDeleteDto.getId());
             }
-
         }
-
     }
 }

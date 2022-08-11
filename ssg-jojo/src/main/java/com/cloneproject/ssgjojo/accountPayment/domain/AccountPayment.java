@@ -1,5 +1,6 @@
 package com.cloneproject.ssgjojo.accountPayment.domain;
 
+import com.cloneproject.ssgjojo.user.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,6 +14,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Builder
 public class AccountPayment {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,5 +24,8 @@ public class AccountPayment {
 
     @Column(nullable = false)
     private String bank;               // 은행명
+
+    @ManyToOne
+    private User user;
 
 }

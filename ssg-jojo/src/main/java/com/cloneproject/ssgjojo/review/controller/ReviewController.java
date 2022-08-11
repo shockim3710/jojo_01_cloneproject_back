@@ -42,7 +42,6 @@ public class ReviewController {
 
     @GetMapping("/review/{id}")
     public Review getReviewById(@PathVariable Long id) {
-
         return iReviewService.getReviewById(id);
     }
 }
