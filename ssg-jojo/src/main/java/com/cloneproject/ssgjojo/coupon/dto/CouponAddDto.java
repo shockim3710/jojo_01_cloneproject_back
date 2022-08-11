@@ -1,7 +1,16 @@
 package com.cloneproject.ssgjojo.coupon.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.sql.Timestamp;
 
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class CouponAddDto {
     private String couponName; // 쿠폰 이름
     private Timestamp couponStartDate; // 쿠폰 시작날짜

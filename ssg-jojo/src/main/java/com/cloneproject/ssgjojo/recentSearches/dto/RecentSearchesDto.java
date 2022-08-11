@@ -1,4 +1,4 @@
-package com.cloneproject.ssgjojo.cart.dto;
+package com.cloneproject.ssgjojo.recentSearches.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,10 +9,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CartEditGetIdDto {
+public class RecentSearchesDto {
     private Long id;
-    private int count; // 하나의 상품을 장바구니에 몇개 담았는지 (장바구니 수정)
+    private String histories; // 최근검색어
 
     private Long user;
-    private Long product;
 }

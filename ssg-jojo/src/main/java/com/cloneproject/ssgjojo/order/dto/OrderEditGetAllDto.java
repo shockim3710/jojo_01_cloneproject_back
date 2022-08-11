@@ -1,7 +1,16 @@
 package com.cloneproject.ssgjojo.order.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.sql.Timestamp;
 
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class OrderEditGetAllDto {
     private Long id;
     private int count; // 하나의 상품을 몇개 주문하는지

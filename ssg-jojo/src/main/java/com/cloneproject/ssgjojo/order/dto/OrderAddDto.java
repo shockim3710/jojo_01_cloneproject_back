@@ -1,10 +1,18 @@
 package com.cloneproject.ssgjojo.order.dto;
 
 import com.cloneproject.ssgjojo.user.domain.User;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
 import java.util.List;
 
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class OrderAddDto {
     private int count; // 하나의 상품을 몇개 주문하는지
     private Timestamp orderDate; // 주문 날짜
