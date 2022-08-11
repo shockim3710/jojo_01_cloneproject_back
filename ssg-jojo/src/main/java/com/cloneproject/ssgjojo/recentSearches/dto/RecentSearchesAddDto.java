@@ -7,6 +7,6 @@ import javax.persistence.ManyToOne;
 
 public class RecentSearchesAddDto {
     private String histories; // 최근검색어
-    private Long user;
 
+    private Long user;
 }

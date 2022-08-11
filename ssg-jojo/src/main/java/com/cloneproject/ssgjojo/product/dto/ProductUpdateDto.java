@@ -20,5 +20,6 @@ public class ProductUpdateDto {
     private String color;
     private String size;
     private int availableStock;
+
     private Long categoryLv4;
 }

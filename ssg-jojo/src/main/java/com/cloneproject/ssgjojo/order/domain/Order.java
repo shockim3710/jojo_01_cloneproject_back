@@ -1,5 +1,6 @@
 package com.cloneproject.ssgjojo.order.domain;
 
+import com.cloneproject.ssgjojo.deliveryAddress.domain.DeliveryAddress;
 import com.cloneproject.ssgjojo.product.domain.Product;
 import com.cloneproject.ssgjojo.user.domain.User;
 import lombok.AllArgsConstructor;
@@ -32,7 +33,7 @@ public class Order {
     private Long orderPrice; // 주문한 총 가격
 
     @Column(nullable = false)
-    private boolean isExchange; // 주문자 이름, 주문자 전화번호, 배송지 변경여부
+    private boolean isExchange; // 주문자 이름, 주문자 전화번호, 배송지, 배송요청사항 변경여부
 
     @Column(nullable = false)
     private boolean isRefund; // 환불여부
@@ -47,6 +48,9 @@ public class Order {
     private Timestamp deliveryDate; // 배송날짜
     // 타임스탬프는 시간을 더해주거나 빼주는 그런게 따로 없어서
     // Calendar 객체를 사용
+    @Column(nullable = false)
+    private String deliveryRequest; // 배송요청사항
+    
 
     @ManyToOne
     private User user;
