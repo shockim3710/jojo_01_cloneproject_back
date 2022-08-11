@@ -42,22 +42,18 @@ public class Product extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false)
+    private String productName;
+    @Column(nullable = false)
     private int price;
     @Column(nullable = false)
     private String description;
-    @Column(nullable = false)
-    private String productName;
     @Column(nullable = false)
     private String manufactureCompany;
     @Column(nullable = false)
     private int discountRate;
     @Column(nullable = false)
     private int fee;
-    private String color;
-    private String size;
-    private int availableStock;
-
-    @ManyToOne
-    private CategoryLv4 categoryLv4;
+    @Column(name = "is_adult_case", nullable = false)
+    private boolean adultCase;
 
 }

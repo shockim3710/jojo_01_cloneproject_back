@@ -2,7 +2,8 @@ package com.cloneproject.ssgjojo.product.controller;
 
 import com.cloneproject.ssgjojo.product.domain.Product;
 import com.cloneproject.ssgjojo.product.dto.ProductAddDto;
-import com.cloneproject.ssgjojo.product.dto.ProductUpdateDto;
+import com.cloneproject.ssgjojo.product.dto.ProductEditDto;
+import com.cloneproject.ssgjojo.product.dto.ProductInfoDto;
 import com.cloneproject.ssgjojo.product.service.IProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -21,12 +22,12 @@ public class ProductController {
     }
 
     @GetMapping("/product/getAll")
-    public List<Product> getAllProduct() {
+    public List<ProductInfoDto> getAllProduct() {
         return iProductService.getAllProduct();
     }
 
     @GetMapping("/product/{id}")
-    public Product getProduct(@PathVariable Long id) {
+    public ProductInfoDto getProduct(@PathVariable Long id) {
         return iProductService.getProductById(id);
     }
 
@@ -36,7 +37,7 @@ public class ProductController {
     }
 
     @PutMapping("/product")
-    public Product editProduct(@RequestBody ProductUpdateDto productUpdateDto) {
-        return iProductService.editProduct(productUpdateDto);
+    public Product editProduct(@RequestBody ProductEditDto productEditDto) {
+        return iProductService.editProduct(productEditDto);
     }
 }
