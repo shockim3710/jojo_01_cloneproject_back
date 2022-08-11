@@ -21,6 +21,10 @@ public class CategoryLv1 {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     private Long id;
+
+    @Column(nullable = false)
     private String lv1name;
+
+    @Column(nullable = false)
     private String lv1imgpath;
 }

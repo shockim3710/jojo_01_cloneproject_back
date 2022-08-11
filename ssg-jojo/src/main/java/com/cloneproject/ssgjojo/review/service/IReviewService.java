@@ -1,16 +1,18 @@
 package com.cloneproject.ssgjojo.review.service;
 
 import com.cloneproject.ssgjojo.review.domain.Review;
+import com.cloneproject.ssgjojo.review.dto.ReviewDeleteDto;
 import com.cloneproject.ssgjojo.review.dto.ReviewDto;
+import com.cloneproject.ssgjojo.review.dto.ReviewEditDto;
 
 import java.util.List;
 
 public interface IReviewService {
 
     Review addReview(ReviewDto reviewDto);
-    Review editReview(Review review);
+    Review editReview(ReviewEditDto reviewEditDto);
     Review getReviewById(Long id);
     List<Review> getAllReview();
 
-    void deleteReview(Long id);
+    void deleteReview(ReviewDeleteDto reviewDeleteDto);
 }

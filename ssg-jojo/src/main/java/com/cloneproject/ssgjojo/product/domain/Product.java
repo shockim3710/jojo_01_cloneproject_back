@@ -53,11 +53,7 @@ public class Product extends BaseTimeEntity {
     private int discountRate;
     @Column(nullable = false)
     private int fee;
-    private String color;
-    private String size;
-    private int availableStock;
-
-    @ManyToOne
-    private CategoryLv4 categoryLv4;
+    @Column(nullable = false)
+    private boolean isAdultCase;
 
 }

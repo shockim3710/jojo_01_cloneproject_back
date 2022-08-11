@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ReviewDto {
-
+public class ReviewEditDto {
+    private Long id;
     private String title;
     private String mainText;
     private int score;

@@ -9,12 +9,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ReviewDto {
+public class ReviewDeleteDto {
 
-    private String title;
-    private String mainText;
-    private int score;
-
+    private Long id;
     private Long userId;
-    private Long productId;
 }

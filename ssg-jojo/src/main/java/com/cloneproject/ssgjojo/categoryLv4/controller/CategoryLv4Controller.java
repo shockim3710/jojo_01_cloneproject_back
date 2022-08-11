@@ -24,6 +24,7 @@ public class CategoryLv4Controller {
 
     @GetMapping("/category/Lv4/getAll")
     public List<CategoryLv4> getAllCategory() {
+
         return iCategoryLv4Service.getAllCategory();
     }
 
@@ -34,11 +35,13 @@ public class CategoryLv4Controller {
 
     @DeleteMapping("/category/Lv4/{id}")
     public void deleteCategory(@PathVariable Long id) {
+
         iCategoryLv4Service.deleteCategory(id);
     }
 
     @GetMapping("/category/Lv4/{id}")
     public CategoryLv4 getCategoryById(@PathVariable Long id) {
+
         return iCategoryLv4Service.getCategoryById(id);
     }
 }

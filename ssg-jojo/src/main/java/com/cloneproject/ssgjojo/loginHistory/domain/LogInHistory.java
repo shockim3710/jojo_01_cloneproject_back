@@ -1,5 +1,6 @@
 package com.cloneproject.ssgjojo.loginHistory.domain;
 
+import com.cloneproject.ssgjojo.user.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,6 +15,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @Builder
 public class LogInHistory {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,4 +25,7 @@ public class LogInHistory {
 
     @Column(nullable = false)
     private String logInIp;         // 로그인한 PC, 모바일 (ip)
+
+    @ManyToOne
+    private User user;
 }
