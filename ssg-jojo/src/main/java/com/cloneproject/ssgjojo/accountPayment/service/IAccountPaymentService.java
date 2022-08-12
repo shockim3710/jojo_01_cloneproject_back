@@ -9,7 +9,7 @@ import java.util.List;
 public interface IAccountPaymentService {
 
     AccountPayment addAccountPayment(AccountPaymentDto accountPaymentDto);
-    AccountPayment getAccountPaymentByUserId(Long id);
+    List<AccountPayment> getAccountPaymentByUserId(Long id);
     List<AccountPayment> getAllAccountPayment();
     void deleteAccountPayment(AccountPaymentDeleteDto accountPaymentDeleteDto);
 }

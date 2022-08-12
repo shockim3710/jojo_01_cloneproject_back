@@ -68,12 +68,13 @@ public class ReviewServiceImple implements IReviewService {
     }
 
     @Override
-    public Review getReviewById(Long id) {
+    public List<Review> getReviewById(Long id) {
 
+        Optional<Product> product = iProductRepository.findById(id);
         Optional<Review> review = iReviewRepository.findById(id);
 
-        if(review.isPresent()) {
-            return review.get();
+        if(product.isPresent() && review.isPresent()) {
+            return iReviewRepository.findAllByProduct(product.get());
         }
 
         return null;

@@ -28,7 +28,7 @@ public class AccountPaymentController {
     }
 
     @GetMapping("/accountpayment/{id}")
-    public AccountPayment getAccountPaymentByUserId(@PathVariable Long id) {
+    public List<AccountPayment> getAccountPaymentByUserId(@PathVariable Long id) {
         return iAccountPaymentService.getAccountPaymentByUserId(id);
     }
 

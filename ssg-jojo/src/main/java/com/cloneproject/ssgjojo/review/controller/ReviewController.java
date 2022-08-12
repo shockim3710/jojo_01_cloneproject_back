@@ -41,7 +41,7 @@ public class ReviewController {
     }
 
     @GetMapping("/review/{id}")
-    public Review getReviewById(@PathVariable Long id) {
+    public List<Review> getReviewById(@PathVariable Long id) {
         return iReviewService.getReviewById(id);
     }
 }

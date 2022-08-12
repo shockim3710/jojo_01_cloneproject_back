@@ -11,7 +11,7 @@ public interface IReviewService {
 
     Review addReview(ReviewDto reviewDto);
     Review editReview(ReviewEditDto reviewEditDto);
-    Review getReviewById(Long id);
+    List<Review> getReviewById(Long id);
     List<Review> getAllReview();
 
     void deleteReview(ReviewDeleteDto reviewDeleteDto);

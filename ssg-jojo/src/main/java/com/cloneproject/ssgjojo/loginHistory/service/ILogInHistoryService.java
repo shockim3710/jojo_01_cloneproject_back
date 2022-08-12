@@ -8,6 +8,6 @@ import java.util.List;
 public interface ILogInHistoryService {
 
     LogInHistory addLogInHistory(LogInHistoryDto logInHistoryDto);
-    LogInHistory getHistoryByUserId(Long id);
+    List<LogInHistory> getHistoryByUserId(Long id);
     List<LogInHistory> getAllLogInHistory();
 }

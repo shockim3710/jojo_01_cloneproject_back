@@ -38,13 +38,12 @@ public class LogInHistoryServiceImple implements ILogInHistoryService {
     }
 
     @Override
-    public LogInHistory getHistoryByUserId(Long id) {
+    public List<LogInHistory> getHistoryByUserId(Long id) {
 
-        Optional<LogInHistory> logInHistory = iLogInHistoryRepository.findById(id);
         Optional<User> user = iUserRepository.findById(id);
 
-        if(logInHistory.isPresent() && user.isPresent()) {
-            return logInHistory.get();
+        if(user.isPresent()) {
+            return iLogInHistoryRepository.findAllByUser(user.get());
         }
 
         return null;

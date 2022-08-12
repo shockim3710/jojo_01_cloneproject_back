@@ -30,7 +30,7 @@ public class LogInHistoryController {
 
 
     @GetMapping("/loginhistory/{id}")
-    public LogInHistory getHistoryByUserId(@PathVariable Long id) {
+    public List<LogInHistory> getHistoryByUserId(@PathVariable Long id) {
         return iLogInHistoryService.getHistoryByUserId(id);
     }
 

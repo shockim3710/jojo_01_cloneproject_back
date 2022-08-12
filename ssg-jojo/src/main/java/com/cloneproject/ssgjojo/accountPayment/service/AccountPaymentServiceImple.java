@@ -39,13 +39,12 @@ public class AccountPaymentServiceImple implements IAccountPaymentService{
     }
 
     @Override
-    public AccountPayment getAccountPaymentByUserId(Long id) {
+    public List<AccountPayment> getAccountPaymentByUserId(Long id) {
 
-        Optional<AccountPayment> accountPayment = iAccountPaymentRepository.findById(id);
         Optional<User> user = iUserRepository.findById(id);
 
-        if(accountPayment.isPresent() && user.isPresent()) {
-            return accountPayment.get();
+        if(user.isPresent()) {
+            return iAccountPaymentRepository.findAllByUser(user.get());
         }
 
         return null;

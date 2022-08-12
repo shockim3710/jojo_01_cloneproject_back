@@ -1,5 +1,6 @@
 package com.cloneproject.ssgjojo.payingCreditCard.domain;
 
+import com.cloneproject.ssgjojo.user.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,4 +23,7 @@ public class PayingCreditCard {
 
     @Column(nullable = false)
     private String creditCardCompany;      // 신용카드 회사명
+
+    @ManyToOne
+    private User user;
 }
