@@ -22,6 +22,8 @@ public class CategoryLv3 {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     private Long id;
+
+    @Column(nullable = false)
     private String lv3name;
 
     @ManyToOne

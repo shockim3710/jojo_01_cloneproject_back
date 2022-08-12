@@ -1,9 +1,6 @@
+package com.cloneproject.ssgjojo.payingCreditCard.domain;
 
-// L Category
-
-package com.cloneproject.ssgjojo.categoryLv2.domain;
-
-import com.cloneproject.ssgjojo.categoryLv1.domain.CategoryLv1;
+import com.cloneproject.ssgjojo.user.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,16 +13,17 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CategoryLv2 {
-
+public class PayingCreditCard {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     private Long id;
 
     @Column(nullable = false)
-    private String lv2name;
+    private String creditCardName;         // 신용카드 이름
+
+    @Column(nullable = false)
+    private String creditCardCompany;      // 신용카드 회사명
 
     @ManyToOne
-    private CategoryLv1 categoryLv1;
+    private User user;
 }

@@ -1,9 +1,6 @@
+package com.cloneproject.ssgjojo.accountPayment.domain;
 
-// L Category
-
-package com.cloneproject.ssgjojo.categoryLv2.domain;
-
-import com.cloneproject.ssgjojo.categoryLv1.domain.CategoryLv1;
+import com.cloneproject.ssgjojo.user.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,16 +13,19 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CategoryLv2 {
+public class AccountPayment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     private Long id;
 
     @Column(nullable = false)
-    private String lv2name;
+    private String accountNumber;      // 계좌번호
+
+    @Column(nullable = false)
+    private String bank;               // 은행명
 
     @ManyToOne
-    private CategoryLv1 categoryLv1;
+    private User user;
+
 }
