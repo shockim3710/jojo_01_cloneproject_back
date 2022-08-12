@@ -1,6 +1,7 @@
 package com.cloneproject.ssgjojo.product.dto;
 
 import com.cloneproject.ssgjojo.productoption.domain.ProductOption;
+import com.cloneproject.ssgjojo.productoption.dto.ProductOptionOutDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,5 +28,5 @@ public class ProductInfoDto {
     private Long categoryLv1;
 
 
-    private List<ProductOption> productOptionList;
+    private List<ProductOptionOutDto> productOptionList;
 }

@@ -2,7 +2,7 @@ package com.cloneproject.ssgjojo.product.controller;
 
 import com.cloneproject.ssgjojo.product.domain.Product;
 import com.cloneproject.ssgjojo.product.dto.ProductAddDto;
-import com.cloneproject.ssgjojo.product.dto.ProductEditDto;
+import com.cloneproject.ssgjojo.product.dto.ProductUpdateDto;
 import com.cloneproject.ssgjojo.product.dto.ProductInfoDto;
 import com.cloneproject.ssgjojo.product.service.IProductService;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +37,7 @@ public class ProductController {
     }
 
     @PutMapping("/product")
-    public Product editProduct(@RequestBody ProductEditDto productEditDto) {
-        return iProductService.editProduct(productEditDto);
+    public Product editProduct(@RequestBody ProductUpdateDto productUpdateDto) {
+        return iProductService.editProduct(productUpdateDto);
     }
 }

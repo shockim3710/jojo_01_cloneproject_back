@@ -9,7 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductOptionAddDto {
+public class ProductOptionOutDto {
+    private Long id;
     private String productOption1Name;
     private String productOption1Contents;
     private String productOption2Name;

@@ -12,7 +12,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductEditDto {
+public class ProductUpdateDto {
     private Long id;
     private int price;
     private String description;
@@ -25,7 +25,6 @@ public class ProductEditDto {
     private Long categoryLv3;
     private Long categoryLv2;
     private Long categoryLv1;
-
 
     private List<ProductOption> productOptionList;
 }

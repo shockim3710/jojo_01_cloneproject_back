@@ -11,10 +11,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProductOptionDto {
-    private String option1Name;
-    private String option1Contents;
-    private String option2Name;
-    private String option2Contents;
+    private String productOption1Name;
+    private String productOption1Contents;
+    private String productOption2Name;
+    private String productOption2Contents;
 
     private int stock;
 }

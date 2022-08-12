@@ -13,18 +13,18 @@ import com.cloneproject.ssgjojo.categoryProductList.domain.CategoryProductList;
 import com.cloneproject.ssgjojo.categoryProductList.repository.ICategoryProductListRepository;
 import com.cloneproject.ssgjojo.product.domain.Product;
 import com.cloneproject.ssgjojo.product.dto.ProductAddDto;
-import com.cloneproject.ssgjojo.product.dto.ProductEditDto;
+import com.cloneproject.ssgjojo.product.dto.ProductUpdateDto;
 import com.cloneproject.ssgjojo.product.dto.ProductInfoDto;
 import com.cloneproject.ssgjojo.product.repository.IProductRepository;
 import com.cloneproject.ssgjojo.productoption.domain.ProductOption;
 import com.cloneproject.ssgjojo.productoption.dto.ProductOptionDto;
+import com.cloneproject.ssgjojo.productoption.dto.ProductOptionOutDto;
 import com.cloneproject.ssgjojo.productoption.repository.IProductOptionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -60,6 +60,7 @@ public class ProductServiceImple implements IProductService {
                     .discountRate(productAddDto.getDiscountRate())
                     .description(productAddDto.getDescription())
                     .manufactureCompany(productAddDto.getManufactureCompany())
+                    .adultCase(productAddDto.isAdultCase())
                     .fee(productAddDto.getFee())
                     .adultCase(productAddDto.isAdultCase())
                     .build()
@@ -79,10 +80,10 @@ public class ProductServiceImple implements IProductService {
             for(ProductOptionDto productOptionDto : productAddDto.getProductOptionDtoList()) {
                 iProductOptionRepository.save(ProductOption.builder()
                     .product(product)
-                    .productOption1Name(productOptionDto.getOption1Name())
-                    .productOption1Contents(productOptionDto.getOption1Contents())
-                    .productOption2Name(productOptionDto.getOption2Name())
-                    .productOption2Contents(productOptionDto.getOption2Contents())
+                    .productOption1Name(productOptionDto.getProductOption1Name())
+                    .productOption1Contents(productOptionDto.getProductOption1Contents())
+                    .productOption2Name(productOptionDto.getProductOption2Name())
+                    .productOption2Contents(productOptionDto.getProductOption2Contents())
                     .stock(productOptionDto.getStock())
                     .build());
             }
@@ -98,14 +99,28 @@ public class ProductServiceImple implements IProductService {
     public ProductInfoDto getProductById(Long id) {
         Optional<Product> product = iProductRepository.findById(id);
 
-        // 상품 아이디 유효성 검증
+        // 상품 유효성 검증
         if(product.isPresent()) {
             Optional<CategoryProductList> categoryProductList = iCategoryProductListRepository.findByProduct(product.get());
-            List<ProductOption> productOption = iProductOptionRepository.findAllByProduct(product.get());
+            List<ProductOption> productOptionList = iProductOptionRepository.findAllByProduct(product.get());
 
             
             // 중간 테이블 및 옵션 리스트 유효성 검증
-            if(categoryProductList.isPresent() && !productOption.isEmpty()) {
+            if(categoryProductList.isPresent() && !productOptionList.isEmpty()) {
+                List<ProductOptionOutDto> optionOutDtoList = new ArrayList<>();
+
+                for(ProductOption dto : productOptionList) {
+                    optionOutDtoList.add(ProductOptionOutDto.builder()
+                                    .id(dto.getId())
+                                    .productId(dto.getProduct().getId())
+                                    .productOption1Name(dto.getProductOption1Name())
+                                    .productOption1Contents(dto.getProductOption1Contents())
+                                    .productOption2Name(dto.getProductOption2Name())
+                                    .productOption2Contents(dto.getProductOption2Contents())
+                                    .stock(dto.getStock())
+                            .build());
+                }
+
                 ProductInfoDto returnDto = ProductInfoDto.builder()
                         .id(product.get().getId())
                         .price(product.get().getPrice())
@@ -119,7 +134,7 @@ public class ProductServiceImple implements IProductService {
                         .categoryLv3(categoryProductList.get().getCategoryLv3().getId())
                         .categoryLv2(categoryProductList.get().getCategoryLv2().getId())
                         .categoryLv1(categoryProductList.get().getCategoryLv1().getId())
-                        .productOptionList(productOption)
+                        .productOptionList(optionOutDtoList)
                         .build();
 
                 return returnDto;
@@ -133,6 +148,7 @@ public class ProductServiceImple implements IProductService {
         List<Product> productList = iProductRepository.findAll();
         List<ProductInfoDto> productInfoDtoList = new ArrayList<>();
 
+
         for(Product product : productList) {
             Optional<CategoryProductList> categoryProductList = iCategoryProductListRepository.findByProduct(product);
             List<ProductOption> productOptionList = iProductOptionRepository.findAllByProduct(product);
@@ -140,6 +156,20 @@ public class ProductServiceImple implements IProductService {
 
             // 중간 테이블 및 옵션 리스트 유효성 검증
             if(categoryProductList.isPresent() && !productOptionList.isEmpty()) {
+                List<ProductOptionOutDto> optionOutDtoList = new ArrayList<>();
+
+                for(ProductOption dto : productOptionList) {
+                    optionOutDtoList.add(ProductOptionOutDto.builder()
+                            .id(dto.getId())
+                            .productId(dto.getProduct().getId())
+                            .productOption1Name(dto.getProductOption1Name())
+                            .productOption1Contents(dto.getProductOption1Contents())
+                            .productOption2Name(dto.getProductOption2Name())
+                            .productOption2Contents(dto.getProductOption2Contents())
+                            .stock(dto.getStock())
+                            .build());
+                }
+
                 productInfoDtoList.add(ProductInfoDto.builder()
                         .id(product.getId())
                         .price(product.getPrice())
@@ -153,13 +183,13 @@ public class ProductServiceImple implements IProductService {
                         .categoryLv3(categoryProductList.get().getCategoryLv3().getId())
                         .categoryLv2(categoryProductList.get().getCategoryLv2().getId())
                         .categoryLv1(categoryProductList.get().getCategoryLv1().getId())
-                        .productOptionList(productOptionList)
+                        .productOptionList(optionOutDtoList)
                         .build());
             }
         }
 
 
-        return null;
+        return productInfoDtoList;
     }
 
     // 상품 삭제
@@ -173,33 +203,35 @@ public class ProductServiceImple implements IProductService {
 
             if(categoryProductList.isPresent() && !productOptions.isEmpty()) {
                 iCategoryProductListRepository.deleteByProduct(product.get());
-                iProductOptionRepository.deleteByProduct(product.get());
-            }
 
+                for(ProductOption temp : productOptions)
+                    iProductOptionRepository.deleteById(temp.getId());
+            }
             iProductRepository.deleteById(id);
         }
     }
 
     @Override
-    public Product editProduct(ProductEditDto productEditDto) {
-        Optional<Product> product = iProductRepository.findById(productEditDto.getId());
-        Optional<CategoryLv4> categoryLv4 = iCategoryLv4Repository.findById(productEditDto.getCategoryLv4());
-        Optional<CategoryLv3> categoryLv3 = iCategoryLv3Repository.findById(productEditDto.getCategoryLv3());
-        Optional<CategoryLv2> categoryLv2 = iCategoryLv2Repository.findById(productEditDto.getCategoryLv2());
-        Optional<CategoryLv1> categoryLv1 = iCategoryLv1Repository.findById(productEditDto.getCategoryLv1());
+    @Transactional
+    public Product editProduct(ProductUpdateDto productUpdateDto) {
+        Optional<Product> product = iProductRepository.findById(productUpdateDto.getId());
+        Optional<CategoryLv4> categoryLv4 = iCategoryLv4Repository.findById(productUpdateDto.getCategoryLv4());
+        Optional<CategoryLv3> categoryLv3 = iCategoryLv3Repository.findById(productUpdateDto.getCategoryLv3());
+        Optional<CategoryLv2> categoryLv2 = iCategoryLv2Repository.findById(productUpdateDto.getCategoryLv2());
+        Optional<CategoryLv1> categoryLv1 = iCategoryLv1Repository.findById(productUpdateDto.getCategoryLv1());
 
         Optional<CategoryProductList> categoryProductList = iCategoryProductListRepository.findByProduct(product.get());
 
         if(product.isPresent() && categoryLv4.isPresent() && categoryLv3.isPresent() && categoryLv2.isPresent() && categoryLv1.isPresent()) {
             Product editProduct = iProductRepository.save(Product.builder()
-                    .id(productEditDto.getId())
-                    .productName(productEditDto.getProductName())
-                    .price(productEditDto.getPrice())
-                    .description(productEditDto.getDescription())
-                    .manufactureCompany(productEditDto.getManufactureCompany())
-                    .discountRate(productEditDto.getDiscountRate())
-                    .fee(productEditDto.getFee())
-                    .adultCase(productEditDto.isAdultCase())
+                    .id(productUpdateDto.getId())
+                    .productName(productUpdateDto.getProductName())
+                    .price(productUpdateDto.getPrice())
+                    .description(productUpdateDto.getDescription())
+                    .manufactureCompany(productUpdateDto.getManufactureCompany())
+                    .discountRate(productUpdateDto.getDiscountRate())
+                    .fee(productUpdateDto.getFee())
+                    .adultCase(productUpdateDto.isAdultCase())
                     .build()
             );
 
@@ -212,16 +244,29 @@ public class ProductServiceImple implements IProductService {
                     .product(editProduct)
                     .build());
 
-            for(ProductOption productOption : productEditDto.getProductOptionList()) {
-                iProductOptionRepository.save(ProductOption.builder()
-                        .id(productOption.getId())
-                        .product(editProduct)
-                        .productOption1Name(productOption.getProductOption1Name())
-                        .productOption1Contents(productOption.getProductOption1Contents())
-                        .productOption2Name(productOption.getProductOption2Name())
-                        .productOption2Contents(productOption.getProductOption2Contents())
-                        .stock(productOption.getStock())
-                        .build());
+            for(ProductOption productOption : productUpdateDto.getProductOptionList()) {
+                // 새로 등록된 옵션이면 아래 로직
+                if(productOption.getId() == null) {
+                    iProductOptionRepository.save(ProductOption.builder()
+                            .product(editProduct)
+                            .productOption1Name(productOption.getProductOption1Name())
+                            .productOption1Contents(productOption.getProductOption1Contents())
+                            .productOption2Name(productOption.getProductOption2Name())
+                            .productOption2Contents(productOption.getProductOption2Contents())
+                            .stock(productOption.getStock())
+                            .build());
+                }
+                else {
+                    iProductOptionRepository.save(ProductOption.builder()
+                            .id(productOption.getId())
+                            .product(editProduct)
+                            .productOption1Name(productOption.getProductOption1Name())
+                            .productOption1Contents(productOption.getProductOption1Contents())
+                            .productOption2Name(productOption.getProductOption2Name())
+                            .productOption2Contents(productOption.getProductOption2Contents())
+                            .stock(productOption.getStock())
+                            .build());
+                }
             }
 
             return editProduct;

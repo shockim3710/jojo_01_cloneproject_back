@@ -24,10 +24,10 @@ public class ProductOptionServiceImple implements IProductOptionService{
 
         if(product.isPresent()) {
             return iProductOptionRepository.save(ProductOption.builder()
-                            .productOption1Contents(productOptionAddDto.getOption1Contents())
-                            .productOption1Name(productOptionAddDto.getOption1Name())
-                            .productOption2Contents(productOptionAddDto.getOption2Contents())
-                            .productOption2Name(productOptionAddDto.getOption2Name())
+                            .productOption1Contents(productOptionAddDto.getProductOption1Contents())
+                            .productOption1Name(productOptionAddDto.getProductOption1Name())
+                            .productOption2Contents(productOptionAddDto.getProductOption2Contents())
+                            .productOption2Name(productOptionAddDto.getProductOption2Name())
                             .stock(productOptionAddDto.getStock())
                             .product(product.get())
                     .build());
