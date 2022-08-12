@@ -23,7 +23,7 @@ public class RecentSearchesServiceImple implements IRecentSearchesService {
     private final IUserRepository iUserRepository;
 
     @Override
-    public RecentSearchesAddDto addRecentSearches(RecentSearchesAddDto recentSearchesAddDto) {
+    public RecentSearchesAddDto addRecentSearches(RecentSearchesAddDto recentSearchesAddDto) { // 최근검색어 추가
         Optional<User> user = iUserRepository.findById(recentSearchesAddDto.getUser());
 
         if(user.isPresent()) {
@@ -42,31 +42,29 @@ public class RecentSearchesServiceImple implements IRecentSearchesService {
     }
 
     @Override
-    public List<RecentSearchesDto> getRecentSearchesByUserId(Long id) {
-        Optional<User> user = iUserRepository.findById(id);
+    public List<RecentSearchesDto> getRecentSearchesByUserId(Long id) { // 해당 사용자의 최근검색어 조회
+        Optional<User> userOptional = iUserRepository.findById(id);
 
-        if(user.isPresent()) {
-            List<RecentSearches> recentSearchesList = iRecentSearchesRepository.findAllByUser(user.get());
-            List<RecentSearchesDto> returnList = new ArrayList<>();
+        if(userOptional.isPresent()) {
+            List<RecentSearches> recentSearchesList = iRecentSearchesRepository.findAllByUser(userOptional.get());
+            List<RecentSearchesDto> recentSearchesDtoList = new ArrayList<>();
 
-            for(RecentSearches temp : recentSearchesList) {
-                returnList.add(
-                        RecentSearchesDto.builder()
-                                .id(temp.getId())
-                                .histories(temp.getHistories())
-                                .user(temp.getUser().getId())
-                                .build()
-                );
-            }
+            recentSearchesList.forEach(user -> {
+                recentSearchesDtoList.add(RecentSearchesDto.builder()
+                        .id(user.getId())
+                        .histories(user.getHistories())
+                        .user(user.getUser().getId())
+                        .build());
+            });
 
-            return returnList;
+            return recentSearchesDtoList;
         }
 
         return null;
     }
 
     @Override
-    public void deleteRecentSearches(Long id) {
+    public void deleteRecentSearches(Long id) { // 해당 사용자의 최근검색어 삭제
         Optional<RecentSearches> recentSearches = iRecentSearchesRepository.findById(id);
 
         if(recentSearches.isPresent()) {

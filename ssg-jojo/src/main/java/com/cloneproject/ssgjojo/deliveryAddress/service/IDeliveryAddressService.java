@@ -14,6 +14,6 @@ public interface IDeliveryAddressService {
 
     DeliveryAddressAddDto addDeliveryAddress(DeliveryAddressAddDto deliveryAddressAddDto);
     List<DeliveryAddressEditGetIdDto> getDeliveryAddressByUserId(Long id);
-    DeliveryAddress editDeliveryAddress(DeliveryAddressEditGetIdDto deliveryAddressEditGetIdDto);
+    DeliveryAddressEditGetIdDto editDeliveryAddress(DeliveryAddressEditGetIdDto deliveryAddressEditGetIdDto);
     void deleteDeliveryAddress(Long id);
 }

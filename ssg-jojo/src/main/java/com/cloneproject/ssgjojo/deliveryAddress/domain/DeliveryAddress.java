@@ -22,8 +22,8 @@ public class DeliveryAddress {
     @Column(nullable = false)
     private String address; // 배송지
 
-    @Column(nullable = false)
-    private boolean isDefaultDeliveryAddress; // 기본배송지 여부
+    @Column(nullable = false, name = "is_default_address")
+    private boolean whetherDefaultAddress; // 기본배송지 여부
 
     @ManyToOne
     private User user;

@@ -15,7 +15,7 @@ import javax.persistence.ManyToOne;
 @AllArgsConstructor
 public class DeliveryAddressAddDto {
     private String address; // 배송지
-    private boolean isDefaultDeliveryAddress; // 기본배송지 여부
+    private boolean whetherDefaultAddress; // 기본배송지 여부
 
     private Long user;
 }

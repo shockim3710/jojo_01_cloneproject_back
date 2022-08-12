@@ -19,23 +19,23 @@ public class DeliveryAddressController {
 
     private final IDeliveryAddressService iDeliveryAddressService;
 
-    @PostMapping("/deliveryaddress/add")
+    @PostMapping("/deliveryaddress/add") // 배송지 추가
     public DeliveryAddressAddDto addDeliveryAddress(@RequestBody DeliveryAddressAddDto deliveryAddressAddDto) {
         return iDeliveryAddressService.addDeliveryAddress(deliveryAddressAddDto);
     }
 
 
-    @GetMapping("/deliveryaddress/get/{id}")
+    @GetMapping("/deliveryaddress/get/{id}") // 해당 사용자의 배송지 조회
     public List<DeliveryAddressEditGetIdDto> getDeliveryAddress(@PathVariable Long id) {
         return iDeliveryAddressService.getDeliveryAddressByUserId(id);
     }
 
-    @PutMapping("/deliveryaddress/edit")
-    public DeliveryAddress editDeliveryAddress(@RequestBody DeliveryAddressEditGetIdDto deliveryAddressEditGetIdDto) {
+    @PutMapping("/deliveryaddress/edit") // 배송지 수정
+    public DeliveryAddressEditGetIdDto editDeliveryAddress(@RequestBody DeliveryAddressEditGetIdDto deliveryAddressEditGetIdDto) {
         return iDeliveryAddressService.editDeliveryAddress(deliveryAddressEditGetIdDto);
     }
 
-    @DeleteMapping("/deliveryaddress/delete/{id}")
+    @DeleteMapping("/deliveryaddress/delete/{id}") // 해당 사용자의 배송지 삭제
     public void deleteDeliveryAddress(@PathVariable Long id) {
         iDeliveryAddressService.deleteDeliveryAddress(id);
     }
