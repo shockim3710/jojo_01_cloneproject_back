@@ -43,7 +43,9 @@ public class User extends BaseTimeEntity {
     @Column(nullable = false)
     private String gender; // 성별
 
+    @Column(nullable = false)
     private String membershipLevel; // 회원 등급
 
+    @Column(nullable = false)
     private Boolean isLeave; // 탈퇴 여부
 }

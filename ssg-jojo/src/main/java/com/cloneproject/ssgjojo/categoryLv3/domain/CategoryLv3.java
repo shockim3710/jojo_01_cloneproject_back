@@ -20,7 +20,6 @@ public class CategoryLv3 {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     private Long id;
 
     @Column(nullable = false)

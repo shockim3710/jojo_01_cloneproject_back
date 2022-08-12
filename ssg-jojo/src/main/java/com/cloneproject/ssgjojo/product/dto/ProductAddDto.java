@@ -20,7 +20,9 @@ public class ProductAddDto {
     private String manufactureCompany;
     private int discountRate;
     private int fee;
+
     private boolean adultCase;
+
 
     private Long categoryLv4;
     private Long categoryLv3;
