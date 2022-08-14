@@ -20,7 +20,7 @@ public class BannerController {
         return iBannerService.addBanner(bannerAddDto);
     }
 
-    @GetMapping("/banner/getall")
+    @GetMapping("/banner/getAll")
     public List<Banner> getAllBanner() {
         return iBannerService.getAllBanner();
     }

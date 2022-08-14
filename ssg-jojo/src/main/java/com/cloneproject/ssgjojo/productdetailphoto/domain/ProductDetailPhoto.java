@@ -1,4 +1,4 @@
-package com.cloneproject.ssgjojo.productphoto.domain;
+package com.cloneproject.ssgjojo.productdetailphoto.domain;
 
 import com.cloneproject.ssgjojo.product.domain.Product;
 import lombok.AllArgsConstructor;
@@ -7,23 +7,22 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 
 @Entity
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductPhoto {
+public class ProductDetailPhoto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false)
-    private String productPhotoPath;
+    private String productDetailPhotoPath;
     @Column(nullable = false)
-    private String productPhotoOriginName;
+    private String productDetailPhotoOriginName;
     @Column(nullable = false)
-    private int productPhotoSeq;
+    private int productDetailPhotoSeq;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")

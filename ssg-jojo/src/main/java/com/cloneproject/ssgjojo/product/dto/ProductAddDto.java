@@ -14,9 +14,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductAddDto {
+    private String productName;
     private int price;
     private String description;
-    private String productName;
     private String manufactureCompany;
     private int discountRate;
     private int fee;

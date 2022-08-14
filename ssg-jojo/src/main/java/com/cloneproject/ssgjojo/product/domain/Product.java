@@ -34,6 +34,7 @@ import java.util.Date;
 @Data
 @Entity
 @Builder
+@DynamicUpdate
 @NoArgsConstructor
 @AllArgsConstructor
 public class Product extends BaseTimeEntity {
@@ -55,5 +56,7 @@ public class Product extends BaseTimeEntity {
     private int fee;
     @Column(name = "is_adult_case", nullable = false)
     private boolean adultCase;
+    @Column(nullable = true)
+    private String thumbnail;
 
 }

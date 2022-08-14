@@ -16,5 +16,5 @@ public class ProductOptionDto {
     private String productOption2Name;
     private String productOption2Contents;
 
-    private int stock;
+    private Integer stock;
 }

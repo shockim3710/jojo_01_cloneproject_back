@@ -16,14 +16,22 @@ import com.cloneproject.ssgjojo.product.dto.ProductAddDto;
 import com.cloneproject.ssgjojo.product.dto.ProductUpdateDto;
 import com.cloneproject.ssgjojo.product.dto.ProductInfoDto;
 import com.cloneproject.ssgjojo.product.repository.IProductRepository;
+import com.cloneproject.ssgjojo.productdetailphoto.domain.ProductDetailPhoto;
+import com.cloneproject.ssgjojo.productdetailphoto.repository.IProductDetailPhotoRepository;
 import com.cloneproject.ssgjojo.productoption.domain.ProductOption;
 import com.cloneproject.ssgjojo.productoption.dto.ProductOptionDto;
 import com.cloneproject.ssgjojo.productoption.dto.ProductOptionOutDto;
 import com.cloneproject.ssgjojo.productoption.repository.IProductOptionRepository;
+import com.cloneproject.ssgjojo.productphoto.domain.ProductPhoto;
+import com.cloneproject.ssgjojo.productphoto.repository.IProductPhotoRepository;
+import com.cloneproject.ssgjojo.util.MultipartUtil;
+import com.cloneproject.ssgjojo.util.s3.AwsS3ResourceStorage;
+import com.cloneproject.ssgjojo.util.s3.FileInfoDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +49,12 @@ public class ProductServiceImple implements IProductService {
     private final ICategoryProductListRepository iCategoryProductListRepository;
 
     private final IProductOptionRepository iProductOptionRepository;
+    private final IProductPhotoRepository iProductPhotoRepository;
+    private final IProductDetailPhotoRepository iProductDetailPhotoRepository;
+
+    private final AwsS3ResourceStorage awsS3ResourceStorage;
+
+
     
     // 상품 추가
     @Override
@@ -94,14 +108,110 @@ public class ProductServiceImple implements IProductService {
         return null;
     }
 
-    // 상품 아이디를 통한 저장
+    @Override
+    public Product addProductWithPhoto(ProductAddDto productAddDto, MultipartFile thumbnail, List<MultipartFile> productPhoto, List<MultipartFile> productDetail) {
+        Optional<CategoryLv1> categoryLv1 = iCategoryLv1Repository.findById(productAddDto.getCategoryLv1());
+        Optional<CategoryLv2> categoryLv2 = iCategoryLv2Repository.findById(productAddDto.getCategoryLv2());
+        Optional<CategoryLv3> categoryLv3 = iCategoryLv3Repository.findById(productAddDto.getCategoryLv3());
+        Optional<CategoryLv4> categoryLv4 = iCategoryLv4Repository.findById(productAddDto.getCategoryLv4());
+
+        // 카테고리 유효성 검증
+        if(categoryLv1.isPresent() && categoryLv2.isPresent() && categoryLv3.isPresent() && categoryLv4.isPresent()) {
+
+            if(thumbnail.isEmpty())
+                return null;
+
+            // 상품 저장
+            Product product = iProductRepository.save(Product.builder()
+                    .productName(productAddDto.getProductName())
+                    .price(productAddDto.getPrice())
+                    .discountRate(productAddDto.getDiscountRate())
+                    .description(productAddDto.getDescription())
+                    .manufactureCompany(productAddDto.getManufactureCompany())
+                    .adultCase(productAddDto.isAdultCase())
+                    .fee(productAddDto.getFee())
+                    .adultCase(productAddDto.isAdultCase())
+                    .build()
+            );
+
+            FileInfoDto thumbnailDto = FileInfoDto.multipartOf(thumbnail, "product", product.getId());
+            awsS3ResourceStorage.store(thumbnailDto, thumbnail);
+
+            product.setThumbnail(MultipartUtil.createURL(thumbnailDto.getRemotePath()));
+
+
+            // 상품 - 카테고리 중칸테이블 저장
+            iCategoryProductListRepository.save(CategoryProductList.builder()
+                    .categoryLv1(categoryLv1.get())
+                    .categoryLv2(categoryLv2.get())
+                    .categoryLv3(categoryLv3.get())
+                    .categoryLv4(categoryLv4.get())
+                    .product(product)
+                    .build());
+
+            // 상품 옵션 저장
+            // 상품 등록할 때 옵션을 여러가지 등록할 수 있으므로 foreach로 하나씩 저장
+            for(ProductOptionDto productOptionDto : productAddDto.getProductOptionDtoList()) {
+                iProductOptionRepository.save(ProductOption.builder()
+                        .product(product)
+                        .productOption1Name(productOptionDto.getProductOption1Name())
+                        .productOption1Contents(productOptionDto.getProductOption1Contents())
+                        .productOption2Name(productOptionDto.getProductOption2Name())
+                        .productOption2Contents(productOptionDto.getProductOption2Contents())
+                        .stock(productOptionDto.getStock())
+                        .build());
+            }
+
+            List<ProductPhoto> productPhotoList = new ArrayList<>();
+            List<ProductDetailPhoto> productDetailPhotoList = new ArrayList<>();
+
+            int count = 1;
+
+            for(MultipartFile file : productPhoto) {
+                FileInfoDto fileInfoDto = FileInfoDto.multipartOf(file, "product", product.getId());
+                awsS3ResourceStorage.store(fileInfoDto, file);
+
+                productPhotoList.add(iProductPhotoRepository.save(ProductPhoto.builder()
+                                .productPhotoPath(MultipartUtil.createURL(fileInfoDto.getRemotePath()))
+                                .productPhotoOriginName(fileInfoDto.getName())
+                                .productPhotoSeq(count++)
+                                .product(product)
+                        .build()
+                ));
+            }
+
+            count = 1;
+
+            for(MultipartFile file : productDetail) {
+                FileInfoDto fileInfoDto = FileInfoDto.multipartOf(file, "product", product.getId());
+                awsS3ResourceStorage.store(fileInfoDto, file);
+
+                productDetailPhotoList.add(iProductDetailPhotoRepository.save(ProductDetailPhoto.builder()
+                        .productDetailPhotoPath(MultipartUtil.createURL(fileInfoDto.getRemotePath()))
+                        .productDetailPhotoOriginName(fileInfoDto.getName())
+                        .productDetailPhotoSeq(count++)
+                        .product(product)
+                        .build()
+                ));
+            }
+
+
+            return product;
+        }
+
+        return null;
+    }
+
+    // 상품 아이디를 통한 조회
     @Override
     public ProductInfoDto getProductById(Long id) {
         Optional<Product> product = iProductRepository.findById(id);
 
         // 상품 유효성 검증
         if(product.isPresent()) {
+            // 상품 - 카테고리 중간 테이블에 데이터 있는지 확인
             Optional<CategoryProductList> categoryProductList = iCategoryProductListRepository.findByProduct(product.get());
+            // 옵션 테이블에 해당 상품에 대한 데이터 있는 
             List<ProductOption> productOptionList = iProductOptionRepository.findAllByProduct(product.get());
 
             
@@ -109,6 +219,9 @@ public class ProductServiceImple implements IProductService {
             if(categoryProductList.isPresent() && !productOptionList.isEmpty()) {
                 List<ProductOptionOutDto> optionOutDtoList = new ArrayList<>();
 
+                // 하나의 상품에 여러개의 옵션이 있을 수 있으므로 
+                // 옵션 테이블의 데이터를 내가 보내주고 싶은 필드만
+                // DTO로 만들고 build 한 뒤, optionOutDtoList에 추가해준다.
                 for(ProductOption dto : productOptionList) {
                     optionOutDtoList.add(ProductOptionOutDto.builder()
                                     .id(dto.getId())
@@ -121,6 +234,8 @@ public class ProductServiceImple implements IProductService {
                             .build());
                 }
 
+                // 최종적으로 반환될 Dto
+                // 상품 기본 정보 + 카테고리 + 상품에 해당하는 옵션 리스트를 담아서 보내준다.
                 ProductInfoDto returnDto = ProductInfoDto.builder()
                         .id(product.get().getId())
                         .price(product.get().getPrice())
