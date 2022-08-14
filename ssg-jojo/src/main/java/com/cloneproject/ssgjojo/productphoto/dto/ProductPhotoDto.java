@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductPhotoAddDto {
+public class ProductPhotoDto {
     private String productPhotoPath;
     private String productPhotoOriginName;
     private int productPhotoSeq;

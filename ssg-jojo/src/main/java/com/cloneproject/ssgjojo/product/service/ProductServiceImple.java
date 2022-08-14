@@ -17,12 +17,14 @@ import com.cloneproject.ssgjojo.product.dto.ProductUpdateDto;
 import com.cloneproject.ssgjojo.product.dto.ProductInfoDto;
 import com.cloneproject.ssgjojo.product.repository.IProductRepository;
 import com.cloneproject.ssgjojo.productdetailphoto.domain.ProductDetailPhoto;
+import com.cloneproject.ssgjojo.productdetailphoto.dto.ProductDetailPhotoDto;
 import com.cloneproject.ssgjojo.productdetailphoto.repository.IProductDetailPhotoRepository;
 import com.cloneproject.ssgjojo.productoption.domain.ProductOption;
 import com.cloneproject.ssgjojo.productoption.dto.ProductOptionDto;
 import com.cloneproject.ssgjojo.productoption.dto.ProductOptionOutDto;
 import com.cloneproject.ssgjojo.productoption.repository.IProductOptionRepository;
 import com.cloneproject.ssgjojo.productphoto.domain.ProductPhoto;
+import com.cloneproject.ssgjojo.productphoto.dto.ProductPhotoDto;
 import com.cloneproject.ssgjojo.productphoto.repository.IProductPhotoRepository;
 import com.cloneproject.ssgjojo.util.MultipartUtil;
 import com.cloneproject.ssgjojo.util.s3.AwsS3ResourceStorage;
@@ -213,24 +215,47 @@ public class ProductServiceImple implements IProductService {
             Optional<CategoryProductList> categoryProductList = iCategoryProductListRepository.findByProduct(product.get());
             // 옵션 테이블에 해당 상품에 대한 데이터 있는 
             List<ProductOption> productOptionList = iProductOptionRepository.findAllByProduct(product.get());
-
+            List<ProductPhoto> productPhotoList = iProductPhotoRepository.findAllByProduct(product.get());
+            List<ProductDetailPhoto> productDetailPhotoList = iProductDetailPhotoRepository.findAllByProduct(product.get());
             
             // 중간 테이블 및 옵션 리스트 유효성 검증
-            if(categoryProductList.isPresent() && !productOptionList.isEmpty()) {
+            if(categoryProductList.isPresent() && !productOptionList.isEmpty() && !productPhotoList.isEmpty() && !productDetailPhotoList.isEmpty()) {
                 List<ProductOptionOutDto> optionOutDtoList = new ArrayList<>();
 
                 // 하나의 상품에 여러개의 옵션이 있을 수 있으므로 
                 // 옵션 테이블의 데이터를 내가 보내주고 싶은 필드만
                 // DTO로 만들고 build 한 뒤, optionOutDtoList에 추가해준다.
-                for(ProductOption dto : productOptionList) {
+                for(ProductOption tmp : productOptionList) {
                     optionOutDtoList.add(ProductOptionOutDto.builder()
-                                    .id(dto.getId())
-                                    .productId(dto.getProduct().getId())
-                                    .productOption1Name(dto.getProductOption1Name())
-                                    .productOption1Contents(dto.getProductOption1Contents())
-                                    .productOption2Name(dto.getProductOption2Name())
-                                    .productOption2Contents(dto.getProductOption2Contents())
-                                    .stock(dto.getStock())
+                            .id(tmp.getId())
+                            .productId(tmp.getProduct().getId())
+                            .productOption1Name(tmp.getProductOption1Name())
+                            .productOption1Contents(tmp.getProductOption1Contents())
+                            .productOption2Name(tmp.getProductOption2Name())
+                            .productOption2Contents(tmp.getProductOption2Contents())
+                            .stock(tmp.getStock())
+                            .build());
+                }
+
+                // 상품 이미지 목록 DTO 형태로 변환하여 저장
+                List<ProductPhotoDto> photoDtoList = new ArrayList<>();
+                for(ProductPhoto tmp : productPhotoList) {
+                    photoDtoList.add(ProductPhotoDto.builder()
+                            .productPhotoOriginName(tmp.getProductPhotoOriginName())
+                            .productPhotoPath(tmp.getProductPhotoPath())
+                            .productPhotoSeq(tmp.getProductPhotoSeq())
+                            .productId(tmp.getProduct().getId())
+                            .build());
+                }
+
+                // 상품 상세 이미지 목록 DTO 형태로 변환하여 저장
+                List<ProductDetailPhotoDto> detailPhotoDtoList = new ArrayList<>();
+                for(ProductDetailPhoto tmp : productDetailPhotoList) {
+                    detailPhotoDtoList.add(ProductDetailPhotoDto.builder()
+                            .productDetailPhotoOriginName(tmp.getProductDetailPhotoOriginName())
+                            .productDetailPhotoPath(tmp.getProductDetailPhotoPath())
+                            .productDetailPhotoSeq(tmp.getProductDetailPhotoSeq())
+                            .productId(tmp.getProduct().getId())
                             .build());
                 }
 
@@ -245,11 +270,14 @@ public class ProductServiceImple implements IProductService {
                         .discountRate(product.get().getDiscountRate())
                         .fee(product.get().getFee())
                         .adultCase(product.get().isAdultCase())
+                        .thumbnail(product.get().getThumbnail())
                         .categoryLv4(categoryProductList.get().getCategoryLv4().getId())
                         .categoryLv3(categoryProductList.get().getCategoryLv3().getId())
                         .categoryLv2(categoryProductList.get().getCategoryLv2().getId())
                         .categoryLv1(categoryProductList.get().getCategoryLv1().getId())
                         .productOptionList(optionOutDtoList)
+                        .productPhotoList(photoDtoList)
+                        .productDetailPhotoList(detailPhotoDtoList)
                         .build();
 
                 return returnDto;
@@ -266,24 +294,11 @@ public class ProductServiceImple implements IProductService {
 
         for(Product product : productList) {
             Optional<CategoryProductList> categoryProductList = iCategoryProductListRepository.findByProduct(product);
-            List<ProductOption> productOptionList = iProductOptionRepository.findAllByProduct(product);
 
 
             // 중간 테이블 및 옵션 리스트 유효성 검증
-            if(categoryProductList.isPresent() && !productOptionList.isEmpty()) {
+            if(categoryProductList.isPresent()) {
                 List<ProductOptionOutDto> optionOutDtoList = new ArrayList<>();
-
-                for(ProductOption dto : productOptionList) {
-                    optionOutDtoList.add(ProductOptionOutDto.builder()
-                            .id(dto.getId())
-                            .productId(dto.getProduct().getId())
-                            .productOption1Name(dto.getProductOption1Name())
-                            .productOption1Contents(dto.getProductOption1Contents())
-                            .productOption2Name(dto.getProductOption2Name())
-                            .productOption2Contents(dto.getProductOption2Contents())
-                            .stock(dto.getStock())
-                            .build());
-                }
 
                 productInfoDtoList.add(ProductInfoDto.builder()
                         .id(product.getId())
@@ -294,6 +309,7 @@ public class ProductServiceImple implements IProductService {
                         .discountRate(product.getDiscountRate())
                         .fee(product.getFee())
                         .adultCase(product.isAdultCase())
+                        .thumbnail(product.getThumbnail())
                         .categoryLv4(categoryProductList.get().getCategoryLv4().getId())
                         .categoryLv3(categoryProductList.get().getCategoryLv3().getId())
                         .categoryLv2(categoryProductList.get().getCategoryLv2().getId())
@@ -315,12 +331,20 @@ public class ProductServiceImple implements IProductService {
         if(product.isPresent()) {
             Optional<CategoryProductList> categoryProductList = iCategoryProductListRepository.findByProduct(product.get());
             List<ProductOption> productOptions = iProductOptionRepository.findAllByProduct(product.get());
+            List<ProductPhoto> productPhotoList = iProductPhotoRepository.findAllByProduct(product.get());
+            List<ProductDetailPhoto> productDetailPhotoList = iProductDetailPhotoRepository.findAllByProduct(product.get());
 
             if(categoryProductList.isPresent() && !productOptions.isEmpty()) {
                 iCategoryProductListRepository.deleteByProduct(product.get());
 
                 for(ProductOption temp : productOptions)
                     iProductOptionRepository.deleteById(temp.getId());
+
+                for(ProductPhoto temp : productPhotoList)
+                    iProductPhotoRepository.deleteById(temp.getId());
+
+                for(ProductDetailPhoto temp : productDetailPhotoList)
+                    iProductDetailPhotoRepository.deleteById(temp.getId());
             }
             iProductRepository.deleteById(id);
         }
