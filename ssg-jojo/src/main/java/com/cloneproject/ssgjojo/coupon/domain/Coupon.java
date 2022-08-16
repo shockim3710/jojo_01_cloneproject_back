@@ -32,8 +32,14 @@ public class Coupon {
     @Column(nullable = false)
     private String couponContent; // 쿠폰 내용
 
-    @Column(nullable = false)
-    private boolean isUseStatus; // 쿠폰 사용여부
+    @Column(nullable = false, name = "is_use_status")
+    private boolean whetherIsUseStatus; // 쿠폰 사용여부
+
+    private Long bargainPrice; // 쿠폰 할인가격
+
+    private Long bargainPercent; // 쿠폰 할인퍼센트
+
+
 
     @ManyToOne
     private User user;

@@ -1,4 +1,4 @@
-package com.cloneproject.ssgjojo.order.dto;
+package com.cloneproject.ssgjojo.orders.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,11 +11,11 @@ import java.sql.Timestamp;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderGetIdDto {
-    private Long id;
+public class OrdersAddDto {
     private int count; // 하나의 상품을 몇개 주문하는지
     private Timestamp orderDate; // 주문 날짜
     private Long orderPrice; // 주문한 총 가격
+    private boolean isExchange; // 주문자 이름, 주문자 전화번호, 배송지 변경여부
     private boolean isRefund; // 환불여부
     private String orderName; // 주문자 이름
     private String orderPhone; // 주문자 전화번호
@@ -24,4 +24,5 @@ public class OrderGetIdDto {
 
     private Long user;
     private Long product;
+    private Long productOption;
 }
