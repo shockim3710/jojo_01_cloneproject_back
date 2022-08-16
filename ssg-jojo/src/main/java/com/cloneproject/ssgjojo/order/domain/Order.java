@@ -1,6 +1,5 @@
 package com.cloneproject.ssgjojo.order.domain;
 
-import com.cloneproject.ssgjojo.deliveryAddress.domain.DeliveryAddress;
 import com.cloneproject.ssgjojo.product.domain.Product;
 import com.cloneproject.ssgjojo.user.domain.User;
 import lombok.AllArgsConstructor;
@@ -9,7 +8,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.sql.Date;
 import java.sql.Timestamp;
 
 @Data
