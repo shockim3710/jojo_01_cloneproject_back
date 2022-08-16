@@ -1,4 +1,4 @@
-package com.cloneproject.ssgjojo.loginHistory.domain;
+package com.cloneproject.ssgjojo.loginhistory.domain;
 
 import com.cloneproject.ssgjojo.user.domain.User;
 import lombok.AllArgsConstructor;

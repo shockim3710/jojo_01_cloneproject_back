@@ -1,12 +1,8 @@
-package com.cloneproject.ssgjojo.deliveryAddress.controller;
+package com.cloneproject.ssgjojo.deliveryaddress.controller;
 
-import com.cloneproject.ssgjojo.deliveryAddress.domain.DeliveryAddress;
-import com.cloneproject.ssgjojo.deliveryAddress.dto.DeliveryAddressAddDto;
-import com.cloneproject.ssgjojo.deliveryAddress.dto.DeliveryAddressEditGetIdDto;
-import com.cloneproject.ssgjojo.deliveryAddress.service.IDeliveryAddressService;
-import com.cloneproject.ssgjojo.product.domain.Product;
-import com.cloneproject.ssgjojo.product.dto.ProductUpdateDto;
-import com.cloneproject.ssgjojo.recentSearches.dto.RecentSearchesDto;
+import com.cloneproject.ssgjojo.deliveryaddress.dto.DeliveryAddressAddDto;
+import com.cloneproject.ssgjojo.deliveryaddress.dto.DeliveryAddressEditGetIdDto;
+import com.cloneproject.ssgjojo.deliveryaddress.service.IDeliveryAddressService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

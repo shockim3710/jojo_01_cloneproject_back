@@ -1,9 +1,9 @@
-package com.cloneproject.ssgjojo.payingCreditCard.controller;
+package com.cloneproject.ssgjojo.payingcreditcard.controller;
 
-import com.cloneproject.ssgjojo.payingCreditCard.domain.PayingCreditCard;
-import com.cloneproject.ssgjojo.payingCreditCard.dto.PayingCreditCardDeleteDto;
-import com.cloneproject.ssgjojo.payingCreditCard.dto.PayingCreditCardInputDto;
-import com.cloneproject.ssgjojo.payingCreditCard.service.IPayingCreditCardService;
+import com.cloneproject.ssgjojo.payingcreditcard.domain.PayingCreditCard;
+import com.cloneproject.ssgjojo.payingcreditcard.dto.PayingCreditCardDeleteDto;
+import com.cloneproject.ssgjojo.payingcreditcard.dto.PayingCreditCardInputDto;
+import com.cloneproject.ssgjojo.payingcreditcard.service.IPayingCreditCardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

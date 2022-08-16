@@ -1,7 +1,7 @@
-package com.cloneproject.ssgjojo.loginHistory.service;
+package com.cloneproject.ssgjojo.loginhistory.service;
 
-import com.cloneproject.ssgjojo.loginHistory.domain.LogInHistory;
-import com.cloneproject.ssgjojo.loginHistory.dto.LogInHistoryDto;
+import com.cloneproject.ssgjojo.loginhistory.domain.LogInHistory;
+import com.cloneproject.ssgjojo.loginhistory.dto.LogInHistoryDto;
 
 import java.util.List;
 

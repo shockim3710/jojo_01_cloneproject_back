@@ -1,4 +1,4 @@
-package com.cloneproject.ssgjojo.categoryLv3.dto;
+package com.cloneproject.ssgjojo.categorylv3.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

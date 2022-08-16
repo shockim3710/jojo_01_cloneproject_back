@@ -1,9 +1,9 @@
-package com.cloneproject.ssgjojo.recentSearches.service;
+package com.cloneproject.ssgjojo.recentsearches.service;
 
-import com.cloneproject.ssgjojo.recentSearches.domain.RecentSearches;
-import com.cloneproject.ssgjojo.recentSearches.dto.RecentSearchesAddDto;
-import com.cloneproject.ssgjojo.recentSearches.dto.RecentSearchesDto;
-import com.cloneproject.ssgjojo.recentSearches.repository.IRecentSearchesRepository;
+import com.cloneproject.ssgjojo.recentsearches.domain.RecentSearches;
+import com.cloneproject.ssgjojo.recentsearches.dto.RecentSearchesAddDto;
+import com.cloneproject.ssgjojo.recentsearches.dto.RecentSearchesDto;
+import com.cloneproject.ssgjojo.recentsearches.repository.IRecentSearchesRepository;
 import com.cloneproject.ssgjojo.user.domain.User;
 import com.cloneproject.ssgjojo.user.repository.IUserRepository;
 import lombok.RequiredArgsConstructor;

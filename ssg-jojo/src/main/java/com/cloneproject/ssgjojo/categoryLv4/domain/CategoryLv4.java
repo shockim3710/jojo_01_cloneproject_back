@@ -1,8 +1,8 @@
-package com.cloneproject.ssgjojo.categoryLv4.domain;
+package com.cloneproject.ssgjojo.categorylv4.domain;
 
 // S Category
 
-import com.cloneproject.ssgjojo.categoryLv3.domain.CategoryLv3;
+import com.cloneproject.ssgjojo.categorylv3.domain.CategoryLv3;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

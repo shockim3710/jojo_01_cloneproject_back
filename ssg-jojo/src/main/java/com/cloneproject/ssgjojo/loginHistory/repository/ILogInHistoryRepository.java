@@ -1,6 +1,6 @@
-package com.cloneproject.ssgjojo.loginHistory.repository;
+package com.cloneproject.ssgjojo.loginhistory.repository;
 
-import com.cloneproject.ssgjojo.loginHistory.domain.LogInHistory;
+import com.cloneproject.ssgjojo.loginhistory.domain.LogInHistory;
 import com.cloneproject.ssgjojo.user.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 

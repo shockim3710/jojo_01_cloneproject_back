@@ -1,8 +1,8 @@
-package com.cloneproject.ssgjojo.recentSearches.controller;
+package com.cloneproject.ssgjojo.recentsearches.controller;
 
-import com.cloneproject.ssgjojo.recentSearches.dto.RecentSearchesAddDto;
-import com.cloneproject.ssgjojo.recentSearches.dto.RecentSearchesDto;
-import com.cloneproject.ssgjojo.recentSearches.service.IRecentSearchesService;
+import com.cloneproject.ssgjojo.recentsearches.dto.RecentSearchesAddDto;
+import com.cloneproject.ssgjojo.recentsearches.dto.RecentSearchesDto;
+import com.cloneproject.ssgjojo.recentsearches.service.IRecentSearchesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

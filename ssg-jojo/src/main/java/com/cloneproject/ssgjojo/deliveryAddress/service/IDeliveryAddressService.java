@@ -1,12 +1,7 @@
-package com.cloneproject.ssgjojo.deliveryAddress.service;
+package com.cloneproject.ssgjojo.deliveryaddress.service;
 
-import com.cloneproject.ssgjojo.deliveryAddress.domain.DeliveryAddress;
-import com.cloneproject.ssgjojo.deliveryAddress.dto.DeliveryAddressAddDto;
-import com.cloneproject.ssgjojo.deliveryAddress.dto.DeliveryAddressEditGetIdDto;
-import com.cloneproject.ssgjojo.product.domain.Product;
-import com.cloneproject.ssgjojo.product.dto.ProductUpdateDto;
-import com.cloneproject.ssgjojo.recentSearches.dto.RecentSearchesAddDto;
-import com.cloneproject.ssgjojo.recentSearches.dto.RecentSearchesDto;
+import com.cloneproject.ssgjojo.deliveryaddress.dto.DeliveryAddressAddDto;
+import com.cloneproject.ssgjojo.deliveryaddress.dto.DeliveryAddressEditGetIdDto;
 
 import java.util.List;
 

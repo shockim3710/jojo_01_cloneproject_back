@@ -1,10 +1,9 @@
-package com.cloneproject.ssgjojo.deliveryAddress.service;
+package com.cloneproject.ssgjojo.deliveryaddress.service;
 
-import com.cloneproject.ssgjojo.deliveryAddress.domain.DeliveryAddress;
-import com.cloneproject.ssgjojo.deliveryAddress.dto.DeliveryAddressAddDto;
-import com.cloneproject.ssgjojo.deliveryAddress.dto.DeliveryAddressEditGetIdDto;
-import com.cloneproject.ssgjojo.deliveryAddress.repository.IDeliveryAddressRepository;
-import com.cloneproject.ssgjojo.recentSearches.domain.RecentSearches;
+import com.cloneproject.ssgjojo.deliveryaddress.domain.DeliveryAddress;
+import com.cloneproject.ssgjojo.deliveryaddress.dto.DeliveryAddressAddDto;
+import com.cloneproject.ssgjojo.deliveryaddress.dto.DeliveryAddressEditGetIdDto;
+import com.cloneproject.ssgjojo.deliveryaddress.repository.IDeliveryAddressRepository;
 import com.cloneproject.ssgjojo.user.domain.User;
 import com.cloneproject.ssgjojo.user.repository.IUserRepository;
 import lombok.RequiredArgsConstructor;

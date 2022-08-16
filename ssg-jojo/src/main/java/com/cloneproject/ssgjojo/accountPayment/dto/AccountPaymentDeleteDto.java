@@ -1,4 +1,4 @@
-package com.cloneproject.ssgjojo.accountPayment.dto;
+package com.cloneproject.ssgjojo.accountpayment.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,8 +1,8 @@
-package com.cloneproject.ssgjojo.loginHistory.service;
+package com.cloneproject.ssgjojo.loginhistory.service;
 
-import com.cloneproject.ssgjojo.loginHistory.domain.LogInHistory;
-import com.cloneproject.ssgjojo.loginHistory.dto.LogInHistoryDto;
-import com.cloneproject.ssgjojo.loginHistory.repository.ILogInHistoryRepository;
+import com.cloneproject.ssgjojo.loginhistory.domain.LogInHistory;
+import com.cloneproject.ssgjojo.loginhistory.dto.LogInHistoryDto;
+import com.cloneproject.ssgjojo.loginhistory.repository.ILogInHistoryRepository;
 import com.cloneproject.ssgjojo.user.domain.User;
 import com.cloneproject.ssgjojo.user.repository.IUserRepository;
 import lombok.RequiredArgsConstructor;

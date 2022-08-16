@@ -1,8 +1,8 @@
-package com.cloneproject.ssgjojo.payingCreditCard.service;
+package com.cloneproject.ssgjojo.payingcreditcard.service;
 
-import com.cloneproject.ssgjojo.payingCreditCard.domain.PayingCreditCard;
-import com.cloneproject.ssgjojo.payingCreditCard.dto.PayingCreditCardDeleteDto;
-import com.cloneproject.ssgjojo.payingCreditCard.dto.PayingCreditCardInputDto;
+import com.cloneproject.ssgjojo.payingcreditcard.domain.PayingCreditCard;
+import com.cloneproject.ssgjojo.payingcreditcard.dto.PayingCreditCardDeleteDto;
+import com.cloneproject.ssgjojo.payingcreditcard.dto.PayingCreditCardInputDto;
 
 import java.util.List;
 

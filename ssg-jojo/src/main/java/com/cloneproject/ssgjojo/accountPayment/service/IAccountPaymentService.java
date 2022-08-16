@@ -1,8 +1,8 @@
-package com.cloneproject.ssgjojo.accountPayment.service;
+package com.cloneproject.ssgjojo.accountpayment.service;
 
-import com.cloneproject.ssgjojo.accountPayment.domain.AccountPayment;
-import com.cloneproject.ssgjojo.accountPayment.dto.AccountPaymentDeleteDto;
-import com.cloneproject.ssgjojo.accountPayment.dto.AccountPaymentDto;
+import com.cloneproject.ssgjojo.accountpayment.domain.AccountPayment;
+import com.cloneproject.ssgjojo.accountpayment.dto.AccountPaymentDeleteDto;
+import com.cloneproject.ssgjojo.accountpayment.dto.AccountPaymentDto;
 
 import java.util.List;
 

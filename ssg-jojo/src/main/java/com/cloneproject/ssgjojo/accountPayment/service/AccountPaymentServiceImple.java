@@ -1,9 +1,9 @@
-package com.cloneproject.ssgjojo.accountPayment.service;
+package com.cloneproject.ssgjojo.accountpayment.service;
 
-import com.cloneproject.ssgjojo.accountPayment.domain.AccountPayment;
-import com.cloneproject.ssgjojo.accountPayment.dto.AccountPaymentDeleteDto;
-import com.cloneproject.ssgjojo.accountPayment.dto.AccountPaymentDto;
-import com.cloneproject.ssgjojo.accountPayment.repository.IAccountPaymentRepository;
+import com.cloneproject.ssgjojo.accountpayment.domain.AccountPayment;
+import com.cloneproject.ssgjojo.accountpayment.dto.AccountPaymentDeleteDto;
+import com.cloneproject.ssgjojo.accountpayment.dto.AccountPaymentDto;
+import com.cloneproject.ssgjojo.accountpayment.repository.IAccountPaymentRepository;
 import com.cloneproject.ssgjojo.user.domain.User;
 import com.cloneproject.ssgjojo.user.repository.IUserRepository;
 import lombok.RequiredArgsConstructor;

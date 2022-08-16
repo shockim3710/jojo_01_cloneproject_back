@@ -1,6 +1,5 @@
-package com.cloneproject.ssgjojo.deliveryAddress.dto;
+package com.cloneproject.ssgjojo.deliveryaddress.dto;
 
-import com.cloneproject.ssgjojo.user.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -1,6 +1,6 @@
-package com.cloneproject.ssgjojo.accountPayment.repository;
+package com.cloneproject.ssgjojo.accountpayment.repository;
 
-import com.cloneproject.ssgjojo.accountPayment.domain.AccountPayment;
+import com.cloneproject.ssgjojo.accountpayment.domain.AccountPayment;
 import com.cloneproject.ssgjojo.user.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 

@@ -1,9 +1,7 @@
-package com.cloneproject.ssgjojo.categoryLv1.controller;
+package com.cloneproject.ssgjojo.categorylv1.controller;
 
-import com.cloneproject.ssgjojo.categoryLv1.domain.CategoryLv1;
-import com.cloneproject.ssgjojo.categoryLv1.service.ICategoryLv1Service;
-import com.cloneproject.ssgjojo.categoryLv2.domain.CategoryLv2;
-import com.cloneproject.ssgjojo.categoryLv2.dto.CategoryLv2Dto;
+import com.cloneproject.ssgjojo.categorylv1.domain.CategoryLv1;
+import com.cloneproject.ssgjojo.categorylv1.service.ICategoryLv1Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

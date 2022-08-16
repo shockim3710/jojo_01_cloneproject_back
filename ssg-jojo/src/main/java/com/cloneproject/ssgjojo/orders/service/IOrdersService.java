@@ -6,7 +6,7 @@ import com.cloneproject.ssgjojo.orders.dto.OrdersGetIdDto;
 
 import java.util.List;
 
-public interface IOrderService {
+public interface IOrdersService {
 
     OrdersAddDto addOrders(OrdersAddDto ordersAddDto);
     List<OrdersGetIdDto> getOrdersByUserId(Long id);

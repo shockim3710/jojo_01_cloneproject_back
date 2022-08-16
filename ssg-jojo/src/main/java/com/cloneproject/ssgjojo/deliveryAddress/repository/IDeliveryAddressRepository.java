@@ -1,7 +1,6 @@
-package com.cloneproject.ssgjojo.deliveryAddress.repository;
+package com.cloneproject.ssgjojo.deliveryaddress.repository;
 
-import com.cloneproject.ssgjojo.deliveryAddress.domain.DeliveryAddress;
-import com.cloneproject.ssgjojo.recentSearches.domain.RecentSearches;
+import com.cloneproject.ssgjojo.deliveryaddress.domain.DeliveryAddress;
 import com.cloneproject.ssgjojo.user.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 

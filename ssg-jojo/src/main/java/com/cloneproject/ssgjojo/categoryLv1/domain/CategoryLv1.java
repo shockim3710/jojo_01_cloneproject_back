@@ -1,7 +1,7 @@
 
 // XL Category
 
-package com.cloneproject.ssgjojo.categoryLv1.domain;
+package com.cloneproject.ssgjojo.categorylv1.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

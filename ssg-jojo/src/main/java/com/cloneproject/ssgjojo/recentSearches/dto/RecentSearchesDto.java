@@ -1,4 +1,4 @@
-package com.cloneproject.ssgjojo.recentSearches.dto;
+package com.cloneproject.ssgjojo.recentsearches.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

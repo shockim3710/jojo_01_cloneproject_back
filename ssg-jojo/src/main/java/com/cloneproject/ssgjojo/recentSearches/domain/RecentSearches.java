@@ -1,6 +1,5 @@
-package com.cloneproject.ssgjojo.recentSearches.domain;
+package com.cloneproject.ssgjojo.recentsearches.domain;
 
-import com.cloneproject.ssgjojo.categoryLv4.domain.CategoryLv4;
 import com.cloneproject.ssgjojo.user.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

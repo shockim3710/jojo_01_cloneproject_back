@@ -1,9 +1,7 @@
-package com.cloneproject.ssgjojo.categoryLv1.service;
+package com.cloneproject.ssgjojo.categorylv1.service;
 
-import com.cloneproject.ssgjojo.categoryLv1.domain.CategoryLv1;
-import com.cloneproject.ssgjojo.categoryLv1.repository.ICategoryLv1Repository;
-import com.cloneproject.ssgjojo.categoryLv1.service.ICategoryLv1Service;
-import com.cloneproject.ssgjojo.categoryLv2.domain.CategoryLv2;
+import com.cloneproject.ssgjojo.categorylv1.domain.CategoryLv1;
+import com.cloneproject.ssgjojo.categorylv1.repository.ICategoryLv1Repository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

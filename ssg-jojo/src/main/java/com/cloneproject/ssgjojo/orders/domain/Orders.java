@@ -1,12 +1,15 @@
 package com.cloneproject.ssgjojo.orders.domain;
 
+import com.cloneproject.ssgjojo.deliveryaddress.domain.DeliveryAddress;
 import com.cloneproject.ssgjojo.product.domain.Product;
 import com.cloneproject.ssgjojo.productoption.domain.ProductOption;
 import com.cloneproject.ssgjojo.user.domain.User;
+import com.cloneproject.ssgjojo.util.BaseTimeEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -16,7 +19,8 @@ import java.sql.Timestamp;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Orders {
+@DynamicUpdate
+public class Orders extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,16 +30,13 @@ public class Orders {
     private int count; // 하나의 상품을 몇개 주문하는지
 
     @Column(nullable = false)
-    private Timestamp ordersDate; // 주문 날짜
-
-    @Column(nullable = false)
     private Long ordersPrice; // 주문한 총 가격
 
-    @Column(nullable = false)
-    private boolean isExchange; // 주문자 이름, 주문자 전화번호, 배송지, 배송요청사항 변경여부
+    @Column(nullable = false, name = "is_exchange")
+    private boolean whetherExchange; // 주문자 이름, 주문자 전화번호, 주문자 이메일, 배송지, 배송요청사항 변경여부
 
-    @Column(nullable = false)
-    private boolean isRefund; // 환불여부
+    @Column(nullable = false, name = "is_refund")
+    private boolean whetherRefund; // 환불여부
 
     @Column(nullable = false)
     private String ordersName; // 주문자 이름
@@ -44,10 +45,13 @@ public class Orders {
     private String ordersPhone; // 주문자 전화번호
 
     @Column(nullable = false)
-    private Timestamp deliveryDate; // 배송날짜
+    private String ordersEmail; // 주문자 이메일
 
+    @Column(nullable = false)
+    private Timestamp deliveryDate; // 배송날짜
     // 타임스탬프는 시간을 더해주거나 빼주는 그런게 따로 없어서
     // Calendar 객체를 사용
+
     @Column(nullable = false)
     private String deliveryRequest; // 배송요청사항
 
@@ -60,4 +64,7 @@ public class Orders {
 
     @ManyToOne
     private ProductOption productOption;
+
+    @ManyToOne
+    private DeliveryAddress deliveryAddress;
 }

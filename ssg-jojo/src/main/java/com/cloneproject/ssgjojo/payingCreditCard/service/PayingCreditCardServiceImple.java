@@ -1,9 +1,9 @@
-package com.cloneproject.ssgjojo.payingCreditCard.service;
+package com.cloneproject.ssgjojo.payingcreditcard.service;
 
-import com.cloneproject.ssgjojo.payingCreditCard.domain.PayingCreditCard;
-import com.cloneproject.ssgjojo.payingCreditCard.dto.PayingCreditCardDeleteDto;
-import com.cloneproject.ssgjojo.payingCreditCard.dto.PayingCreditCardInputDto;
-import com.cloneproject.ssgjojo.payingCreditCard.repository.IPayingCreditCardRepository;
+import com.cloneproject.ssgjojo.payingcreditcard.domain.PayingCreditCard;
+import com.cloneproject.ssgjojo.payingcreditcard.dto.PayingCreditCardDeleteDto;
+import com.cloneproject.ssgjojo.payingcreditcard.dto.PayingCreditCardInputDto;
+import com.cloneproject.ssgjojo.payingcreditcard.repository.IPayingCreditCardRepository;
 import com.cloneproject.ssgjojo.user.domain.User;
 import com.cloneproject.ssgjojo.user.repository.IUserRepository;
 import lombok.RequiredArgsConstructor;

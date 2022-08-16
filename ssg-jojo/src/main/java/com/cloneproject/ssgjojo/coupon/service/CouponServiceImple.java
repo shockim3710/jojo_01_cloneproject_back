@@ -4,7 +4,7 @@ import com.cloneproject.ssgjojo.coupon.domain.Coupon;
 import com.cloneproject.ssgjojo.coupon.dto.CouponAddDto;
 import com.cloneproject.ssgjojo.coupon.dto.CouponUseGetIdDto;
 import com.cloneproject.ssgjojo.coupon.repository.ICouponRepository;
-import com.cloneproject.ssgjojo.exceptionOutput.CouponException;
+import com.cloneproject.ssgjojo.exceptionoutput.CouponException;
 import com.cloneproject.ssgjojo.user.domain.User;
 import com.cloneproject.ssgjojo.user.repository.IUserRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +28,7 @@ public class CouponServiceImple implements ICouponService {
     public CouponAddDto addCoupon(CouponAddDto couponAddDto) {
         Optional<User> user = Optional.ofNullable(iUserRepository.findById(couponAddDto.getUser()).orElseThrow(CouponException::new));
 //        Optional<User> user = iUserRepository.findById(couponAddDto.getUser());
-        if (user.isPresent() ) {
+        if (user.isPresent()) {
 
             couponAddDto.setWhetherIsUseStatus(false);
 
@@ -40,6 +40,8 @@ public class CouponServiceImple implements ICouponService {
                             .whetherIsUseStatus(couponAddDto.isWhetherIsUseStatus())
                             .bargainPrice(couponAddDto.getBargainPrice())
                             .bargainPercent(couponAddDto.getBargainPercent())
+                            .useOverPrice(couponAddDto.getUseOverPrice())
+                            .maxUsePrice(couponAddDto.getMaxUsePrice())
                             .user(user.get())
                             .build());
 
@@ -51,6 +53,8 @@ public class CouponServiceImple implements ICouponService {
                     .whetherIsUseStatus(temp.isWhetherIsUseStatus())
                     .bargainPrice(temp.getBargainPrice())
                     .bargainPercent(temp.getBargainPercent())
+                    .useOverPrice(temp.getUseOverPrice())
+                    .maxUsePrice(temp.getMaxUsePrice())
                     .user(temp.getUser().getId())
                     .build();
         }
@@ -76,6 +80,8 @@ public class CouponServiceImple implements ICouponService {
                                 .whetherIsUseStatus(user.isWhetherIsUseStatus())
                                 .bargainPrice(user.getBargainPrice())
                                 .bargainPercent(user.getBargainPercent())
+                                .useOverPrice(user.getUseOverPrice())
+                                .maxUsePrice(user.getMaxUsePrice())
                                 .user(user.getUser().getId())
                                 .build());
             });

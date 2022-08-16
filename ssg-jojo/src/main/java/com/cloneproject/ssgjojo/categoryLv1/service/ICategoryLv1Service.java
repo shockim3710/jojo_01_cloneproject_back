@@ -1,6 +1,6 @@
-package com.cloneproject.ssgjojo.categoryLv1.service;
+package com.cloneproject.ssgjojo.categorylv1.service;
 
-import com.cloneproject.ssgjojo.categoryLv1.domain.CategoryLv1;
+import com.cloneproject.ssgjojo.categorylv1.domain.CategoryLv1;
 
 import java.util.List;
 

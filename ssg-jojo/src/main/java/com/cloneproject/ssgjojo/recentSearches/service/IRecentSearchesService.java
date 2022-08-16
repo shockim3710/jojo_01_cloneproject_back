@@ -1,7 +1,7 @@
-package com.cloneproject.ssgjojo.recentSearches.service;
+package com.cloneproject.ssgjojo.recentsearches.service;
 
-import com.cloneproject.ssgjojo.recentSearches.dto.RecentSearchesAddDto;
-import com.cloneproject.ssgjojo.recentSearches.dto.RecentSearchesDto;
+import com.cloneproject.ssgjojo.recentsearches.dto.RecentSearchesAddDto;
+import com.cloneproject.ssgjojo.recentsearches.dto.RecentSearchesDto;
 
 import java.util.List;
 

@@ -1,12 +1,10 @@
-package com.cloneproject.ssgjojo.categoryLv2.service;
+package com.cloneproject.ssgjojo.categorylv2.service;
 
-import com.cloneproject.ssgjojo.categoryLv1.domain.CategoryLv1;
-import com.cloneproject.ssgjojo.categoryLv2.domain.CategoryLv2;
-import com.cloneproject.ssgjojo.categoryLv2.dto.CategoryLv2Dto;
-import com.cloneproject.ssgjojo.categoryLv2.repository.ICategoryLv2Repository;
-import com.cloneproject.ssgjojo.categoryLv1.repository.ICategoryLv1Repository;
-import com.cloneproject.ssgjojo.categoryLv2.service.ICategoryLv2Service;
-import com.cloneproject.ssgjojo.categoryLv3.domain.CategoryLv3;
+import com.cloneproject.ssgjojo.categorylv1.domain.CategoryLv1;
+import com.cloneproject.ssgjojo.categorylv2.domain.CategoryLv2;
+import com.cloneproject.ssgjojo.categorylv2.dto.CategoryLv2Dto;
+import com.cloneproject.ssgjojo.categorylv2.repository.ICategoryLv2Repository;
+import com.cloneproject.ssgjojo.categorylv1.repository.ICategoryLv1Repository;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,6 +1,6 @@
-package com.cloneproject.ssgjojo.payingCreditCard.repository;
+package com.cloneproject.ssgjojo.payingcreditcard.repository;
 
-import com.cloneproject.ssgjojo.payingCreditCard.domain.PayingCreditCard;
+import com.cloneproject.ssgjojo.payingcreditcard.domain.PayingCreditCard;
 import com.cloneproject.ssgjojo.user.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 

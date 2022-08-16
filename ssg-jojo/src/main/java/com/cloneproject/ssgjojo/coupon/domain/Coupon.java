@@ -39,6 +39,9 @@ public class Coupon {
 
     private Long bargainPercent; // 쿠폰 할인퍼센트
 
+    private Long useOverPrice; // 쿠폰 사용의 기본가격 (얼마 이상 구매시 사용가능)
+
+    private Long maxUsePrice; // 최대 할인가격 (최대 얼마까지만 할인)
 
 
     @ManyToOne

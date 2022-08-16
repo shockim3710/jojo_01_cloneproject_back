@@ -1,4 +1,4 @@
-package com.cloneproject.ssgjojo.deliveryAddress.domain;
+package com.cloneproject.ssgjojo.deliveryaddress.domain;
 
 import com.cloneproject.ssgjojo.user.domain.User;
 import lombok.AllArgsConstructor;

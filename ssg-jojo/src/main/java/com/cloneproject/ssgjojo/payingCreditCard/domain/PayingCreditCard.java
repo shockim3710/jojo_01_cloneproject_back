@@ -1,4 +1,4 @@
-package com.cloneproject.ssgjojo.payingCreditCard.domain;
+package com.cloneproject.ssgjojo.payingcreditcard.domain;
 
 import com.cloneproject.ssgjojo.user.domain.User;
 import lombok.AllArgsConstructor;
