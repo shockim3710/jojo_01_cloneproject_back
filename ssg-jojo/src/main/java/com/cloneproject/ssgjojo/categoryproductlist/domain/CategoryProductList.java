@@ -1,9 +1,9 @@
 package com.cloneproject.ssgjojo.categoryProductList.domain;
 
-import com.cloneproject.ssgjojo.categoryLv1.domain.CategoryLv1;
-import com.cloneproject.ssgjojo.categoryLv2.domain.CategoryLv2;
-import com.cloneproject.ssgjojo.categoryLv3.domain.CategoryLv3;
-import com.cloneproject.ssgjojo.categoryLv4.domain.CategoryLv4;
+import com.cloneproject.ssgjojo.categorylv1.domain.CategoryLv1;
+import com.cloneproject.ssgjojo.categorylv2.domain.CategoryLv2;
+import com.cloneproject.ssgjojo.categorylv3.domain.CategoryLv3;
+import com.cloneproject.ssgjojo.categorylv4.domain.CategoryLv4;
 import com.cloneproject.ssgjojo.product.domain.Product;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

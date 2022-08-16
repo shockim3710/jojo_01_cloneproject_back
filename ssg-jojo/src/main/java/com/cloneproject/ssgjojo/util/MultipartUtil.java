@@ -70,6 +70,10 @@ public class MultipartUtil {
         return String.format("%s/%d/%s.%s", photoDiv, productId, fileId, format);
     }
 
+    public static String createRemotePath(String photoDiv, String fileId, String format) {
+        return String.format("%s/%s.%s", photoDiv, fileId, format);
+    }
+
     public static String createURL(String remotePath) {
         return String.format("https://%s.s3.%s.amazonaws.com/%s", bucket, region, remotePath);
     }

@@ -1,17 +1,14 @@
-package com.cloneproject.ssgjojo.categoryLv4.service;
+package com.cloneproject.ssgjojo.categorylv4.service;
 
-import com.cloneproject.ssgjojo.categoryLv2.domain.CategoryLv2;
-import com.cloneproject.ssgjojo.categoryLv2.dto.CategoryLv2Dto;
-import com.cloneproject.ssgjojo.categoryLv3.domain.CategoryLv3;
-import com.cloneproject.ssgjojo.categoryLv4.domain.CategoryLv4;
-import com.cloneproject.ssgjojo.categoryLv4.dto.CategoryLv4Dto;
-import com.cloneproject.ssgjojo.categoryLv3.repository.ICategoryLv3Repository;
-import com.cloneproject.ssgjojo.categoryLv4.repository.ICategoryLv4Repository;
+import com.cloneproject.ssgjojo.categorylv3.domain.CategoryLv3;
+import com.cloneproject.ssgjojo.categorylv4.domain.CategoryLv4;
+import com.cloneproject.ssgjojo.categorylv4.dto.CategoryLv4Dto;
+import com.cloneproject.ssgjojo.categorylv3.repository.ICategoryLv3Repository;
+import com.cloneproject.ssgjojo.categorylv4.repository.ICategoryLv4Repository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 

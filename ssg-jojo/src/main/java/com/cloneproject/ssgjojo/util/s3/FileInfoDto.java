@@ -36,6 +36,20 @@ public class FileInfoDto {
                 .build();
     }
 
+    public static FileInfoDto multipartOf(MultipartFile multipartFile, String photoDiv) {
+        final String fileId = MultipartUtil.createFileUUID();
+        final String format = MultipartUtil.getFormat(multipartFile.getContentType());
+
+        return FileInfoDto.builder()
+                .id(fileId)
+                .name(multipartFile.getOriginalFilename())
+                .format(format)
+                .localPath(MultipartUtil.createLocalPath(fileId, format))
+                .remotePath(MultipartUtil.createRemotePath(photoDiv, fileId, format))
+                .bytes(multipartFile.getSize())
+                .build();
+    }
+
     public static FileInfoDto multipartOf(MultipartFile multipartFile, String photoDiv, Long productId) {
         final String fileId = MultipartUtil.createFileUUID();
         final String format = MultipartUtil.getFormat(multipartFile.getContentType());

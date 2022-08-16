@@ -1,14 +1,14 @@
 package com.cloneproject.ssgjojo.product.service;
 
 
-import com.cloneproject.ssgjojo.categoryLv1.domain.CategoryLv1;
-import com.cloneproject.ssgjojo.categoryLv1.repository.ICategoryLv1Repository;
-import com.cloneproject.ssgjojo.categoryLv2.domain.CategoryLv2;
-import com.cloneproject.ssgjojo.categoryLv2.repository.ICategoryLv2Repository;
-import com.cloneproject.ssgjojo.categoryLv3.domain.CategoryLv3;
-import com.cloneproject.ssgjojo.categoryLv3.repository.ICategoryLv3Repository;
-import com.cloneproject.ssgjojo.categoryLv4.domain.CategoryLv4;
-import com.cloneproject.ssgjojo.categoryLv4.repository.ICategoryLv4Repository;
+import com.cloneproject.ssgjojo.categorylv1.domain.CategoryLv1;
+import com.cloneproject.ssgjojo.categorylv1.repository.ICategoryLv1Repository;
+import com.cloneproject.ssgjojo.categorylv2.domain.CategoryLv2;
+import com.cloneproject.ssgjojo.categorylv2.repository.ICategoryLv2Repository;
+import com.cloneproject.ssgjojo.categorylv3.domain.CategoryLv3;
+import com.cloneproject.ssgjojo.categorylv3.repository.ICategoryLv3Repository;
+import com.cloneproject.ssgjojo.categorylv4.domain.CategoryLv4;
+import com.cloneproject.ssgjojo.categorylv4.repository.ICategoryLv4Repository;
 import com.cloneproject.ssgjojo.categoryProductList.domain.CategoryProductList;
 import com.cloneproject.ssgjojo.categoryProductList.repository.ICategoryProductListRepository;
 import com.cloneproject.ssgjojo.product.domain.Product;

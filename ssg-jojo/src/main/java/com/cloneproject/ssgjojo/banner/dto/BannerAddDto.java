@@ -11,5 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class BannerAddDto {
     private String bannerName;
-    private String bannerPhotoPath;
+    private String bannerContents;
+    private String bannerUri;
 }

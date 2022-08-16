@@ -1,9 +1,8 @@
-package com.cloneproject.ssgjojo.categoryLv4.controller;
+package com.cloneproject.ssgjojo.categorylv4.controller;
 
-import com.cloneproject.ssgjojo.categoryLv3.domain.CategoryLv3;
-import com.cloneproject.ssgjojo.categoryLv4.domain.CategoryLv4;
-import com.cloneproject.ssgjojo.categoryLv4.dto.CategoryLv4Dto;
-import com.cloneproject.ssgjojo.categoryLv4.service.ICategoryLv4Service;
+import com.cloneproject.ssgjojo.categorylv4.domain.CategoryLv4;
+import com.cloneproject.ssgjojo.categorylv4.dto.CategoryLv4Dto;
+import com.cloneproject.ssgjojo.categorylv4.service.ICategoryLv4Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

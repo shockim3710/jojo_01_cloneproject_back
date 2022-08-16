@@ -20,5 +20,9 @@ public class Banner {
     @Column(nullable = false)
     private String bannerName;
     @Column(nullable = false)
+    private String bannerContents;
+    @Column(nullable = false)
     private String bannerPhotoPath;
+    @Column(nullable = false)
+    private String bannerUri;
 }

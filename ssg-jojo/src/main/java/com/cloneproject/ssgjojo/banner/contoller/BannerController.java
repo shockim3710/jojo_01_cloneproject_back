@@ -4,7 +4,9 @@ import com.cloneproject.ssgjojo.banner.domain.Banner;
 import com.cloneproject.ssgjojo.banner.dto.BannerAddDto;
 import com.cloneproject.ssgjojo.banner.service.IBannerService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -12,12 +14,14 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class BannerController {
     private final IBannerService iBannerService;
 
-    @PostMapping("/banner/add")
-    public Banner addBanner(@RequestBody BannerAddDto bannerAddDto) {
-        return iBannerService.addBanner(bannerAddDto);
+    @PostMapping(value = "/banner/add", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public Banner addBanner(@RequestParam("bannerPhoto") MultipartFile bannerPhoto,
+                            @RequestPart BannerAddDto bannerAddDto) {
+        return iBannerService.addBanner(bannerPhoto, bannerAddDto);
     }
 
     @GetMapping("/banner/getAll")

@@ -14,19 +14,20 @@ import java.util.List;
 @AllArgsConstructor
 public class ProductUpdateDto {
     private Long id;
+    private String productName;
     private int price;
     private String description;
-    private String productName;
     private String manufactureCompany;
     private int discountRate;
     private int fee;
-
     private boolean adultCase;
+    private String thumbnail;
 
-    private Long categoryLv4;
-    private Long categoryLv3;
-    private Long categoryLv2;
     private Long categoryLv1;
+    private Long categoryLv2;
+    private Long categoryLv3;
+    private Long categoryLv4;
 
     private List<ProductOption> productOptionList;
+
 }

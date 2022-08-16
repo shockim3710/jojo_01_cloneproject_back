@@ -23,4 +23,6 @@ public class ProductNewService {
     private String newServiceContent;
     @Column(nullable = false)
     private String productNewPhotoPath;
+    @Column(nullable = false)
+    private String newServiceUri;
 }

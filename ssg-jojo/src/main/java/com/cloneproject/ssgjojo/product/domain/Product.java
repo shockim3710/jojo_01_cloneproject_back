@@ -1,6 +1,5 @@
 package com.cloneproject.ssgjojo.product.domain;
 
-import com.cloneproject.ssgjojo.categoryLv4.domain.CategoryLv4;
 import com.cloneproject.ssgjojo.util.BaseTimeEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +8,6 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
-import java.util.Date;
 
 /*
  * id : Product PK
