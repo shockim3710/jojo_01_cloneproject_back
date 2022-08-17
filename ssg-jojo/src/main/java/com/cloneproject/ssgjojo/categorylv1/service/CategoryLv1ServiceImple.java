@@ -6,9 +6,13 @@ import com.cloneproject.ssgjojo.categorylv1.repository.ICategoryLv1Repository;
 import com.cloneproject.ssgjojo.categorylv2.domain.CategoryLv2;
 import com.cloneproject.ssgjojo.categorylv2.dto.CategoryLv2Dto;
 import com.cloneproject.ssgjojo.categorylv2.repository.ICategoryLv2Repository;
+import com.cloneproject.ssgjojo.util.MultipartUtil;
+import com.cloneproject.ssgjojo.util.s3.AwsS3ResourceStorage;
+import com.cloneproject.ssgjojo.util.s3.FileInfoDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,10 +25,22 @@ public class CategoryLv1ServiceImple implements ICategoryLv1Service {
 
     private final ICategoryLv1Repository iCategoryLv1Repository;
     private final ICategoryLv2Repository iCategoryLv2Repository;
+    private final AwsS3ResourceStorage awsS3ResourceStorage;
 
     @Override
     public CategoryLv1 addCategory(CategoryLv1 categoryLv1) {
         return iCategoryLv1Repository.save(categoryLv1);
+    }
+
+    @Override
+    public CategoryLv1 addCategoryWithImg(MultipartFile categoryImg, String categoryLv1Name) {
+        FileInfoDto CategoryImgDto = FileInfoDto.multipartOf(categoryImg, "category");
+        awsS3ResourceStorage.store(CategoryImgDto, categoryImg);
+
+        return iCategoryLv1Repository.save(CategoryLv1.builder()
+                        .lv1imgpath(MultipartUtil.createURL(CategoryImgDto.getRemotePath()))
+                        .lv1name(categoryLv1Name)
+                .build());
     }
 
     @Override

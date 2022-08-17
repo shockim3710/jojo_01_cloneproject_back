@@ -1,4 +1,4 @@
-package com.cloneproject.ssgjojo.categorylv3.dto;
+package com.cloneproject.ssgjojo.categorylv1.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -6,11 +6,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class CategoryLv3Dto {
-
-    private Long categoryLv2;
-    private String lv3name;
+public class CategoryLv1InputDto {
+    private String lv1name;
 }

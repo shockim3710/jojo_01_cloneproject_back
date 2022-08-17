@@ -46,15 +46,15 @@ public class CategoryLv3ServiceImple implements ICategoryLv3Service {
     }
 
     @Override
-    public CategoryLv3 editCategory(CategoryLv3Dto categoryLv3Dto) {
-        Optional<CategoryLv3> categoryLv3 = iCategoryLv3Repository.findById(categoryLv3Dto.getId());
-        Optional<CategoryLv2> categoryLv2 = iCategoryLv2Repository.findById(categoryLv3Dto.getCategoryLv2());
+    public CategoryLv3 editCategory(CategoryLv3 categoryLv3) {
+        Optional<CategoryLv3> temp = iCategoryLv3Repository.findById(categoryLv3.getId());
+        Optional<CategoryLv2> categoryLv2 = iCategoryLv2Repository.findById(categoryLv3.getCategoryLv2().getId());
 
-        if(categoryLv2.isPresent() && categoryLv3.isPresent()) {
+        if(categoryLv2.isPresent() && temp.isPresent()) {
             return iCategoryLv3Repository.save(CategoryLv3.builder()
-                    .id(categoryLv3Dto.getId())
-                    .lv3name(categoryLv3Dto.getLv3name())
-                    .categoryLv2(iCategoryLv2Repository.findById(categoryLv3Dto.getCategoryLv2()).get())
+                    .id(categoryLv3.getId())
+                    .lv3name(categoryLv3.getLv3name())
+                    .categoryLv2(iCategoryLv2Repository.findById(categoryLv3.getCategoryLv2().getId()).get())
                     .build());
         }
 

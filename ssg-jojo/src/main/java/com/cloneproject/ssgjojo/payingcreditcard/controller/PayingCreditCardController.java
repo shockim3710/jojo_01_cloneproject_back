@@ -3,6 +3,7 @@ package com.cloneproject.ssgjojo.payingcreditcard.controller;
 import com.cloneproject.ssgjojo.payingcreditcard.domain.PayingCreditCard;
 import com.cloneproject.ssgjojo.payingcreditcard.dto.PayingCreditCardDeleteDto;
 import com.cloneproject.ssgjojo.payingcreditcard.dto.PayingCreditCardInputDto;
+import com.cloneproject.ssgjojo.payingcreditcard.dto.PayingCreditCardOutputDto;
 import com.cloneproject.ssgjojo.payingcreditcard.service.IPayingCreditCardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +19,7 @@ public class PayingCreditCardController {
     private final IPayingCreditCardService iPayingCreditCardService;
 
     @PostMapping("/payingcreditcard/add")
-    public PayingCreditCard addPayingCreditCard(@RequestBody PayingCreditCardInputDto payingCreditCardInputDto) {
+    public PayingCreditCardOutputDto addPayingCreditCard(@RequestBody PayingCreditCardInputDto payingCreditCardInputDto) {
         return iPayingCreditCardService.addPayingCreditCard(payingCreditCardInputDto);
     }
 
@@ -28,7 +29,7 @@ public class PayingCreditCardController {
     }
 
     @GetMapping("/payingcreditcard/{id}")
-    public List<PayingCreditCard> getPayingCreditCardByUserId(@PathVariable Long id) {
+    public List<PayingCreditCardOutputDto> getPayingCreditCardByUserId(@PathVariable Long id) {
         return iPayingCreditCardService.getPayingCreditCardByUserId(id);
     }
 

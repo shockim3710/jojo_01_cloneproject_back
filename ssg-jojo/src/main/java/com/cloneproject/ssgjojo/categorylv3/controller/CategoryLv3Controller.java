@@ -27,8 +27,8 @@ public class CategoryLv3Controller {
     }
 
     @PutMapping("/category/Lv3/edit")
-    public CategoryLv3 editCategory(@RequestBody CategoryLv3Dto categoryLv3Dto) {
-        return iCategoryLv3Service.editCategory(categoryLv3Dto);
+    public CategoryLv3 editCategory(@RequestBody CategoryLv3 categoryLv3) {
+        return iCategoryLv3Service.editCategory(categoryLv3);
     }
 
     @DeleteMapping("/category/Lv3/{id}")

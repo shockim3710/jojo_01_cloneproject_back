@@ -5,6 +5,7 @@ import com.cloneproject.ssgjojo.categorylv1.dto.CategoryLv1Dto;
 import com.cloneproject.ssgjojo.categorylv1.service.ICategoryLv1Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -19,6 +20,13 @@ public class CategoryLv1Controller {
     @PostMapping("/category/Lv1/add")
     public CategoryLv1 addCategory(@RequestBody CategoryLv1 categoryLv1) {
         return iCategoryLv1Service.addCategory(categoryLv1);
+    }
+
+    @PostMapping("/category/Lv1/addnew")
+    public CategoryLv1 addCategoryWithImage(@RequestParam("categoryImg") MultipartFile img,
+                                   @RequestPart String categoryLv1Name) {
+
+        return iCategoryLv1Service.addCategoryWithImg(img, categoryLv1Name);
     }
 
     @GetMapping("/category/Lv1/getAll")

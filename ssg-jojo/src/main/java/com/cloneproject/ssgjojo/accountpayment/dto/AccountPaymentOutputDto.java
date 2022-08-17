@@ -6,11 +6,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
-public class AccountPaymentDto {
-
+@NoArgsConstructor
+@AllArgsConstructor
+public class AccountPaymentOutputDto {
+    private Long id;
     private String accountNumber;
     private String bank;
 
