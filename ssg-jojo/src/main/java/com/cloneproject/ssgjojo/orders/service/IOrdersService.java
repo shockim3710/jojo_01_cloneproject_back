@@ -11,6 +11,6 @@ public interface IOrdersService {
     OrdersAddDto addOrders(OrdersAddDto ordersAddDto);
     List<OrdersGetIdDto> getOrdersByUserId(Long id);
     OrdersEditGetAllDto editOrders(OrdersEditGetAllDto ordersEditGetAllDto);
-    void deleteDeliveryAddress(Long id);
+    void deleteOrders(Long id);
 
 }

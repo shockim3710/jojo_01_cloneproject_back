@@ -46,11 +46,11 @@ public class OrdersServiceImple implements IOrdersService{
 
             Orders temp = iOrdersRepository.save(Orders.builder()
                             .count(ordersAddDto.getCount())
-                            .ordersPrice(ordersAddDto.getOrderPrice())
+                            .ordersPrice(ordersAddDto.getOrdersPrice())
                             .whetherExchange(ordersAddDto.isWhetherExchange())
                             .whetherRefund(ordersAddDto.isWhetherRefund())
-                            .ordersName(ordersAddDto.getOrderName())
-                            .ordersPhone(ordersAddDto.getOrderPhone())
+                            .ordersName(ordersAddDto.getOrdersName())
+                            .ordersPhone(ordersAddDto.getOrdersPhone())
                             .ordersEmail(ordersAddDto.getOrdersEmail())
                             .deliveryDate(ordersAddDto.getDeliveryDate())
                             .deliveryRequest(ordersAddDto.getDeliveryRequest())
@@ -62,11 +62,11 @@ public class OrdersServiceImple implements IOrdersService{
 
             return OrdersAddDto.builder()
                     .count(temp.getCount())
-                    .orderPrice(temp.getOrdersPrice())
+                    .ordersPrice(temp.getOrdersPrice())
                     .whetherExchange(temp.isWhetherExchange())
                     .whetherRefund(temp.isWhetherRefund())
-                    .orderName(temp.getOrdersName())
-                    .orderPhone(temp.getOrdersPhone())
+                    .ordersName(temp.getOrdersName())
+                    .ordersPhone(temp.getOrdersPhone())
                     .ordersEmail(temp.getOrdersEmail())
                     .deliveryDate(temp.getDeliveryDate())
                     .deliveryRequest(temp.getDeliveryRequest())
@@ -92,10 +92,9 @@ public class OrdersServiceImple implements IOrdersService{
     @Override
     public List<OrdersGetIdDto> getOrdersByUserId(Long id) {
         Optional<User> userOptional = iUserRepository.findById(id);
-        Optional<Product> productOptional = iProductRepository.findById(id);
-        Optional<ProductOption> productOptionOptional = iProductOptionRepository.findById(id);
+        Optional<DeliveryAddress> deliveryAddressOptional = iDeliveryAddressRepository.findById(id);
 
-        if (userOptional.isPresent() && productOptional.isPresent() && productOptionOptional.isPresent()) {
+        if (userOptional.isPresent() && deliveryAddressOptional.isPresent()) {
             List<Orders> ordersList = iOrdersRepository.findAllByUser(userOptional.get());
             List<OrdersGetIdDto> ordersGetIdDtoList = new ArrayList<>();
 
@@ -103,16 +102,23 @@ public class OrdersServiceImple implements IOrdersService{
                 ordersGetIdDtoList.add(OrdersGetIdDto.builder()
                                 .id(user.getId())
                                 .count(user.getCount())
-                                .orderPrice(user.getOrdersPrice())
+                                .ordersPrice(user.getOrdersPrice())
                                 .whetherRefund(user.isWhetherRefund())
-                                .orderName(user.getOrdersName())
-                                .orderPhone(user.getOrdersPhone())
+                                .ordersName(user.getOrdersName())
+                                .ordersPhone(user.getOrdersPhone())
                                 .ordersEmail(user.getOrdersEmail())
                                 .deliveryDate(user.getDeliveryDate())
                                 .deliveryRequest(user.getDeliveryRequest())
                                 .user(user.getUser().getId())
                                 .product(user.getProduct().getId())
+                                .productName(user.getProduct().getProductName())
+                                .manufactureCompany(user.getProduct().getManufactureCompany())
+//                                .thumbnail(user.getProduct().getThumbnail())
+                                .deliveryAddress(user.getDeliveryAddress().getId())
+                                .address(user.getDeliveryAddress().getAddress())
                                 .productOption(user.getProductOption().getId())
+                                .productOption1Contents(user.getProductOption().getProductOption1Contents())
+                                .productOption2Contents(user.getProductOption().getProductOption2Contents())
                                 .build());
             });
 
@@ -124,11 +130,68 @@ public class OrdersServiceImple implements IOrdersService{
 
     @Override
     public OrdersEditGetAllDto editOrders(OrdersEditGetAllDto ordersEditGetAllDto) {
+
+        Optional<Orders> orders = iOrdersRepository.findById(ordersEditGetAllDto.getId());
+        Optional<User> user = iUserRepository.findById(ordersEditGetAllDto.getId());
+        Optional<DeliveryAddress> deliveryAddress = iDeliveryAddressRepository.findById(ordersEditGetAllDto.getId());
+
+        if(orders.isPresent() && user.isPresent() && deliveryAddress.isPresent()) {
+            ordersEditGetAllDto.setWhetherExchange(true);
+
+            Orders temp = iOrdersRepository.save(Orders.builder()
+                            .id(ordersEditGetAllDto.getId())
+                            .count(ordersEditGetAllDto.getCount())
+                            .ordersPrice(ordersEditGetAllDto.getOrdersPrice())
+                            .whetherExchange(ordersEditGetAllDto.isWhetherExchange())
+                            .whetherRefund(ordersEditGetAllDto.isWhetherRefund())
+                            .ordersName(ordersEditGetAllDto.getOrdersName())
+                            .ordersPhone(ordersEditGetAllDto.getOrdersPhone())
+                            .ordersEmail(ordersEditGetAllDto.getOrdersEmail())
+                            .deliveryDate(ordersEditGetAllDto.getDeliveryDate())
+                            .deliveryRequest(ordersEditGetAllDto.getDeliveryRequest())
+                            .user(iUserRepository.findById(ordersEditGetAllDto.getUser()).get())
+                            .deliveryAddress(iDeliveryAddressRepository.findById(ordersEditGetAllDto.getDeliveryAddress()).get())
+                            .product(iProductRepository.findById(ordersEditGetAllDto.getProduct()).get())
+                            .productOption(iProductOptionRepository.findById(ordersEditGetAllDto.getProductOption()).get())
+                            .build());
+
+            return OrdersEditGetAllDto.builder()
+                    .id(temp.getId())
+                    .count(temp.getCount())
+                    .ordersPrice(temp.getOrdersPrice())
+                    .whetherExchange(temp.isWhetherExchange())
+                    .whetherRefund(temp.isWhetherRefund())
+                    .ordersName(temp.getOrdersName())
+                    .ordersPhone(temp.getOrdersPhone())
+                    .ordersEmail(temp.getOrdersEmail())
+                    .deliveryDate(temp.getDeliveryDate())
+                    .deliveryRequest(temp.getDeliveryRequest())
+                    .user(temp.getUser().getId())
+                    .name(temp.getUser().getName())
+                    .phone(temp.getUser().getPhone())
+                    .email(temp.getUser().getEmail())
+                    .product(temp.getProduct().getId())
+                    .productName(temp.getProduct().getProductName())
+                    .manufactureCompany(temp.getProduct().getManufactureCompany())
+//                    .thumbnail(temp.getProduct().getThumbnail())
+                    .deliveryAddress(temp.getDeliveryAddress().getId())
+                    .address(temp.getDeliveryAddress().getAddress())
+                    .productOption(temp.getProductOption().getId())
+                    .productOption1Contents(temp.getProductOption().getProductOption1Contents())
+                    .productOption2Contents(temp.getProductOption().getProductOption2Contents())
+                    .build();
+        }
+
         return null;
     }
 
     @Override
-    public void deleteDeliveryAddress(Long id) {
+    public void deleteOrders(Long id) {
+        Optional<Orders> orders = iOrdersRepository.findById(id);
+
+        if(orders.isPresent()) {
+            iOrdersRepository.deleteById(id);
+        }
 
     }
 }

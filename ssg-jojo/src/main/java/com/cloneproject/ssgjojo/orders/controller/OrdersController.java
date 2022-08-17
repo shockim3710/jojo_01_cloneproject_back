@@ -24,7 +24,6 @@ public class OrdersController {
         return iOrdersService.addOrders(ordersAddDto);
     }
 
-
     @GetMapping("/orders/get/{id}")
     public List<OrdersGetIdDto> getOrders(@PathVariable Long id) {
         return iOrdersService.getOrdersByUserId(id);
@@ -35,9 +34,9 @@ public class OrdersController {
         return iOrdersService.editOrders(ordersEditGetAllDto);
     }
 
-//    @DeleteMapping("/orders/delete/{id}")
-//    public void deleteOrders(@PathVariable Long id) {
-//        iOrdersService.deleteOrders(id);
-//    }
+    @DeleteMapping("/orders/delete/{id}")
+    public void deleteOrders(@PathVariable Long id) {
+        iOrdersService.deleteOrders(id);
+    }
 
 }
