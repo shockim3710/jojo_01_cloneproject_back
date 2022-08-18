@@ -1,4 +1,4 @@
-package com.cloneproject.ssgjojo.producttimedeal.domain;
+package com.cloneproject.ssgjojo.producttimedeal.dto;
 
 import com.cloneproject.ssgjojo.product.domain.Product;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -10,27 +10,23 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.sql.Timestamp;
 
-@Entity
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductTimeDeal {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class ProductTimeDealOutputDto {
     private Long id;
-    @Column(nullable = false)
     private String timeDealName;
-    @Column(nullable = false)
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Timestamp timeDealStartDate;
-    @Column(nullable = false)
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Timestamp timeDealEndDate;
-    @Column(nullable = false)
+
+    private String productThumbnail;
     private int timeDealPercent;
 
-    @ManyToOne
-    private Product product;
+    private Long originPrice;
+    private Long discountPrice;
 
+    private Long productId;
 }

@@ -19,7 +19,7 @@ import java.util.List;
 @AllArgsConstructor
 public class ProductInfoDto {
     private Long id;
-    private int price;
+    private Long price;
     private String description;
     private String productName;
     private String manufactureCompany;

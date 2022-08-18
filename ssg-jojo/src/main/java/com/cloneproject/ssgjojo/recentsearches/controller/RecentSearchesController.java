@@ -11,6 +11,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*", allowedHeaders = "*")
+
 public class RecentSearchesController {
 
     private final IRecentSearchesService iRecentSearchesService;

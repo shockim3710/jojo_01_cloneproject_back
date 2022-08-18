@@ -4,10 +4,14 @@ import com.cloneproject.ssgjojo.product.domain.Product;
 import com.cloneproject.ssgjojo.product.repository.IProductRepository;
 import com.cloneproject.ssgjojo.producttimedeal.domain.ProductTimeDeal;
 import com.cloneproject.ssgjojo.producttimedeal.dto.ProductTimeDealAddDto;
+import com.cloneproject.ssgjojo.producttimedeal.dto.ProductTimeDealOutputDto;
 import com.cloneproject.ssgjojo.producttimedeal.repository.IProductTimeDealRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.swing.text.html.Option;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,25 +22,69 @@ public class ProductTimeDealServiceImple implements IProductTimeDealService{
     private final IProductRepository iProductRepository;
 
     @Override
-    public ProductTimeDeal addTimeDeal(ProductTimeDealAddDto productTimeDealAddDto) {
+    public ProductTimeDealOutputDto addTimeDeal(ProductTimeDealAddDto productTimeDealAddDto) {
         Optional<Product> product = iProductRepository.findById(productTimeDealAddDto.getProductId());
 
-        return iProductTimeDealRepository.save(ProductTimeDeal.builder()
-                        .timeDealName(productTimeDealAddDto.getTimeDealName())
-                        .timeDealStartDate(productTimeDealAddDto.getTimeDealStartDate())
-                        .timeDealEndDate(productTimeDealAddDto.getTimeDealEndDate())
-                        .price(productTimeDealAddDto.getPrice())
-                        .product(product.get())
-                .build());
-    }
+        if(product.isPresent()) {
+            ProductTimeDeal timeDeal = iProductTimeDealRepository.save(ProductTimeDeal.builder()
+                    .timeDealName(productTimeDealAddDto.getTimeDealName())
+                    .timeDealStartDate(productTimeDealAddDto.getTimeDealStartDate())
+                    .timeDealEndDate(productTimeDealAddDto.getTimeDealEndDate())
+                    .timeDealPercent(productTimeDealAddDto.getTimeDealPercent())
+                    .product(product.get())
+                    .build());
 
-    @Override
-    public List<ProductTimeDeal> getAll() {
+            Long discountPrice = (long) ((float) product.get().getPrice() * (1 - ((float) timeDeal.getTimeDealPercent() / 100)));
+
+            return ProductTimeDealOutputDto.builder()
+                    .id(timeDeal.getId())
+                    .timeDealName(timeDeal.getTimeDealName())
+                    .timeDealStartDate(timeDeal.getTimeDealStartDate())
+                    .timeDealEndDate(timeDeal.getTimeDealEndDate())
+                    .timeDealPercent(timeDeal.getTimeDealPercent())
+                    .originPrice(product.get().getPrice())
+                    .productThumbnail(product.get().getThumbnail())
+                    .discountPrice(discountPrice)
+                    .productId(product.get().getId())
+                    .build();
+        }
+
         return null;
     }
 
     @Override
-    public ProductTimeDeal findOneTimeDeal() {
+    public List<ProductTimeDeal> getAll() {
+        return iProductTimeDealRepository.findAll();
+    }
+
+    @Override
+    public List<ProductTimeDealOutputDto> findTimeDealList() {
+        List<ProductTimeDeal> timeDealList = iProductTimeDealRepository.findProductTimeDealList();
+        List<ProductTimeDealOutputDto> returnDto = new ArrayList<>();
+        if(!timeDealList.isEmpty()) {
+            for (ProductTimeDeal timeDeal : timeDealList) {
+                Optional<Product> product = iProductRepository.findById(timeDeal.getProduct().getId());
+
+                if(!product.isPresent())
+                    continue;
+
+                Long discountPrice = (long) ((float) product.get().getPrice() * (1 - ((float) timeDeal.getTimeDealPercent() / 100)));
+
+                returnDto.add(ProductTimeDealOutputDto.builder()
+                        .id(timeDeal.getId())
+                        .productId(product.get().getId())
+                        .productThumbnail(product.get().getThumbnail())
+                        .timeDealName(timeDeal.getTimeDealName())
+                        .timeDealStartDate(timeDeal.getTimeDealStartDate())
+                        .timeDealEndDate(timeDeal.getTimeDealEndDate())
+                        .timeDealPercent(timeDeal.getTimeDealPercent())
+                        .originPrice(product.get().getPrice())
+                        .discountPrice(discountPrice)
+                        .build());
+            }
+
+            return returnDto;
+        }
         return null;
     }
 }

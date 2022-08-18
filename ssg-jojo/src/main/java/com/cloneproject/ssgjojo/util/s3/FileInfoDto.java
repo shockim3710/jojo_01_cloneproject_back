@@ -25,7 +25,8 @@ public class FileInfoDto {
 
     public static FileInfoDto multipartOf(MultipartFile multipartFile) {
         final String fileId = MultipartUtil.createFileUUID();
-        final String format = MultipartUtil.getFormat(multipartFile.getContentType());
+        final String fileName = multipartFile.getOriginalFilename();
+        final String format =fileName.substring(fileName.lastIndexOf('.')+1);
 
         return FileInfoDto.builder()
                 .id(fileId)
@@ -38,7 +39,8 @@ public class FileInfoDto {
 
     public static FileInfoDto multipartOf(MultipartFile multipartFile, String photoDiv) {
         final String fileId = MultipartUtil.createFileUUID();
-        final String format = MultipartUtil.getFormat(multipartFile.getContentType());
+        final String fileName = multipartFile.getOriginalFilename();
+        final String format = fileName.substring(fileName.lastIndexOf('.')+1);
 
         return FileInfoDto.builder()
                 .id(fileId)
@@ -52,7 +54,8 @@ public class FileInfoDto {
 
     public static FileInfoDto multipartOf(MultipartFile multipartFile, String photoDiv, Long productId) {
         final String fileId = MultipartUtil.createFileUUID();
-        final String format = MultipartUtil.getFormat(multipartFile.getContentType());
+        final String fileName = multipartFile.getOriginalFilename();
+        final String format = fileName.substring(fileName.lastIndexOf('.')+1);
 
         return FileInfoDto.builder()
                 .id(fileId)

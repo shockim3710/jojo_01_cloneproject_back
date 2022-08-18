@@ -43,7 +43,7 @@ public class Product extends BaseTimeEntity {
     @Column(nullable = false)
     private String productName;
     @Column(nullable = false)
-    private int price;
+    private Long price;
     @Column(nullable = false)
     private String description;
     @Column(nullable = false)

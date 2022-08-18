@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Timestamp;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,4 +23,5 @@ public class UserEditGetAllDto {
     private String gender; // 성별 (회원 정보 수정)
     private String membershipLevel; // 회원 등급
     private Boolean isLeave; // 탈퇴 여부 (회원 탈퇴)
+    private Timestamp createTime;
 }

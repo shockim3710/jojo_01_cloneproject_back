@@ -15,5 +15,4 @@ public interface IProductService {
     List<ProductInfoDto> getAllProduct();
     void deleteProduct(Long id);
     Product editProduct(ProductUpdateDto productUpdateDto);
-
 }

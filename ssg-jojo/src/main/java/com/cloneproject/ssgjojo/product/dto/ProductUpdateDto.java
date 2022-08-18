@@ -15,7 +15,7 @@ import java.util.List;
 public class ProductUpdateDto {
     private Long id;
     private String productName;
-    private int price;
+    private Long price;
     private String description;
     private String manufactureCompany;
     private int discountRate;
