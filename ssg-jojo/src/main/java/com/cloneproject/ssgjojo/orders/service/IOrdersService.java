@@ -1,5 +1,6 @@
 package com.cloneproject.ssgjojo.orders.service;
 
+import com.cloneproject.ssgjojo.orders.domain.Orders;
 import com.cloneproject.ssgjojo.orders.dto.OrdersAddDto;
 import com.cloneproject.ssgjojo.orders.dto.OrdersEditGetAllDto;
 import com.cloneproject.ssgjojo.orders.dto.OrdersGetIdDto;

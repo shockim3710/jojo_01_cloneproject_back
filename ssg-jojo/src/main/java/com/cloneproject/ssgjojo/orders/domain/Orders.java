@@ -27,16 +27,10 @@ public class Orders extends BaseTimeEntity {
     private Long id;
 
     @Column(nullable = false)
-    private int count; // 하나의 상품을 몇개 주문하는지
-
-    @Column(nullable = false)
     private Long ordersPrice; // 주문한 총 가격
 
     @Column(nullable = false, name = "is_exchange")
     private boolean whetherExchange; // 주문자 이름, 주문자 전화번호, 주문자 이메일, 배송지, 배송요청사항 변경여부
-
-    @Column(nullable = false, name = "is_refund")
-    private boolean whetherRefund; // 환불여부
 
     @Column(nullable = false)
     private String ordersName; // 주문자 이름
@@ -58,12 +52,6 @@ public class Orders extends BaseTimeEntity {
 
     @ManyToOne
     private User user;
-
-    @ManyToOne
-    private Product product;
-
-    @ManyToOne
-    private ProductOption productOption;
 
     @ManyToOne
     private DeliveryAddress deliveryAddress;
