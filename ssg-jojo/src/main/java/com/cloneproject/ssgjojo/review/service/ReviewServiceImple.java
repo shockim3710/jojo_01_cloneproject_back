@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -93,7 +94,7 @@ public class ReviewServiceImple implements IReviewService {
                             .title(review.getTitle())
                             .mainText(review.getMainText())
                             .score(review.getScore())
-                            .userId(review.getUser().getId())
+                            .userId(review.getUser().getUserId())
                             .productId(review.getProduct().getId())
                             .createdTime(review.getCreatedDate())
                             .build());
@@ -107,9 +108,77 @@ public class ReviewServiceImple implements IReviewService {
     }
 
     @Override
+    public List<ReviewOutputDto> sortedGetReviewByProductId(Long id, int sort) {
+        Optional<Product> product = iProductRepository.findById(id);
+        List<ReviewOutputDto> returnDto = new ArrayList<>();
+        List<Review> temp = new ArrayList<>();
+
+        if(product.isPresent()) {
+            if(sort == 1)
+                temp = iReviewRepository.findAllByProductOrderByScoreAsc(product.get());
+            else if(sort == 2)
+                temp = iReviewRepository.findAllByProductOrderByScoreDesc(product.get());
+            else if(sort == 3)
+                temp = iReviewRepository.findAllByProductOrderByCreatedDateDesc(product.get());
+            else
+                temp = iReviewRepository.findAllByProduct(product.get());
+
+            for(Review review : temp) {
+                returnDto.add(ReviewOutputDto.builder()
+                        .id(review.getId())
+                        .title(review.getTitle())
+                        .mainText(review.getMainText())
+                        .score(review.getScore())
+                        .userId(review.getUser().getUserId())
+                        .productId(review.getProduct().getId())
+                        .createdTime(review.getCreatedDate())
+                        .build());
+            }
+
+            return returnDto;
+        }
+
+        return null;
+    }
+
+    @Override
     public List<Review> getAllReview() {
 
         return iReviewRepository.findAll();
+    }
+
+    @Override
+    public List<ReviewOutputDto> getTop5(Long productId) {
+        Optional<Product> product = iProductRepository.findById(productId);
+        List<ReviewOutputDto> returnDtoList = new ArrayList<>();
+
+        if(product.isPresent()) {
+            List<Review> reviewList = iReviewRepository.findTop5ByProduct(product.get());
+
+            for(Review review : reviewList) {
+                returnDtoList.add(ReviewOutputDto.builder()
+                        .id(review.getId())
+                        .title(review.getTitle())
+                        .mainText(review.getMainText())
+                        .score(review.getScore())
+                        .userId(review.getUser().getUserId())
+                        .productId(review.getProduct().getId())
+                        .createdTime(review.getCreatedDate())
+                        .build());
+            }
+
+            return returnDtoList;
+        }
+        return null;
+    }
+
+    // 접근지시자(public) 반환형(Integer) 함수의이름(getReviewCountByProduct) 전달받을변수의이름(자료형 변수이름)
+    @Override
+    public Integer getReviewCountByProduct(Long productId) {
+
+        Integer review = iReviewRepository.getReviewCountByProduct(productId);
+
+        return review;
     }
 
     @Override
@@ -124,4 +193,6 @@ public class ReviewServiceImple implements IReviewService {
             }
         }
     }
+
+
 }

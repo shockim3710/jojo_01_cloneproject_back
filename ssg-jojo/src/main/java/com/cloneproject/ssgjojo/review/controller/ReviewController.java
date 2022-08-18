@@ -45,4 +45,20 @@ public class ReviewController {
     public List<ReviewOutputDto> getReviewById(@PathVariable Long id) {
         return iReviewService.getReviewByProductId(id);
     }
+
+    @GetMapping("/review/count/{productId}")
+    public Integer getReviewCountByProduct(@PathVariable Long productId) {
+        return iReviewService.getReviewCountByProduct(productId);
+    }
+
+    @GetMapping("/review/get5/{productId}")
+    public List<ReviewOutputDto> getTop(@PathVariable Long productId) {
+        return iReviewService.getTop5(productId);
+    }
+
+    @GetMapping("/review/getAll/sort")
+    public List<ReviewOutputDto> getByProductSort(@RequestParam Long productId, @RequestParam int sort) {
+        return iReviewService.sortedGetReviewByProductId(productId, sort);
+    }
+
 }

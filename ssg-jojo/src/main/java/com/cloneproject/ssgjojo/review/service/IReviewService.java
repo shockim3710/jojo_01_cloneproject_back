@@ -13,7 +13,10 @@ public interface IReviewService {
     Review addReview(ReviewDto reviewDto);
     ReviewEditDto editReview(ReviewEditDto reviewEditDto);
     List<ReviewOutputDto> getReviewByProductId(Long id);
+    List<ReviewOutputDto> sortedGetReviewByProductId(Long id, int sort);
     List<Review> getAllReview();
-
+    Integer getReviewCountByProduct(Long reviewId);
     void deleteReview(ReviewDeleteDto reviewDeleteDto);
+
+    List<ReviewOutputDto> getTop5(Long productId);
 }

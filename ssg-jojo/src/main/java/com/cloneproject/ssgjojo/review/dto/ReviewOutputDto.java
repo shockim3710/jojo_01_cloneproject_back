@@ -17,7 +17,7 @@ public class ReviewOutputDto {
     private String mainText;
     private int score;
 
-    private Long userId;
+    private String userId;
     private Long productId;
     private Timestamp createdTime;
 }
