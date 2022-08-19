@@ -58,22 +58,6 @@ public class OrdersServiceImple implements IOrdersService{
                             .deliveryAddress(deliveryAddress.get())
                             .build());
 
-            OrdersAddDto addDto = OrdersAddDto.builder()
-                    .ordersPrice(orders.getOrdersPrice())
-                    .whetherExchange(orders.isWhetherExchange())
-                    .ordersName(orders.getOrdersName())
-                    .ordersPhone(orders.getOrdersPhone())
-                    .ordersEmail(orders.getOrdersEmail())
-                    .deliveryDate(orders.getDeliveryDate())
-                    .deliveryRequest(orders.getDeliveryRequest())
-                    .user(orders.getUser().getId())
-                    .name(orders.getUser().getName())
-                    .phone(orders.getUser().getPhone())
-                    .email(orders.getUser().getEmail())
-                    .deliveryAddress(orders.getDeliveryAddress().getId())
-                    .address(orders.getDeliveryAddress().getAddress())
-                    .build();
-
             List<OrdersProductListAddDto> listAddDto = new ArrayList<>();
             for(OrdersProductListAddDto ordersProductListAddDto : ordersAddDto.getOrdersProductListAddDtoList()) {
                 Optional<Product> product = iProductRepository.findById(ordersProductListAddDto.getProduct());
@@ -100,23 +84,7 @@ public class OrdersServiceImple implements IOrdersService{
                         .orders(orders.getId())
                         .build()
                 );
-
-
-                /*OrdersProductListAddDto.builder()
-                        .count(temp.getCount())
-                        .whetherRefund(temp.isWhetherRefund())
-                        .orders(temp.getOrders().getId())
-                        .product(temp.getProduct().getId())
-                        .productName(temp.getProduct().getProductName())
-                        .manufactureCompany(temp.getProduct().getManufactureCompany())
-//                    .thumbnail(temp.getProduct().getThumbnail())
-                        .productOption(temp.getProductOption().getId())
-                        .productOption1Contents(temp.getProductOption().getProductOption1Contents())
-                        .productOption2Contents(temp.getProductOption().getProductOption2Contents())
-                        .build();*/
             }
-
-//            return orders;
 
             return OrdersAddDto.builder()
                     .ordersPrice(orders.getOrdersPrice())
@@ -135,21 +103,6 @@ public class OrdersServiceImple implements IOrdersService{
                     .ordersProductListAddDtoList(listAddDto)
                     .build();
 
-//            return OrdersAddDto.builder()
-//                    .ordersPrice(temp.getOrdersPrice())
-//                    .whetherExchange(temp.isWhetherExchange())
-//                    .ordersName(temp.getOrdersName())
-//                    .ordersPhone(temp.getOrdersPhone())
-//                    .ordersEmail(temp.getOrdersEmail())
-//                    .deliveryDate(temp.getDeliveryDate())
-//                    .deliveryRequest(temp.getDeliveryRequest())
-//                    .user(temp.getUser().getId())
-//                    .name(temp.getUser().getName())
-//                    .phone(temp.getUser().getPhone())
-//                    .email(temp.getUser().getEmail())
-//                    .deliveryAddress(temp.getDeliveryAddress().getId())
-//                    .address(temp.getDeliveryAddress().getAddress())
-//                    .build();
         }
 
         return null;
