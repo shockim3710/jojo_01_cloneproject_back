@@ -1,19 +1,15 @@
 package com.cloneproject.ssgjojo.ordersproductlist.service;
 
-import com.cloneproject.ssgjojo.deliveryaddress.domain.DeliveryAddress;
-import com.cloneproject.ssgjojo.deliveryaddress.repository.IDeliveryAddressRepository;
 import com.cloneproject.ssgjojo.orders.domain.Orders;
 import com.cloneproject.ssgjojo.orders.repository.IOrdersRepository;
 import com.cloneproject.ssgjojo.ordersproductlist.domain.OrdersProductList;
 import com.cloneproject.ssgjojo.ordersproductlist.dto.OrdersProductListAddDto;
-import com.cloneproject.ssgjojo.ordersproductlist.dto.OrdersProductListGetIdDto;
+import com.cloneproject.ssgjojo.ordersproductlist.dto.OrdersProductListGetIdEditDto;
 import com.cloneproject.ssgjojo.ordersproductlist.repository.IOrdersProductListRepository;
 import com.cloneproject.ssgjojo.product.domain.Product;
 import com.cloneproject.ssgjojo.product.repository.IProductRepository;
 import com.cloneproject.ssgjojo.productoption.domain.ProductOption;
 import com.cloneproject.ssgjojo.productoption.repository.IProductOptionRepository;
-import com.cloneproject.ssgjojo.user.domain.User;
-import com.cloneproject.ssgjojo.user.repository.IUserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,7 +17,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -70,15 +65,15 @@ public class OrdersProductListServiceImple implements IOrdersProductListService 
     }
 
     @Override
-    public List<OrdersProductListGetIdDto> getOrdersProductListByOrdersId(Long id) {
+    public List<OrdersProductListGetIdEditDto> getOrdersProductListByOrdersId(Long id) {
         Optional<Orders> ordersOptional = iOrdersRepository.findById(id);
 
         if(ordersOptional.isPresent()) {
             List<OrdersProductList> ordersProductLists = iOrdersProductListRepository.findAllByOrders(ordersOptional.get());
-            List<OrdersProductListGetIdDto> ordersProductListGetIdDtoList = new ArrayList<>();
+            List<OrdersProductListGetIdEditDto> ordersProductListGetIdDtoListEdit = new ArrayList<>();
 
             ordersProductLists.forEach(orders -> {
-                ordersProductListGetIdDtoList.add(OrdersProductListGetIdDto.builder()
+                ordersProductListGetIdDtoListEdit.add(OrdersProductListGetIdEditDto.builder()
                                 .id(orders.getId())
                                 .count(orders.getCount())
                                 .whetherRefund(orders.isWhetherRefund())
@@ -93,7 +88,7 @@ public class OrdersProductListServiceImple implements IOrdersProductListService 
                                 .build());
             });
 
-            return ordersProductListGetIdDtoList;
+            return ordersProductListGetIdDtoListEdit;
 
 //            return ordersProductLists.stream().map(ordersProductList -> {
 //                return OrdersProductListGetIdDto.builder()

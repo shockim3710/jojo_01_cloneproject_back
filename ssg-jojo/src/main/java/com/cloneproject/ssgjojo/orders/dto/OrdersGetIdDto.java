@@ -1,11 +1,13 @@
 package com.cloneproject.ssgjojo.orders.dto;
 
+import com.cloneproject.ssgjojo.ordersproductlist.dto.OrdersProductListGetIdEditDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Data
 @Builder
@@ -24,4 +26,6 @@ public class OrdersGetIdDto {
 
     private Long deliveryAddress;
     private String address; // 배송지
+
+    private List<OrdersProductListGetIdEditDto> ordersProductListGetIdDtoListEdit;
 }

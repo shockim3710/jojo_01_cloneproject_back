@@ -2,6 +2,7 @@ package com.cloneproject.ssgjojo.orders.repository;
 
 import com.cloneproject.ssgjojo.deliveryaddress.domain.DeliveryAddress;
 import com.cloneproject.ssgjojo.orders.domain.Orders;
+import com.cloneproject.ssgjojo.ordersproductlist.service.OrdersProductListServiceImple;
 import com.cloneproject.ssgjojo.user.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

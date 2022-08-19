@@ -1,10 +1,7 @@
 package com.cloneproject.ssgjojo.ordersproductlist.controller;
 
-import com.cloneproject.ssgjojo.orders.dto.OrdersAddDto;
-import com.cloneproject.ssgjojo.orders.dto.OrdersEditGetAllDto;
-import com.cloneproject.ssgjojo.orders.dto.OrdersGetIdDto;
 import com.cloneproject.ssgjojo.ordersproductlist.dto.OrdersProductListAddDto;
-import com.cloneproject.ssgjojo.ordersproductlist.dto.OrdersProductListGetIdDto;
+import com.cloneproject.ssgjojo.ordersproductlist.dto.OrdersProductListGetIdEditDto;
 import com.cloneproject.ssgjojo.ordersproductlist.service.IOrdersProductListService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +21,7 @@ public class OrdersProductListController {
     }
 
     @GetMapping("/ordersproductlist/get/{id}")
-    public List<OrdersProductListGetIdDto> getOrdersProductList(@PathVariable Long id) {
+    public List<OrdersProductListGetIdEditDto> getOrdersProductList(@PathVariable Long id) {
         return iOrdersProductListService.getOrdersProductListByOrdersId(id);
     }
 

@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrdersProductListGetIdDto {
+public class OrdersProductListGetIdEditDto {
     private Long id;
     private int count; // 하나의 상품을 몇개 주문하는지
     private boolean whetherRefund; // 환불여부
