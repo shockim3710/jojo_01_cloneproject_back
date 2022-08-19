@@ -17,7 +17,7 @@ public class OrdersProductListGetIdDto {
     private Long product;
     private String productName; // 상품 이름
     private String manufactureCompany; // 상품 제조사
-//    private String thumbnail; // 썸네일
+    private String thumbnail; // 썸네일
 
     private Long productOption;
     private String productOption1Contents; // 옵션1
