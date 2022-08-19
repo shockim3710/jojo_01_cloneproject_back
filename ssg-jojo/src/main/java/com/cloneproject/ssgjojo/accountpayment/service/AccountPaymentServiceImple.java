@@ -3,6 +3,7 @@ package com.cloneproject.ssgjojo.accountpayment.service;
 import com.cloneproject.ssgjojo.accountpayment.domain.AccountPayment;
 import com.cloneproject.ssgjojo.accountpayment.dto.AccountPaymentDeleteDto;
 import com.cloneproject.ssgjojo.accountpayment.dto.AccountPaymentDto;
+import com.cloneproject.ssgjojo.accountpayment.dto.AccountPaymentOutputDto;
 import com.cloneproject.ssgjojo.accountpayment.repository.IAccountPaymentRepository;
 import com.cloneproject.ssgjojo.user.domain.User;
 import com.cloneproject.ssgjojo.user.repository.IUserRepository;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,28 +25,49 @@ public class AccountPaymentServiceImple implements IAccountPaymentService{
 
 
     @Override
-    public AccountPayment addAccountPayment(AccountPaymentDto accountPaymentDto) {
+    public AccountPaymentOutputDto addAccountPayment(AccountPaymentDto accountPaymentDto) {
 
         Optional<User> user = iUserRepository.findById(accountPaymentDto.getUserId());
 
         if(user.isPresent()) {
-            return iAccountPaymentRepository.save(AccountPayment.builder()
+            AccountPayment accountPayment = iAccountPaymentRepository.save(AccountPayment.builder()
                     .accountNumber(accountPaymentDto.getAccountNumber())
                     .bank(accountPaymentDto.getBank())
                     .user(user.get())
                     .build());
+
+            return AccountPaymentOutputDto.builder()
+                    .id(accountPayment.getId())
+                    .accountNumber(accountPayment.getAccountNumber())
+                    .bank(accountPaymentDto.getBank())
+                    .userId(accountPayment.getUser().getId())
+                    .build();
         }
 
         return null;
     }
 
     @Override
-    public List<AccountPayment> getAccountPaymentByUserId(Long id) {
+    public List<AccountPaymentOutputDto> getAccountPaymentByUserId(Long id) {
 
         Optional<User> user = iUserRepository.findById(id);
 
         if(user.isPresent()) {
-            return iAccountPaymentRepository.findAllByUser(user.get());
+            List<AccountPayment> accountPaymentList = iAccountPaymentRepository.findAllByUser(user.get());
+            List<AccountPaymentOutputDto> accountPaymentOutputDtoList = new ArrayList<>();
+
+            if(!accountPaymentList.isEmpty()) {
+                for(AccountPayment payment : accountPaymentList) {
+                    accountPaymentOutputDtoList.add(AccountPaymentOutputDto.builder()
+                            .id(payment.getId())
+                            .bank(payment.getBank())
+                            .accountNumber(payment.getAccountNumber())
+                            .userId(payment.getUser().getId())
+                            .build());
+                }
+            }
+
+            return accountPaymentOutputDtoList;
         }
 
         return null;

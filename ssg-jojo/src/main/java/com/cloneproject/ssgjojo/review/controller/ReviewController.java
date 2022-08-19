@@ -4,6 +4,7 @@ import com.cloneproject.ssgjojo.review.domain.Review;
 import com.cloneproject.ssgjojo.review.dto.ReviewDeleteDto;
 import com.cloneproject.ssgjojo.review.dto.ReviewDto;
 import com.cloneproject.ssgjojo.review.dto.ReviewEditDto;
+import com.cloneproject.ssgjojo.review.dto.ReviewOutputDto;
 import com.cloneproject.ssgjojo.review.service.IReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +32,7 @@ public class ReviewController {
     }
 
     @PutMapping("/review/edit")
-    public Review editReview(@RequestBody ReviewEditDto reviewEditDto) {
+    public ReviewEditDto editReview(@RequestBody ReviewEditDto reviewEditDto) {
         return iReviewService.editReview(reviewEditDto);
     }
 
@@ -41,7 +42,23 @@ public class ReviewController {
     }
 
     @GetMapping("/review/{id}")
-    public List<Review> getReviewById(@PathVariable Long id) {
-        return iReviewService.getReviewById(id);
+    public List<ReviewOutputDto> getReviewById(@PathVariable Long id) {
+        return iReviewService.getReviewByProductId(id);
     }
+
+    @GetMapping("/review/count/{productId}")
+    public Integer getReviewCountByProduct(@PathVariable Long productId) {
+        return iReviewService.getReviewCountByProduct(productId);
+    }
+
+    @GetMapping("/review/get5/{productId}")
+    public List<ReviewOutputDto> getTop(@PathVariable Long productId) {
+        return iReviewService.getTop5(productId);
+    }
+
+    @GetMapping("/review/getAll/sort")
+    public List<ReviewOutputDto> getByProductSort(@RequestParam Long productId, @RequestParam int sort) {
+        return iReviewService.sortedGetReviewByProductId(productId, sort);
+    }
+
 }

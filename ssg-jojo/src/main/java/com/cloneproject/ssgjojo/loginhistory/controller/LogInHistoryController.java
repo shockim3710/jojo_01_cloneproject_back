@@ -2,6 +2,7 @@ package com.cloneproject.ssgjojo.loginhistory.controller;
 
 import com.cloneproject.ssgjojo.loginhistory.domain.LogInHistory;
 import com.cloneproject.ssgjojo.loginhistory.dto.LogInHistoryDto;
+import com.cloneproject.ssgjojo.loginhistory.dto.LogInHistoryOutputDto;
 import com.cloneproject.ssgjojo.loginhistory.service.ILogInHistoryService;
 import com.cloneproject.ssgjojo.user.repository.IUserRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,7 @@ public class LogInHistoryController {
     private final IUserRepository iUserRepository;
 
     @PostMapping("/loginhistory/add")
-    public LogInHistory addLogInHistory(@RequestBody LogInHistoryDto logInHistoryDto) {
+    public LogInHistoryOutputDto addLogInHistory(@RequestBody LogInHistoryDto logInHistoryDto) {
         return iLogInHistoryService.addLogInHistory(logInHistoryDto);
     }
 
@@ -30,7 +31,7 @@ public class LogInHistoryController {
 
 
     @GetMapping("/loginhistory/{id}")
-    public List<LogInHistory> getHistoryByUserId(@PathVariable Long id) {
+    public List<LogInHistoryOutputDto> getHistoryByUserId(@PathVariable Long id) {
         return iLogInHistoryService.getHistoryByUserId(id);
     }
 
