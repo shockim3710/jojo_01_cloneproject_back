@@ -39,6 +39,7 @@ public class LogInHistoryServiceImple implements ILogInHistoryService {
                     .id(logInHistory.getId())
                     .logInIp(logInHistory.getLogInIp())
                     .userId(logInHistory.getUser().getId())
+                    .logInTime(logInHistory.getLogInTime())
                     .build();
 
         }

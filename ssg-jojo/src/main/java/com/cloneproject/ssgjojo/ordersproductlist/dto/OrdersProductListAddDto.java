@@ -20,14 +20,12 @@ public class OrdersProductListAddDto {
     private Long product;
     private String productName; // 상품 이름
     private String manufactureCompany; // 상품 제조사
-//    private String thumbnail; // 썸네일
+    private String thumbnail; // 썸네일
 
     private Long productOption;
     private String productOption1Contents; // 옵션1
     private String productOption2Contents; // 옵션2
 
     private Long orders;
-//    @ManyToOne
-//    private Orders orders;
 }
 

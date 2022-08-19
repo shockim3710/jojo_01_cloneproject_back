@@ -79,6 +79,7 @@ public class UserServiceImple implements IUserService{
                     .phone(user.getPhone())
                     .membershipLevel(user.getMembershipLevel())
                     .isLeave(user.getIsLeave())
+                    .createTime((user.getCreatedDate()))
                     .build());
                 }
         );
