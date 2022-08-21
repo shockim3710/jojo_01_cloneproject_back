@@ -21,7 +21,7 @@ import com.cloneproject.ssgjojo.productdetailphoto.dto.ProductDetailPhotoDto;
 import com.cloneproject.ssgjojo.productdetailphoto.repository.IProductDetailPhotoRepository;
 import com.cloneproject.ssgjojo.productoption.domain.ProductOption;
 import com.cloneproject.ssgjojo.productoption.dto.ProductOptionDto;
-import com.cloneproject.ssgjojo.productoption.dto.ProductOptionOutDto;
+import com.cloneproject.ssgjojo.productoption.dto.ProductOptionOutputDto;
 import com.cloneproject.ssgjojo.productoption.repository.IProductOptionRepository;
 import com.cloneproject.ssgjojo.productphoto.domain.ProductPhoto;
 import com.cloneproject.ssgjojo.productphoto.dto.ProductPhotoDto;
@@ -220,13 +220,13 @@ public class ProductServiceImple implements IProductService {
             
             // 중간 테이블 및 옵션 리스트 유효성 검증
             if(categoryProductList.isPresent() && !productOptionList.isEmpty() && !productPhotoList.isEmpty() && !productDetailPhotoList.isEmpty()) {
-                List<ProductOptionOutDto> optionOutDtoList = new ArrayList<>();
+                List<ProductOptionOutputDto> optionOutDtoList = new ArrayList<>();
 
                 // 하나의 상품에 여러개의 옵션이 있을 수 있으므로 
                 // 옵션 테이블의 데이터를 내가 보내주고 싶은 필드만
                 // DTO로 만들고 build 한 뒤, optionOutDtoList에 추가해준다.
                 for(ProductOption tmp : productOptionList) {
-                    optionOutDtoList.add(ProductOptionOutDto.builder()
+                    optionOutDtoList.add(ProductOptionOutputDto.builder()
                             .id(tmp.getId())
                             .productId(tmp.getProduct().getId())
                             .productOption1Name(tmp.getProductOption1Name())
@@ -298,7 +298,46 @@ public class ProductServiceImple implements IProductService {
 
             // 중간 테이블 및 옵션 리스트 유효성 검증
             if(categoryProductList.isPresent()) {
-                List<ProductOptionOutDto> optionOutDtoList = new ArrayList<>();
+                List<ProductOption> optionList = iProductOptionRepository.findAllByProduct(product);
+                List<ProductPhoto> photoList = iProductPhotoRepository.findAllByProduct(product);
+                List<ProductDetailPhoto> detailPhotoList = iProductDetailPhotoRepository.findAllByProduct(product);
+
+                List<ProductOptionOutputDto> optionOutputDtoList = new ArrayList<>();
+                List<ProductPhotoDto> photoDtoList = new ArrayList<>();
+                List<ProductDetailPhotoDto> detailPhotoDtoList = new ArrayList<>();
+
+                for(ProductOption option : optionList) {
+                    optionOutputDtoList.add(ProductOptionOutputDto.builder()
+                                    .id(option.getId())
+                                    .productOption1Name(option.getProductOption1Name())
+                                    .productOption1Contents(option.getProductOption1Contents())
+                                    .productOption2Name(option.getProductOption2Name())
+                                    .productOption2Contents(option.getProductOption2Contents())
+                                    .productId(product.getId())
+                                    .stock(option.getStock())
+                            .build()
+                    );
+                }
+
+                for(ProductPhoto photo : photoList) {
+                    photoDtoList.add(ProductPhotoDto.builder()
+                                    .productId(photo.getProduct().getId())
+                                    .productPhotoOriginName(photo.getProductPhotoOriginName())
+                                    .productPhotoSeq(photo.getProductPhotoSeq())
+                                    .productPhotoPath(photo.getProductPhotoPath())
+                            .build());
+                }
+
+                for(ProductDetailPhoto detailPhoto : detailPhotoList) {
+                    detailPhotoDtoList.add(ProductDetailPhotoDto.builder()
+                                    .productId(detailPhoto.getProduct().getId())
+                                    .productDetailPhotoOriginName(detailPhoto.getProductDetailPhotoOriginName())
+                                    .productDetailPhotoSeq(detailPhoto.getProductDetailPhotoSeq())
+                                    .productDetailPhotoPath(detailPhoto.getProductDetailPhotoPath())
+                            .build()
+                    );
+                }
+
 
                 productInfoDtoList.add(ProductInfoDto.builder()
                         .id(product.getId())
@@ -314,7 +353,9 @@ public class ProductServiceImple implements IProductService {
                         .categoryLv3(categoryProductList.get().getCategoryLv3().getId())
                         .categoryLv2(categoryProductList.get().getCategoryLv2().getId())
                         .categoryLv1(categoryProductList.get().getCategoryLv1().getId())
-                        .productOptionList(optionOutDtoList)
+                        .productOptionList(optionOutputDtoList)
+                        .productPhotoList(photoDtoList)
+                        .productDetailPhotoList(detailPhotoDtoList)
                         .build());
             }
         }
