@@ -172,12 +172,36 @@ public class ReviewServiceImple implements IReviewService {
         return null;
     }
 
+    @Override
+    public Float getReviewAvgScore(Long productId) {
+
+        Float avgScore = iReviewRepository.getReviewAvgScore(productId);
+        return (float) (Math.round(avgScore*10)/10.0);
+    }
+
+    @Override
+    public List<ReviewOutputDto> findAllByUser(Long userId) {
+
+//        Optional<User> user = iUserRepository.findById(userId);
+//        Optional<Product> product = iProductRepository.findById();
+//        List<ReviewOutputDto> returnDtoList = new ArrayList<>();
+//
+//        if(user.isPresent() && product.isPresent()) {
+//            List<ReviewOutputDto> reviewList = iReviewRepository.findAllByUser(user.get());
+//
+//            for(Review review : reviewList) {
+//
+//            }
+//        }
+
+        return null;
+    }
+
     // 접근지시자(public) 반환형(Integer) 함수의이름(getReviewCountByProduct) 전달받을변수의이름(자료형 변수이름)
     @Override
     public Integer getReviewCountByProduct(Long productId) {
 
         Integer review = iReviewRepository.getReviewCountByProduct(productId);
-
         return review;
     }
 

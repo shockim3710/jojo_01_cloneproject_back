@@ -61,4 +61,8 @@ public class ReviewController {
         return iReviewService.sortedGetReviewByProductId(productId, sort);
     }
 
+    @GetMapping("/review/getAvgScore/{productId}")
+    public Float getReviewAvgScore(@PathVariable Long productId) {
+        return iReviewService.getReviewAvgScore(productId);
+    }
 }

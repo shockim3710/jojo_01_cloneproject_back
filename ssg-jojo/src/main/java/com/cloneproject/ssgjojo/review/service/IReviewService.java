@@ -15,8 +15,12 @@ public interface IReviewService {
     List<ReviewOutputDto> getReviewByProductId(Long id);
     List<ReviewOutputDto> sortedGetReviewByProductId(Long id, int sort);
     List<Review> getAllReview();
-    Integer getReviewCountByProduct(Long reviewId);
+    Integer getReviewCountByProduct(Long productId);
     void deleteReview(ReviewDeleteDto reviewDeleteDto);
 
     List<ReviewOutputDto> getTop5(Long productId);
+
+    Float getReviewAvgScore(Long id);
+
+    List<ReviewOutputDto> findAllByUser(Long userId);
 }
