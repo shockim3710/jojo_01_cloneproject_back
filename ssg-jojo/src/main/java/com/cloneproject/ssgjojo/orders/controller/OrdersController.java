@@ -32,6 +32,11 @@ public class OrdersController {
         return iOrdersService.editOrders(ordersEditGetAllDto);
     }
 
+    @GetMapping("/orders/get/getAll")
+    public List<Orders> getAllOrders() {
+        return iOrdersService.getAllOrders();
+    }
+
     @DeleteMapping("/orders/delete/{id}")
     public void deleteOrders(@PathVariable Long id) {
         iOrdersService.deleteOrders(id);

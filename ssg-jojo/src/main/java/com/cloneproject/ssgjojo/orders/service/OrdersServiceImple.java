@@ -249,8 +249,21 @@ public class OrdersServiceImple implements IOrdersService{
         Optional<Orders> orders = iOrdersRepository.findById(id);
 
         if(orders.isPresent()) {
+
+            List<OrdersProductList> ordersProductLists = iOrdersProductListRepository.findAllByOrders(orders.get());
+
+            for(OrdersProductList temp : ordersProductLists) {
+                iOrdersProductListRepository.deleteById(temp.getId());
+
+            }
             iOrdersRepository.deleteById(id);
+
         }
 
+    }
+
+    @Override
+    public List<Orders> getAllOrders() {
+        return iOrdersRepository.findAll();
     }
 }

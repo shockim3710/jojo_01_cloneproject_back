@@ -13,5 +13,7 @@ public interface IOrdersService {
     List<OrdersGetIdDto> getOrdersByUserId(Long id);
     OrdersEditGetAllDto editOrders(OrdersEditGetAllDto ordersEditGetAllDto);
     void deleteOrders(Long id);
+    List<Orders> getAllOrders();
+
 
 }
