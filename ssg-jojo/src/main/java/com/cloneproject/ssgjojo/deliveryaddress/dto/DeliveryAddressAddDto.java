@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class DeliveryAddressAddDto {
     private String address; // 배송지
     private boolean whetherDefaultAddress; // 기본배송지 여부
+    private boolean whetherOnlyThisTime; // 이번만배송지 여부
 
     private Long user;
 }

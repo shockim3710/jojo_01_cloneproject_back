@@ -1,9 +1,13 @@
 package com.cloneproject.ssgjojo.cart.dto;
 
+import com.cloneproject.ssgjojo.cartproductlist.dto.CartProductListGetIdEditDto;
+import com.cloneproject.ssgjojo.ordersproductlist.dto.OrdersProductListGetIdEditDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @Builder
@@ -11,8 +15,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CartEditGetIdDto {
     private Long id;
-    private int count; // 하나의 상품을 장바구니에 몇개 담았는지 (장바구니 수정)
 
     private Long user;
-    private Long product;
+
+    private Long deliveryAddress;
+    private String address; // 배송지
+
+    private List<CartProductListGetIdEditDto> cartProductListGetIdEditDtoList;
 }
