@@ -8,6 +8,7 @@ import com.cloneproject.ssgjojo.review.dto.ReviewDto;
 import com.cloneproject.ssgjojo.review.dto.ReviewEditDto;
 import com.cloneproject.ssgjojo.review.dto.ReviewOutputDto;
 import com.cloneproject.ssgjojo.review.repository.IReviewRepository;
+import com.cloneproject.ssgjojo.reviewphoto.domain.ReviewPhoto;
 import com.cloneproject.ssgjojo.user.domain.User;
 import com.cloneproject.ssgjojo.user.repository.IUserRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.swing.text.html.Option;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -172,12 +174,45 @@ public class ReviewServiceImple implements IReviewService {
         return null;
     }
 
+    @Override
+    public Float getReviewAvgScore(Long productId) {
+
+        Float avgScore = iReviewRepository.getReviewAvgScore(productId);
+        return (float) (Math.round(avgScore*10)/10.0);
+    }
+
+    @Override
+    public List<ReviewOutputDto> findAllByUser(Long userId) {
+
+        Optional<User> user = iUserRepository.findById(userId);
+        List<ReviewOutputDto> returnDtoList = new ArrayList<>();
+
+        if(user.isPresent()) {
+            List<Review> reviewList = iReviewRepository.findAllByUser(user.get());
+
+            for(Review review : reviewList) {
+                returnDtoList.add(ReviewOutputDto.builder()
+                        .id(review.getId())
+                        .userId(review.getUser().getUserId())
+                        .productId(review.getProduct().getId())
+                        .title(review.getTitle())
+                        .mainText(review.getMainText())
+                        .score(review.getScore())
+                        .createdTime(new Timestamp(System.currentTimeMillis()))
+                        .build());
+            }
+
+            return returnDtoList;
+        }
+
+        return null;
+    }
+
     // 접근지시자(public) 반환형(Integer) 함수의이름(getReviewCountByProduct) 전달받을변수의이름(자료형 변수이름)
     @Override
     public Integer getReviewCountByProduct(Long productId) {
 
         Integer review = iReviewRepository.getReviewCountByProduct(productId);
-
         return review;
     }
 

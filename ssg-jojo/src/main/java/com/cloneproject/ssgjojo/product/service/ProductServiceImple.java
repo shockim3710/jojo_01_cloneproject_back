@@ -169,6 +169,7 @@ public class ProductServiceImple implements IProductService {
 
             int count = 1;
 
+            // 이미지 리스트로 추가
             for(MultipartFile file : productPhoto) {
                 FileInfoDto fileInfoDto = FileInfoDto.multipartOf(file, "product", product.getId());
                 awsS3ResourceStorage.store(fileInfoDto, file);

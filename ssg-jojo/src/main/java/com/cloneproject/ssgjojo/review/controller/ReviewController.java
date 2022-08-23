@@ -1,5 +1,7 @@
 package com.cloneproject.ssgjojo.review.controller;
 
+import com.cloneproject.ssgjojo.qna.dto.AnswerInputDto;
+import com.cloneproject.ssgjojo.qna.dto.QnAOutputDto;
 import com.cloneproject.ssgjojo.review.domain.Review;
 import com.cloneproject.ssgjojo.review.dto.ReviewDeleteDto;
 import com.cloneproject.ssgjojo.review.dto.ReviewDto;
@@ -61,4 +63,13 @@ public class ReviewController {
         return iReviewService.sortedGetReviewByProductId(productId, sort);
     }
 
+    @GetMapping("/review/getAvgScore/{productId}")
+    public Float getReviewAvgScore(@PathVariable Long productId) {
+        return iReviewService.getReviewAvgScore(productId);
+    }
+
+    @GetMapping("/review/findAllByUser/{userId}")
+    public List<ReviewOutputDto> findAllByUser(@PathVariable Long userId) {
+        return iReviewService.findAllByUser(userId);
+    }
 }
