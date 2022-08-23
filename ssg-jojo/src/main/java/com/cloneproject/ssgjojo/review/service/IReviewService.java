@@ -5,12 +5,14 @@ import com.cloneproject.ssgjojo.review.dto.ReviewDeleteDto;
 import com.cloneproject.ssgjojo.review.dto.ReviewDto;
 import com.cloneproject.ssgjojo.review.dto.ReviewEditDto;
 import com.cloneproject.ssgjojo.review.dto.ReviewOutputDto;
+import com.cloneproject.ssgjojo.reviewphoto.domain.ReviewPhoto;
 
 import java.util.List;
 
 public interface IReviewService {
 
     Review addReview(ReviewDto reviewDto);
+//    ReviewPhoto addReviewWithImg();
     ReviewEditDto editReview(ReviewEditDto reviewEditDto);
     List<ReviewOutputDto> getReviewByProductId(Long id);
     List<ReviewOutputDto> sortedGetReviewByProductId(Long id, int sort);
@@ -23,4 +25,6 @@ public interface IReviewService {
     Float getReviewAvgScore(Long id);
 
     List<ReviewOutputDto> findAllByUser(Long userId);
+
+
 }
