@@ -9,7 +9,9 @@ import com.cloneproject.ssgjojo.review.dto.ReviewEditDto;
 import com.cloneproject.ssgjojo.review.dto.ReviewOutputDto;
 import com.cloneproject.ssgjojo.review.service.IReviewService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -26,6 +28,13 @@ public class ReviewController {
 
         return iReviewService.addReview(reviewDto);
     }
+
+    @PostMapping(value = "/review/addimg", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public boolean addReviewWithImg(@RequestParam("reviewPhoto") List<MultipartFile> reviewPhoto,
+                                    @RequestPart ReviewDto reviewDto) {
+        return iReviewService.addReviewWithImg(reviewDto, reviewPhoto);
+    }
+
 
     @GetMapping("/review/getAll")
     public List<Review> getAllReview() {
@@ -71,5 +80,10 @@ public class ReviewController {
     @GetMapping("/review/findAllByUser/{userId}")
     public List<ReviewOutputDto> findAllByUser(@PathVariable Long userId) {
         return iReviewService.findAllByUser(userId);
+    }
+
+    @GetMapping("/review/findAllByProduct/{productId}")
+    public List<ReviewOutputDto> findAllByProduct(@PathVariable Long productId) {
+        return iReviewService.findAllByProduct(productId);
     }
 }

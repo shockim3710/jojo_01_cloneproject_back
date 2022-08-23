@@ -21,5 +21,6 @@ public class QnAOutputDto {
     private boolean lockCase;
 
     private Long userId;
+    private String userAccount;
     private Long productId;
 }

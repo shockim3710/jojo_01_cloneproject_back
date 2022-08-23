@@ -1,6 +1,5 @@
 package com.cloneproject.ssgjojo.qna.controller;
 
-import com.cloneproject.ssgjojo.qna.domain.QnA;
 import com.cloneproject.ssgjojo.qna.dto.*;
 import com.cloneproject.ssgjojo.qna.service.IQnAService;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +27,21 @@ public class QnAController {
     @GetMapping("/qna/{id}")
     public List<QnAOutputDto> getQnaByProuductId(@PathVariable Long id) {
         return iQnAService.getQnaByProuductId(id);
+    }
+
+    @GetMapping("/qna/getqna5/{productId}")
+    public List<QnAOutputDto> getQna5(@PathVariable Long productId) {
+        return iQnAService.getTop5(productId);
+    }
+
+    @GetMapping("/qna/getAll/sort/{productId}")
+    public List<QnAOutputDto> sortedGetQnaByProductId(@PathVariable Long productId) {
+        return iQnAService.sortedGetQnaByProductId(productId);
+    }
+
+    @GetMapping("/qna/count/{productId}")
+    public Integer getQuestionCountByProduct(@PathVariable Long productId) {
+        return iQnAService.getQuestionCountByProduct(productId);
     }
 
     @DeleteMapping("/qna/deleteQ")

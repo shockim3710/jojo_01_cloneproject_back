@@ -1,11 +1,15 @@
 package com.cloneproject.ssgjojo.review.dto;
 
+import com.cloneproject.ssgjojo.productphoto.dto.ProductPhotoDto;
+import com.cloneproject.ssgjojo.reviewphoto.domain.ReviewPhoto;
+import com.cloneproject.ssgjojo.reviewphoto.dto.ReviewPhotoDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -20,4 +24,6 @@ public class ReviewOutputDto {
     private String userId;
     private Long productId;
     private Timestamp createdTime;
+
+    List<ReviewPhotoDto> reviewPhotoDtoList;
 }

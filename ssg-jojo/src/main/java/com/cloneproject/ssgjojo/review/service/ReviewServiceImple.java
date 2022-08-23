@@ -9,11 +9,17 @@ import com.cloneproject.ssgjojo.review.dto.ReviewEditDto;
 import com.cloneproject.ssgjojo.review.dto.ReviewOutputDto;
 import com.cloneproject.ssgjojo.review.repository.IReviewRepository;
 import com.cloneproject.ssgjojo.reviewphoto.domain.ReviewPhoto;
+import com.cloneproject.ssgjojo.reviewphoto.dto.ReviewPhotoDto;
+import com.cloneproject.ssgjojo.reviewphoto.repository.IReviewPhotoRepository;
 import com.cloneproject.ssgjojo.user.domain.User;
 import com.cloneproject.ssgjojo.user.repository.IUserRepository;
+import com.cloneproject.ssgjojo.util.MultipartUtil;
+import com.cloneproject.ssgjojo.util.s3.AwsS3ResourceStorage;
+import com.cloneproject.ssgjojo.util.s3.FileInfoDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.swing.text.html.Option;
 import java.sql.Timestamp;
@@ -27,8 +33,10 @@ import java.util.Optional;
 public class ReviewServiceImple implements IReviewService {
 
     private final IReviewRepository iReviewRepository;
+    private final IReviewPhotoRepository iReviewPhotoRepository;
     private final IProductRepository iProductRepository;
     private final IUserRepository iUserRepository;
+    private final AwsS3ResourceStorage awsS3ResourceStorage;
 
     @Override
     public Review addReview(ReviewDto reviewDto) {
@@ -47,6 +55,38 @@ public class ReviewServiceImple implements IReviewService {
         }
 
         return null;
+    }
+
+    @Override
+    public boolean addReviewWithImg(ReviewDto reviewDto, List<MultipartFile> reviewPhoto) {
+
+        Optional<User> user = iUserRepository.findById(reviewDto.getUserId());
+        Optional<Product> product = iProductRepository.findById(reviewDto.getProductId());
+
+        if(user.isPresent() && product.isPresent()) {
+            Review review = iReviewRepository.save(Review.builder()
+                    .title(reviewDto.getTitle())
+                    .mainText(reviewDto.getMainText())
+                    .score(reviewDto.getScore())
+                    .user(user.get())
+                    .product(product.get())
+                    .build());
+
+            for(MultipartFile file : reviewPhoto) {
+                FileInfoDto fileInfoDto = FileInfoDto.multipartOf(file, "review", review.getId());
+                awsS3ResourceStorage.store(fileInfoDto, file);
+
+                iReviewPhotoRepository.save(ReviewPhoto.builder()
+                        .reviewPhotoPath(MultipartUtil.createURL(fileInfoDto.getRemotePath()))
+                        .reviewPhotoOriginName(fileInfoDto.getName())
+                        .review(review)
+                        .build());
+            }
+
+            return  true;
+        }
+
+        return false;
     }
 
     @Override
@@ -147,6 +187,47 @@ public class ReviewServiceImple implements IReviewService {
     public List<Review> getAllReview() {
 
         return iReviewRepository.findAll();
+    }
+
+    @Override
+    public List<ReviewOutputDto> findAllByProduct(Long productId) {
+
+        Optional<Product> product = iProductRepository.findById(productId);
+        List<ReviewOutputDto> reviewOutputDtoList = new ArrayList<>();
+
+        if(product.isPresent()) {
+            List<Review> reviewList = iReviewRepository.findAllByProduct(product.get());
+            for(Review review : reviewList) {
+                List<ReviewPhoto> reviewPhotoList = iReviewPhotoRepository.findAllByReview(review);
+                List<ReviewPhotoDto> reviewPhotoDtoList = new ArrayList<>();
+
+                if(!reviewPhotoList.isEmpty()) {
+                    for(ReviewPhoto reviewPhoto : reviewPhotoList) {
+                        reviewPhotoDtoList.add(ReviewPhotoDto.builder()
+                                .id(reviewPhoto.getId())
+                                .reviewPhotoPath(reviewPhoto.getReviewPhotoPath())
+                                .reviewId(reviewPhoto.getId())
+                                .build());
+                    }
+
+                }
+
+                reviewOutputDtoList.add(ReviewOutputDto.builder()
+                        .id(review.getId())
+                        .reviewPhotoDtoList(reviewPhotoDtoList)
+                        .title(review.getTitle())
+                        .mainText(review.getMainText())
+                        .score(review.getScore())
+                        .userId(review.getUser().getUserId())
+                        .productId(review.getProduct().getId())
+                        .createdTime(review.getCreatedDate())
+                        .build());
+            }
+
+            return reviewOutputDtoList;
+        }
+
+        return null;
     }
 
     @Override

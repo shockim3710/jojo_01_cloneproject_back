@@ -128,9 +128,70 @@ public class QnAServiceImple implements IQnAService {
     }
 
     @Override
-    public Integer getQuestionCountByProduct(Long qnAId) {
+    public Integer getQuestionCountByProduct(Long productId) {
+        Integer qna = iQnARepository.getQuestionCountByProduct(productId);
+        return qna;
+    }
+
+    @Override
+    public List<QnAOutputDto> getTop5(Long productId) {
+
+        Optional<Product> product =  iProductRepository.findById(productId);
+        List<QnAOutputDto> returnQnaList = new ArrayList<>();
+
+        if(product.isPresent()) {
+            List<QnA> qnaList = iQnARepository.findTop5ByProduct(product.get());
+
+            for(QnA qnA : qnaList) {
+                returnQnaList.add(QnAOutputDto.builder()
+                        .id(qnA.getId())
+                        .title(qnA.getTitle())
+                        .questionMain(qnA.getQuestionMain())
+                        .questionDate(qnA.getQuestionDate())
+                        .answerMain(qnA.getAnswerMain())
+                        .answerDate(qnA.getAnswerDate())
+                        .lockCase(qnA.isLockCase())
+                        .userId(qnA.getUser().getId())
+                        .productId(qnA.getProduct().getId())
+                        .userAccount(qnA.getUser().getUserId().substring(3)+"******")
+                        .build());
+            }
+
+            return returnQnaList;
+        }
+
         return null;
     }
+
+    @Override
+    public List<QnAOutputDto> sortedGetQnaByProductId(Long id) {
+
+        Optional<Product> product = iProductRepository.findById(id);
+        List<QnAOutputDto> qnAOutputDtoList = new ArrayList<>();
+        List<QnA> qnAList = new ArrayList<>();
+
+        if(product.isPresent()) {
+            qnAList = iQnARepository.findAllByProductOrderByIdDesc(product.get());
+
+        for(QnA qnA : qnAList) {
+            qnAOutputDtoList.add(QnAOutputDto.builder()
+                    .id(qnA.getId())
+                    .userAccount(qnA.getUser().getName())
+                    .title(qnA.getTitle())
+                    .questionMain(qnA.getQuestionMain())
+                    .questionDate(qnA.getQuestionDate())
+                    .answerMain(qnA.getAnswerMain())
+                    .answerDate(qnA.getAnswerDate())
+                    .lockCase(qnA.isLockCase())
+                    .build());
+            }
+
+        return qnAOutputDtoList;
+        }
+
+        return null;
+    }
+
     @Override
     public void deleteQuestion(QnADeleteDto qnADeleteDto) {
 
