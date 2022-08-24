@@ -1,5 +1,6 @@
 package com.cloneproject.ssgjojo.review.repository;
 
+import com.cloneproject.ssgjojo.orders.domain.Orders;
 import com.cloneproject.ssgjojo.product.domain.Product;
 import com.cloneproject.ssgjojo.review.domain.Review;
 import com.cloneproject.ssgjojo.review.dto.ReviewOutputDto;
@@ -15,17 +16,19 @@ import java.util.Optional;
 public interface IReviewRepository extends JpaRepository<Review, Long> {
 
     public List<Review> findAllByProduct(Product product);
-    @Query(value = "select count(rev) from Review rev where rev.product.id =:id")
-    Integer getReviewCountByProduct(@Param("id") Long id);
+    List<Review> findAllByUser(User user);
+
+    List<Review> findAllByOrdersAndProduct(Orders orders, Product product);
 
     public List<Review> findTop5ByProduct(Product product);
 
     public List<Review> findAllByProductOrderByScoreAsc(Product product);
     public List<Review> findAllByProductOrderByScoreDesc(Product product);
     public List<Review> findAllByProductOrderByCreatedDateDesc(Product product);
+    @Query(value = "select count(rev) from Review rev where rev.product.id =:id")
+    Integer getReviewCountByProduct(@Param("id") Long id);
 
     @Query(value = "select avg(rev.score) from Review rev where rev.product.id =:id")
     Float getReviewAvgScore(@Param("id") Long id);
 
-    List<Review> findAllByUser(User user);
 }

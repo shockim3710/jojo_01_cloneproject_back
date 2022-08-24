@@ -1,12 +1,13 @@
 package com.cloneproject.ssgjojo.review.service;
 
+import com.cloneproject.ssgjojo.orders.domain.Orders;
+import com.cloneproject.ssgjojo.orders.repository.IOrdersRepository;
+import com.cloneproject.ssgjojo.ordersproductlist.domain.OrdersProductList;
+import com.cloneproject.ssgjojo.ordersproductlist.repository.IOrdersProductListRepository;
 import com.cloneproject.ssgjojo.product.domain.Product;
 import com.cloneproject.ssgjojo.product.repository.IProductRepository;
 import com.cloneproject.ssgjojo.review.domain.Review;
-import com.cloneproject.ssgjojo.review.dto.ReviewDeleteDto;
-import com.cloneproject.ssgjojo.review.dto.ReviewDto;
-import com.cloneproject.ssgjojo.review.dto.ReviewEditDto;
-import com.cloneproject.ssgjojo.review.dto.ReviewOutputDto;
+import com.cloneproject.ssgjojo.review.dto.*;
 import com.cloneproject.ssgjojo.review.repository.IReviewRepository;
 import com.cloneproject.ssgjojo.reviewphoto.domain.ReviewPhoto;
 import com.cloneproject.ssgjojo.reviewphoto.dto.ReviewPhotoDto;
@@ -18,6 +19,7 @@ import com.cloneproject.ssgjojo.util.s3.AwsS3ResourceStorage;
 import com.cloneproject.ssgjojo.util.s3.FileInfoDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.criterion.Order;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -36,22 +38,36 @@ public class ReviewServiceImple implements IReviewService {
     private final IReviewPhotoRepository iReviewPhotoRepository;
     private final IProductRepository iProductRepository;
     private final IUserRepository iUserRepository;
+    private final IOrdersRepository iOrdersRepository;
+    private final IOrdersProductListRepository iOrdersProductListRepository;
     private final AwsS3ResourceStorage awsS3ResourceStorage;
 
     @Override
-    public Review addReview(ReviewDto reviewDto) {
+    public ReviewOutputDto addReview(ReviewDto reviewDto) {
 
         Optional<User> user = iUserRepository.findById(reviewDto.getUserId());
         Optional<Product> product = iProductRepository.findById(reviewDto.getProductId());
+        Optional<Orders> orders = iOrdersRepository.findById(reviewDto.getOrdersId());
 
-        if(user.isPresent() && product.isPresent()) {
-            return iReviewRepository.save(Review.builder()
+        if(user.isPresent() && product.isPresent() && orders.isPresent()) {
+            Review review = iReviewRepository.save(Review.builder()
                     .title(reviewDto.getTitle())
                     .mainText(reviewDto.getMainText())
                     .score(reviewDto.getScore())
                     .user(user.get())
                     .product(product.get())
+                    .orders(orders.get())
                     .build());
+
+            return ReviewOutputDto.builder()
+                    .id(review.getId())
+                    .title(review.getTitle())
+                    .mainText(review.getMainText())
+                    .score(review.getScore())
+                    .userId(review.getUser().getUserId())
+                    .productId(review.getProduct().getId())
+                    .createdTime(review.getCreatedDate())
+                    .build();
         }
 
         return null;
@@ -272,6 +288,23 @@ public class ReviewServiceImple implements IReviewService {
             List<Review> reviewList = iReviewRepository.findAllByUser(user.get());
 
             for(Review review : reviewList) {
+
+                List<ReviewPhoto> reviewPhotoList = iReviewPhotoRepository.findAllByReview(review);
+                List<ReviewPhotoDto> reviewPhotoDtoList = new ArrayList<>();
+
+                if(!reviewPhotoList.isEmpty()) {
+                    for(ReviewPhoto reviewPhoto : reviewPhotoList) {
+
+                        reviewPhotoDtoList.add(ReviewPhotoDto.builder()
+                                .id(reviewPhoto.getId())
+                                .reviewId(review.getId())
+                                .reviewPhotoPath(reviewPhoto.getReviewPhotoPath())
+                                .build());
+
+                    }
+
+                }
+
                 returnDtoList.add(ReviewOutputDto.builder()
                         .id(review.getId())
                         .userId(review.getUser().getUserId())
@@ -279,7 +312,8 @@ public class ReviewServiceImple implements IReviewService {
                         .title(review.getTitle())
                         .mainText(review.getMainText())
                         .score(review.getScore())
-                        .createdTime(new Timestamp(System.currentTimeMillis()))
+                        .createdTime(review.getCreatedDate())
+                        .reviewPhotoDtoList(reviewPhotoDtoList)
                         .build());
             }
 
@@ -310,5 +344,36 @@ public class ReviewServiceImple implements IReviewService {
         }
     }
 
+    @Override
+    public List<ReviewPossibleWriteDto> findPossibleWrite(Long userId) {
+        Optional<User> user = iUserRepository.findById(userId);
 
+        if(user.isPresent()) {
+            List<Orders> ordersList = iOrdersRepository.findAllByUser(user.get());
+            List<ReviewPossibleWriteDto> returnDtoList = new ArrayList<>();
+            if(ordersList.isEmpty())
+                return null;
+
+            for(Orders orders : ordersList) {
+                List<OrdersProductList> ordersProductLists = iOrdersProductListRepository.findAllByOrders(orders);
+
+                for(OrdersProductList productList : ordersProductLists) {
+                    Product product = productList.getProduct();
+
+                    List<Review> reviewList = iReviewRepository.findAllByOrdersAndProduct(orders, product);
+                    if(reviewList.isEmpty())
+                        returnDtoList.add(ReviewPossibleWriteDto.builder()
+                                        .productId(product.getId())
+                                        .ordersId(orders.getId())
+                                        .productThumbnail(product.getThumbnail())
+                                        .deliveryDate(orders.getDeliveryDate())
+                                .build());
+                }
+            }
+
+            return returnDtoList;
+        }
+
+        return null;
+    }
 }

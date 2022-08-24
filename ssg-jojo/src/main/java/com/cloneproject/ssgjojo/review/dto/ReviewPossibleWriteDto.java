@@ -5,15 +5,17 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Timestamp;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class ReviewPossibleWriteDto {
 
-    private Long id;
-
-    private Long useId;
-    private Long ordersId;
     private Long productId;
+    private Long ordersId;
+    private String productThumbnail;
+    private Timestamp deliveryDate;
+
 }

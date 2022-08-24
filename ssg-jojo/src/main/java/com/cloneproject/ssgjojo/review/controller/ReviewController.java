@@ -3,10 +3,7 @@ package com.cloneproject.ssgjojo.review.controller;
 import com.cloneproject.ssgjojo.qna.dto.AnswerInputDto;
 import com.cloneproject.ssgjojo.qna.dto.QnAOutputDto;
 import com.cloneproject.ssgjojo.review.domain.Review;
-import com.cloneproject.ssgjojo.review.dto.ReviewDeleteDto;
-import com.cloneproject.ssgjojo.review.dto.ReviewDto;
-import com.cloneproject.ssgjojo.review.dto.ReviewEditDto;
-import com.cloneproject.ssgjojo.review.dto.ReviewOutputDto;
+import com.cloneproject.ssgjojo.review.dto.*;
 import com.cloneproject.ssgjojo.review.service.IReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -24,7 +21,7 @@ public class ReviewController {
     private final IReviewService iReviewService;
 
     @PostMapping("/review/add")
-    public Review addReview(@RequestBody ReviewDto reviewDto) {
+    public ReviewOutputDto addReview(@RequestBody ReviewDto reviewDto) {
 
         return iReviewService.addReview(reviewDto);
     }
@@ -42,15 +39,6 @@ public class ReviewController {
         return iReviewService.getAllReview();
     }
 
-    @PutMapping("/review/edit")
-    public ReviewEditDto editReview(@RequestBody ReviewEditDto reviewEditDto) {
-        return iReviewService.editReview(reviewEditDto);
-    }
-
-    @DeleteMapping("/review/delete")
-    public void deleteReview(@RequestBody ReviewDeleteDto reviewDeleteDto) {
-        iReviewService.deleteReview(reviewDeleteDto);
-    }
 
     @GetMapping("/review/{id}")
     public List<ReviewOutputDto> getReviewById(@PathVariable Long id) {
@@ -85,5 +73,19 @@ public class ReviewController {
     @GetMapping("/review/findAllByProduct/{productId}")
     public List<ReviewOutputDto> findAllByProduct(@PathVariable Long productId) {
         return iReviewService.findAllByProduct(productId);
+    }
+
+    @GetMapping("/review/possible/{userId}")
+    public List<ReviewPossibleWriteDto> findPossibleReview(@PathVariable Long userId) {
+        return iReviewService.findPossibleWrite(userId);
+    }
+
+    @PutMapping("/review/edit")
+    public ReviewEditDto editReview(@RequestBody ReviewEditDto reviewEditDto) {
+        return iReviewService.editReview(reviewEditDto);
+    }
+    @DeleteMapping("/review/delete")
+    public void deleteReview(@RequestBody ReviewDeleteDto reviewDeleteDto) {
+        iReviewService.deleteReview(reviewDeleteDto);
     }
 }
