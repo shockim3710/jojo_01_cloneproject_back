@@ -28,5 +28,4 @@ public interface IReviewService {
 
     List<ReviewOutputDto> findAllByUser(Long userId);
 
-
 }

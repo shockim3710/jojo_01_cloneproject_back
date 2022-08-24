@@ -1,5 +1,6 @@
 package com.cloneproject.ssgjojo.review.domain;
 
+import com.cloneproject.ssgjojo.orders.domain.Orders;
 import com.cloneproject.ssgjojo.product.domain.Product;
 import com.cloneproject.ssgjojo.user.domain.User;
 import com.cloneproject.ssgjojo.util.BaseTimeEntity;
@@ -7,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.domain.Sort;
 
 import javax.persistence.*;
 
@@ -35,4 +37,7 @@ public class Review  extends BaseTimeEntity {
 
     @ManyToOne
     private Product product;
+
+    @ManyToOne
+    private Orders orders;
 }
