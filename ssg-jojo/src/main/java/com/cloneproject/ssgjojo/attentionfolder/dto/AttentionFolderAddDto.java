@@ -1,18 +1,15 @@
-package com.cloneproject.ssgjojo.attention.dto;
+package com.cloneproject.ssgjojo.attentionfolder.dto;
 
-import com.cloneproject.ssgjojo.user.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Timestamp;
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AttentionAddDto {
+public class AttentionFolderAddDto {
+    private String folderName;
     private Long userId;
-    private Long productId;
 }
