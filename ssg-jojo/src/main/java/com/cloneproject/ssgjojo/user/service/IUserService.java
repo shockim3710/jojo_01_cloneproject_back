@@ -4,12 +4,14 @@ import com.cloneproject.ssgjojo.user.domain.User;
 import com.cloneproject.ssgjojo.user.dto.*;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface IUserService {
 
-    User addUser(UseSignupDto useSignupDto);
+    User addUser(UserSignupDto userSignupDto);
     UserGetIdDto getUserById(Long id);
+
+    UserLoginDto getUserLogin(UserLoginDto userLoginDto);
+
     User editUser(UserEditGetAllDto userEditGetAllDto);
     List<UserEditGetAllDto> getAll();
 

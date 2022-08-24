@@ -1,5 +1,8 @@
 package com.cloneproject.ssgjojo.user.service;
 
+import com.cloneproject.ssgjojo.deliveryaddress.domain.DeliveryAddress;
+import com.cloneproject.ssgjojo.deliveryaddress.dto.DeliveryAddressAddDto;
+import com.cloneproject.ssgjojo.deliveryaddress.repository.IDeliveryAddressRepository;
 import com.cloneproject.ssgjojo.user.domain.User;
 import com.cloneproject.ssgjojo.user.dto.*;
 import com.cloneproject.ssgjojo.user.repository.IUserRepository;
@@ -8,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.net.DatagramPacket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -18,25 +22,39 @@ import java.util.Optional;
 public class UserServiceImple implements IUserService{
 
     private final IUserRepository iUserRepository;
+    private final IDeliveryAddressRepository iDeliveryAddressRepository;
 
     @Override
-    public User addUser(UseSignupDto useSignupDto) { // 회원가입
-//        log.info("{} added", user);
+    public User addUser(UserSignupDto userSignupDto) { // 회원가입
 
-        useSignupDto.setIsLeave(false);
-        useSignupDto.setMembershipLevel("Friends");
+        userSignupDto.setIsLeave(false);
+        userSignupDto.setMembershipLevel("Friends");
 
-        return iUserRepository.save(User.builder()
-                .userId(useSignupDto.getUserId())
-                .password(useSignupDto.getPassword())
-                .name(useSignupDto.getName())
-                .birth(useSignupDto.getBirth())
-                .phone(useSignupDto.getPhone())
-                .email(useSignupDto.getEmail())
-                .gender(useSignupDto.getGender())
-                .membershipLevel(useSignupDto.getMembershipLevel())
-                .isLeave(useSignupDto.getIsLeave())
+        User user = iUserRepository.save(User.builder()
+                .userId(userSignupDto.getUserId())
+                .password(userSignupDto.getPassword())
+                .name(userSignupDto.getName())
+                .birth(userSignupDto.getBirth())
+                .phone(userSignupDto.getPhone())
+                .email(userSignupDto.getEmail())
+                .gender(userSignupDto.getGender())
+                .membershipLevel(userSignupDto.getMembershipLevel())
+                .isLeave(userSignupDto.getIsLeave())
                 .build());
+
+        userSignupDto.setWhetherDefaultAddress(true);
+        userSignupDto.setWhetherOnlyThisTime(false);
+
+        iDeliveryAddressRepository.save(DeliveryAddress.builder()
+                        .user(user)
+                        .address(userSignupDto.getAddress())
+                        .whetherDefaultAddress(userSignupDto.isWhetherDefaultAddress())
+                        .whetherOnlyThisTime(userSignupDto.isWhetherOnlyThisTime())
+                        .build());
+
+
+
+        return user;
     }
 
     @Override
@@ -60,6 +78,20 @@ public class UserServiceImple implements IUserService{
         return null;
     }
 
+    @Override
+    public UserLoginDto getUserLogin(UserLoginDto userLoginDto) {
+        User userIdAndPassword = iUserRepository.findByUserIdAndPassword(userLoginDto.getUserId(), userLoginDto.getPassword());
+
+        if(userIdAndPassword != null) {
+            return UserLoginDto.builder()
+                    .id(userIdAndPassword.getId())
+                    .userId(userIdAndPassword.getUserId())
+                    .name(userIdAndPassword.getName())
+                    .build();
+
+        }
+        return null;
+    }
 
 
     @Override

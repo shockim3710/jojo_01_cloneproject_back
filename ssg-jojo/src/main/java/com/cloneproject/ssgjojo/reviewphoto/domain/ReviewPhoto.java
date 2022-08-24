@@ -1,6 +1,7 @@
-package com.cloneproject.ssgjojo.recentlyproduct.domain;
+package com.cloneproject.ssgjojo.reviewphoto.domain;
 
 import com.cloneproject.ssgjojo.product.domain.Product;
+import com.cloneproject.ssgjojo.review.domain.Review;
 import com.cloneproject.ssgjojo.user.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,22 +9,25 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 
-@Data
 @Entity
-@Builder
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RecentlyProduct {
+@Builder
+public class ReviewPhoto {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    private Product product;
+    @Column(nullable = false)
+    private String reviewPhotoPath;
+
+    @Column(nullable = false)
+    private String reviewPhotoOriginName;
 
     @ManyToOne
-    private User user;
+    private Review review;
 
 }

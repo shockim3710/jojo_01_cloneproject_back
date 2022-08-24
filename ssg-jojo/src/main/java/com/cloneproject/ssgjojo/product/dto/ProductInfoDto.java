@@ -1,10 +1,7 @@
 package com.cloneproject.ssgjojo.product.dto;
 
-import com.cloneproject.ssgjojo.productdetailphoto.domain.ProductDetailPhoto;
 import com.cloneproject.ssgjojo.productdetailphoto.dto.ProductDetailPhotoDto;
-import com.cloneproject.ssgjojo.productoption.domain.ProductOption;
-import com.cloneproject.ssgjojo.productoption.dto.ProductOptionOutDto;
-import com.cloneproject.ssgjojo.productphoto.domain.ProductPhoto;
+import com.cloneproject.ssgjojo.productoption.dto.ProductOptionOutputDto;
 import com.cloneproject.ssgjojo.productphoto.dto.ProductPhotoDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,7 +29,7 @@ public class ProductInfoDto {
     private Long categoryLv1;
     private String thumbnail;
 
-    private List<ProductOptionOutDto> productOptionList;
+    private List<ProductOptionOutputDto> productOptionList;
     private List<ProductPhotoDto> productPhotoList;
     private List<ProductDetailPhotoDto> productDetailPhotoList;
 }
