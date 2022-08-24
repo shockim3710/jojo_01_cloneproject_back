@@ -1,9 +1,15 @@
 package com.cloneproject.ssgjojo.product.dto;
 
+import com.cloneproject.ssgjojo.productdetailphoto.dto.ProductDetailPhotoDto;
+import com.cloneproject.ssgjojo.productphoto.dto.ProductPhotoDto;
+import com.cloneproject.ssgjojo.qna.dto.QnAOutputDto;
+import com.cloneproject.ssgjojo.review.dto.ReviewOutputDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @Builder
@@ -12,13 +18,17 @@ import lombok.NoArgsConstructor;
 public class ProductDetailDto {
 
     private Long id;
-    private Long productId;
-    private Long mallName;
+    private String mallName;
     private String productName;
-    private Long price;
+    private String manufactureCompany;
+    private Long oldPrice;
+    private Long newPrice;
     private int discountRate;
-    private int reviewCount;
-    private float reviewAvg;
+    private float reviewScore;
+    private int reviewNum;
 
-
+    private List<ProductPhotoDto> productPhotoList;
+    private List<ProductDetailPhotoDto> productDetailPhotoList;
+    private List<ReviewOutputDto> reviewList;
+    private List<QnAOutputDto> QnaList;
 }

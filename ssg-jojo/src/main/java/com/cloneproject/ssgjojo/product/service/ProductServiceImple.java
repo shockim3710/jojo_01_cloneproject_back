@@ -12,10 +12,7 @@ import com.cloneproject.ssgjojo.categorylv4.repository.ICategoryLv4Repository;
 import com.cloneproject.ssgjojo.categoryProductList.domain.CategoryProductList;
 import com.cloneproject.ssgjojo.categoryProductList.repository.ICategoryProductListRepository;
 import com.cloneproject.ssgjojo.product.domain.Product;
-import com.cloneproject.ssgjojo.product.dto.ProductAddDto;
-import com.cloneproject.ssgjojo.product.dto.ProductAllListDto;
-import com.cloneproject.ssgjojo.product.dto.ProductUpdateDto;
-import com.cloneproject.ssgjojo.product.dto.ProductInfoDto;
+import com.cloneproject.ssgjojo.product.dto.*;
 import com.cloneproject.ssgjojo.product.repository.IProductRepository;
 import com.cloneproject.ssgjojo.productdetailphoto.domain.ProductDetailPhoto;
 import com.cloneproject.ssgjojo.productdetailphoto.dto.ProductDetailPhotoDto;
@@ -27,7 +24,15 @@ import com.cloneproject.ssgjojo.productoption.repository.IProductOptionRepositor
 import com.cloneproject.ssgjojo.productphoto.domain.ProductPhoto;
 import com.cloneproject.ssgjojo.productphoto.dto.ProductPhotoDto;
 import com.cloneproject.ssgjojo.productphoto.repository.IProductPhotoRepository;
+import com.cloneproject.ssgjojo.qna.domain.QnA;
+import com.cloneproject.ssgjojo.qna.dto.QnAOutputDto;
+import com.cloneproject.ssgjojo.qna.repository.IQnARepository;
+import com.cloneproject.ssgjojo.review.domain.Review;
+import com.cloneproject.ssgjojo.review.dto.ReviewOutputDto;
 import com.cloneproject.ssgjojo.review.repository.IReviewRepository;
+import com.cloneproject.ssgjojo.reviewphoto.domain.ReviewPhoto;
+import com.cloneproject.ssgjojo.reviewphoto.dto.ReviewPhotoDto;
+import com.cloneproject.ssgjojo.reviewphoto.repository.IReviewPhotoRepository;
 import com.cloneproject.ssgjojo.util.MultipartUtil;
 import com.cloneproject.ssgjojo.util.s3.AwsS3ResourceStorage;
 import com.cloneproject.ssgjojo.util.s3.FileInfoDto;
@@ -56,6 +61,8 @@ public class ProductServiceImple implements IProductService {
     private final IProductPhotoRepository iProductPhotoRepository;
     private final IProductDetailPhotoRepository iProductDetailPhotoRepository;
     private final IReviewRepository iReviewRepository;
+    private final IReviewPhotoRepository iReviewPhotoRepository;
+    private final IQnARepository iQnARepository;
     private final AwsS3ResourceStorage awsS3ResourceStorage;
 
 
@@ -497,4 +504,112 @@ public class ProductServiceImple implements IProductService {
 
         return allList;
     }
+
+    @Override
+    public ProductDetailDto getProductDetail(Long productId) {
+
+        Optional<Product> product = iProductRepository.findById(productId);
+
+        Long newPrice = 0L;
+        Long oldPrice = 0L;
+        Float reviewScore = iReviewRepository.getReviewAvgScore(product.get().getId());
+        int reviewNum = iReviewRepository.getReviewCountByProduct(product.get().getId());
+
+        int discountRate = product.get().getDiscountRate();
+        if(discountRate != 0) {
+            oldPrice = product.get().getPrice();
+            newPrice = (long) ((float) oldPrice * (1 - ((float) discountRate / 100)));
+        }
+        else
+            newPrice= product.get().getPrice();
+
+        List<ProductPhoto> productPhotoList = iProductPhotoRepository.findAllByProduct(product.get());
+        List<ProductPhotoDto> productPhotoDtoList = new ArrayList<>();
+
+        for(ProductPhoto productPhoto : productPhotoList) {
+            productPhotoDtoList.add(ProductPhotoDto.builder()
+                    .productPhotoPath(productPhoto.getProductPhotoPath())
+                    .productPhotoOriginName(productPhoto.getProductPhotoOriginName())
+                    .productPhotoSeq(productPhoto.getProductPhotoSeq())
+                    .productId(productPhoto.getProduct().getId())
+                    .build());
+        }
+
+        List<ProductDetailPhoto> productDetailPhotoList = iProductDetailPhotoRepository.findAllByProduct(product.get());
+        List<ProductDetailPhotoDto> detailPhotoDtoList = new ArrayList<>();
+
+        for(ProductDetailPhoto productDetailPhoto : productDetailPhotoList) {
+            detailPhotoDtoList.add(ProductDetailPhotoDto.builder()
+                    .productDetailPhotoPath(productDetailPhoto.getProductDetailPhotoPath())
+                    .productDetailPhotoOriginName(productDetailPhoto.getProductDetailPhotoOriginName())
+                    .productDetailPhotoSeq(productDetailPhoto.getProductDetailPhotoSeq())
+                    .productId(product.get().getId())
+                    .build());
+        }
+
+        List<Review> reviewList = iReviewRepository.findTop5ByProduct(product.get());
+        List<ReviewOutputDto> reviewOutputDtoList = new ArrayList<>();
+
+        for(Review review : reviewList) {
+            List<ReviewPhoto> reviewPhotoList = iReviewPhotoRepository.findAllByReview(review);
+            List<ReviewPhotoDto> reviewPhotoDtoList = new ArrayList<>();
+
+            if(!reviewPhotoList.isEmpty()) {
+                for(ReviewPhoto reviewPhoto : reviewPhotoList) {
+                    reviewPhotoDtoList.add(ReviewPhotoDto.builder()
+                            .id(reviewPhoto.getId())
+                            .reviewPhotoPath(reviewPhoto.getReviewPhotoPath())
+                            .reviewId(reviewPhoto.getReview().getId())
+                            .build());
+                }
+            }
+            reviewOutputDtoList.add(ReviewOutputDto.builder()
+                    .id(review.getId())
+                    .title(review.getTitle())
+                    .mainText(review.getMainText())
+                    .score(review.getScore())
+                    .userId(review.getUser().getUserId().substring(3)+"******")
+                    .productId(review.getProduct().getId())
+                    .createdTime(review.getCreatedDate())
+                    .reviewPhotoDtoList(reviewPhotoDtoList)
+                    .build());
+        }
+
+        List<QnA> qnAList = iQnARepository.findAllByProduct(product.get());
+        List<QnAOutputDto> qnAOutputDtoList = new ArrayList<>();
+
+        for(QnA qnA : qnAList) {
+
+            qnAOutputDtoList.add(QnAOutputDto.builder()
+                    .id(qnA.getId())
+                    .title(qnA.getTitle())
+                    .questionMain(qnA.getQuestionMain())
+                    .questionDate(qnA.getQuestionDate())
+                    .answerMain(qnA.getAnswerMain())
+                    .answerDate(qnA.getAnswerDate())
+                    .lockCase(qnA.isLockCase())
+                    .userId(qnA.getUser().getId())
+                    .userAccount(qnA.getUser().getUserId().substring(3)+"******")
+                    .productId(qnA.getProduct().getId())
+                    .build());
+        }
+
+        return ProductDetailDto.builder()
+                .id(product.get().getId())
+                .mallName("신세계몰")
+                .productName(product.get().getProductName())
+                .manufactureCompany(product.get().getManufactureCompany())
+                .oldPrice(oldPrice)
+                .newPrice(newPrice)
+                .discountRate(product.get().getDiscountRate())
+                .reviewScore(reviewScore)
+                .reviewNum(reviewNum)
+                .productPhotoList(productPhotoDtoList)
+                .productDetailPhotoList(detailPhotoDtoList)
+                .reviewList(reviewOutputDtoList)
+                .QnaList(qnAOutputDtoList)
+                .build();
+    }
+
+
 }

@@ -2,6 +2,7 @@ package com.cloneproject.ssgjojo.product.controller;
 
 import com.cloneproject.ssgjojo.product.domain.Product;
 import com.cloneproject.ssgjojo.product.dto.ProductAddDto;
+import com.cloneproject.ssgjojo.product.dto.ProductDetailDto;
 import com.cloneproject.ssgjojo.product.dto.ProductUpdateDto;
 import com.cloneproject.ssgjojo.product.dto.ProductInfoDto;
 import com.cloneproject.ssgjojo.product.service.IProductService;
@@ -43,6 +44,11 @@ public class ProductController {
     @GetMapping("/product/{id}")
     public ProductInfoDto getProduct(@PathVariable Long id) {
         return iProductService.getProductById(id);
+    }
+
+    @GetMapping("/product/detail/{id}")
+    public ProductDetailDto getProductDetail(@PathVariable Long id) {
+        return iProductService.getProductDetail(id);
     }
 
     @DeleteMapping("/product/{id}")
