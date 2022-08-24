@@ -13,6 +13,7 @@ import com.cloneproject.ssgjojo.categoryProductList.domain.CategoryProductList;
 import com.cloneproject.ssgjojo.categoryProductList.repository.ICategoryProductListRepository;
 import com.cloneproject.ssgjojo.product.domain.Product;
 import com.cloneproject.ssgjojo.product.dto.ProductAddDto;
+import com.cloneproject.ssgjojo.product.dto.ProductAllListDto;
 import com.cloneproject.ssgjojo.product.dto.ProductUpdateDto;
 import com.cloneproject.ssgjojo.product.dto.ProductInfoDto;
 import com.cloneproject.ssgjojo.product.repository.IProductRepository;
@@ -26,6 +27,7 @@ import com.cloneproject.ssgjojo.productoption.repository.IProductOptionRepositor
 import com.cloneproject.ssgjojo.productphoto.domain.ProductPhoto;
 import com.cloneproject.ssgjojo.productphoto.dto.ProductPhotoDto;
 import com.cloneproject.ssgjojo.productphoto.repository.IProductPhotoRepository;
+import com.cloneproject.ssgjojo.review.repository.IReviewRepository;
 import com.cloneproject.ssgjojo.util.MultipartUtil;
 import com.cloneproject.ssgjojo.util.s3.AwsS3ResourceStorage;
 import com.cloneproject.ssgjojo.util.s3.FileInfoDto;
@@ -53,7 +55,7 @@ public class ProductServiceImple implements IProductService {
     private final IProductOptionRepository iProductOptionRepository;
     private final IProductPhotoRepository iProductPhotoRepository;
     private final IProductDetailPhotoRepository iProductDetailPhotoRepository;
-
+    private final IReviewRepository iReviewRepository;
     private final AwsS3ResourceStorage awsS3ResourceStorage;
 
 
@@ -455,5 +457,44 @@ public class ProductServiceImple implements IProductService {
 
         return null;
 
+    }
+
+    @Override
+    public List<ProductAllListDto> getAllProductList() {
+        List<Product> productList = iProductRepository.findAll();
+        List<ProductAllListDto> allList = new ArrayList<>();
+
+
+        for(Product product : productList) {
+            Long newPrice = 0L;
+            Long oldPrice = 0L;
+            Float reviewScore = iReviewRepository.getReviewAvgScore(product.getId());
+            int reviewNum = iReviewRepository.getReviewCountByProduct(product.getId());
+
+            int discountRate = product.getDiscountRate();
+            if(discountRate != 0) {
+                oldPrice = product.getPrice();
+                newPrice = (long) ((float) oldPrice * (1 - ((float) discountRate /100 )));
+            }
+            else
+                newPrice= product.getPrice();
+
+            allList.add(ProductAllListDto.builder()
+                    .id(product.getId())
+                    .thumbnailUri(product.getThumbnail())
+                    .mallName("신세계몰")
+                    .productName(product.getProductName())
+                    .manufactureCompany(product.getManufactureCompany())
+                    .discountRate(product.getDiscountRate())
+                    .oldPrice(oldPrice)
+                    .newPrice(newPrice)
+                    .reviewScore(reviewScore == null ? 0 : reviewScore)
+                    .reviewNum(reviewNum)
+                    .fee(product.getFee())
+                    .adultCase(product.isAdultCase())
+                    .build());
+        }
+
+        return allList;
     }
 }
