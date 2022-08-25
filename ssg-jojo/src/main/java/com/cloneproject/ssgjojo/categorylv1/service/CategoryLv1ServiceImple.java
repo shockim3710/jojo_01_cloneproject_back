@@ -38,8 +38,8 @@ public class CategoryLv1ServiceImple implements ICategoryLv1Service {
         awsS3ResourceStorage.store(CategoryImgDto, categoryImg);
 
         return iCategoryLv1Repository.save(CategoryLv1.builder()
-                        .lv1imgpath(MultipartUtil.createURL(CategoryImgDto.getRemotePath()))
-                        .lv1name(categoryLv1Name)
+                .lv1imgpath(MultipartUtil.createURL(CategoryImgDto.getRemotePath()))
+                .lv1name(categoryLv1Name)
                 .build());
     }
 
@@ -67,11 +67,6 @@ public class CategoryLv1ServiceImple implements ICategoryLv1Service {
 
         return null;
 
-    }
-
-    @Override
-    public List<CategoryLv1> getAllCategory() {
-        return iCategoryLv1Repository.findAll();
     }
 
     @Override

@@ -17,11 +17,13 @@ public class CategoryLv1Controller {
 
     private final ICategoryLv1Service iCategoryLv1Service;
 
+    // XL 카테고리 추가
     @PostMapping("/category/Lv1/add")
     public CategoryLv1 addCategory(@RequestBody CategoryLv1 categoryLv1) {
         return iCategoryLv1Service.addCategory(categoryLv1);
     }
 
+    // XL 카테고리 이미지 추가
     @PostMapping("/category/Lv1/addnew")
     public CategoryLv1 addCategoryWithImage(@RequestParam("categoryImg") MultipartFile img,
                                    @RequestPart String categoryLv1Name) {
@@ -29,29 +31,32 @@ public class CategoryLv1Controller {
         return iCategoryLv1Service.addCategoryWithImg(img, categoryLv1Name);
     }
 
-    @GetMapping("/category/Lv1/getAll")
-    public List<CategoryLv1> getAllCategory() {
-        return iCategoryLv1Service.getAllCategory();
+    // XL 카테고리, L 카테고리 리스트 동시 호출
+    @GetMapping("/category/Lv1/findAll")
+    public List<CategoryLv1Dto> findAllCategory() {
+        return iCategoryLv1Service.findAllCategory();
     }
 
-    @PutMapping("/category/Lv1/edit")
-    public CategoryLv1 editCategory(@RequestBody CategoryLv1 categoryLv1) {
-        return iCategoryLv1Service.editCategory(categoryLv1);
-    }
-
-    @DeleteMapping("/category/Lv1/{id}")
-    public void deleteCategory(@PathVariable Long id) {
-        iCategoryLv1Service.deleteCategory(id);
-    }
-
+    // id 통해서 XL 카테고리 찾기
     @GetMapping("/category/Lv1/{id}")
     public CategoryLv1 getCategoryById(@PathVariable Long id) {
         return iCategoryLv1Service.getCategoryById(id);
     }
 
-    @GetMapping("/category/Lv1/findAll")
-    public List<CategoryLv1Dto> findAllCategory() {
-        return iCategoryLv1Service.findAllCategory();
+    // XL 카테고리 수정
+    @PutMapping("/category/Lv1/edit")
+    public CategoryLv1 editCategory(@RequestBody CategoryLv1 categoryLv1) {
+        return iCategoryLv1Service.editCategory(categoryLv1);
     }
+
+    // XL 카테고리 삭제
+    @DeleteMapping("/category/Lv1/{id}")
+    public void deleteCategory(@PathVariable Long id) {
+        iCategoryLv1Service.deleteCategory(id);
+    }
+
+
+
+
 
 }

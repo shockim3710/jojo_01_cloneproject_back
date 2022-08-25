@@ -73,10 +73,10 @@ public class AccountPaymentServiceImple implements IAccountPaymentService{
         return null;
     }
 
-    @Override
-    public List<AccountPayment> getAllAccountPayment() {
-        return iAccountPaymentRepository.findAll();
-    }
+//    @Override
+//    public List<AccountPayment> getAllAccountPayment() {
+//        return iAccountPaymentRepository.findAll();
+//    }
 
     @Override
     public void deleteAccountPayment(AccountPaymentDeleteDto accountPaymentDeleteDto) {

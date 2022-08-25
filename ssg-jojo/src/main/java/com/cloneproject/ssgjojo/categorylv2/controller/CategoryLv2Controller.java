@@ -22,6 +22,11 @@ public class CategoryLv2Controller {
         return iCategoryLv2Service.addCategory(categoryLv2Dto);
     }
 
+    @GetMapping("/category/Lv2/{id}")
+    public CategoryLv2 getCategoryById(@PathVariable Long id) {
+        return iCategoryLv2Service.getCategoryById(id);
+    }
+
     @GetMapping("/category/Lv2/getAll")
     public List<CategoryLv2> getAllCategory() {
         return iCategoryLv2Service.getAllCategory();
@@ -37,8 +42,5 @@ public class CategoryLv2Controller {
         iCategoryLv2Service.deleteCategory(id);
     }
 
-    @GetMapping("/category/Lv2/{id}")
-    public CategoryLv2 getCategoryById(@PathVariable Long id) {
-        return iCategoryLv2Service.getCategoryById(id);
-    }
+
 }

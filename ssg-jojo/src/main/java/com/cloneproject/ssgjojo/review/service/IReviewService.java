@@ -12,9 +12,7 @@ public interface IReviewService {
     ReviewOutputDto addReview(ReviewDto reviewDto);
     boolean addReviewWithImg(ReviewDto reviewDto, List<MultipartFile> reviewPhoto);
     ReviewEditDto editReview(ReviewEditDto reviewEditDto);
-    List<ReviewOutputDto> getReviewByProductId(Long id);
     List<ReviewOutputDto> sortedGetReviewByProductId(Long id, int sort);
-    List<Review> getAllReview();
     List<ReviewOutputDto> findAllByProduct(Long productId);
     Integer getReviewCountByProduct(Long productId);
     void deleteReview(ReviewDeleteDto reviewDeleteDto);

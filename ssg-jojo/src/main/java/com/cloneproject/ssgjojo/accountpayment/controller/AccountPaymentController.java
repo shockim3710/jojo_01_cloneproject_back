@@ -23,10 +23,10 @@ public class AccountPaymentController {
         return iAccountPaymentService.addAccountPayment(accountPaymentDto);
     }
 
-    @GetMapping("/accountpayment/getAll")
-    public List<AccountPayment> getAllAccountPayment() {
-        return iAccountPaymentService.getAllAccountPayment();
-    }
+//    @GetMapping("/accountpayment/getAll")
+//    public List<AccountPayment> getAllAccountPayment() {
+//        return iAccountPaymentService.getAllAccountPayment();
+//    }
 
     @GetMapping("/accountpayment/{id}")
     public List<AccountPaymentOutputDto> getAccountPaymentByUserId(@PathVariable Long id) {

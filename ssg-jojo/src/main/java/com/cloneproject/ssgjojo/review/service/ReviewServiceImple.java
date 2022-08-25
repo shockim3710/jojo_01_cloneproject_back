@@ -78,6 +78,7 @@ public class ReviewServiceImple implements IReviewService {
 
         Optional<User> user = iUserRepository.findById(reviewDto.getUserId());
         Optional<Product> product = iProductRepository.findById(reviewDto.getProductId());
+        Optional<Orders> orders = iOrdersRepository.findById(reviewDto.getOrdersId());
 
         if(user.isPresent() && product.isPresent()) {
             Review review = iReviewRepository.save(Review.builder()
@@ -86,6 +87,7 @@ public class ReviewServiceImple implements IReviewService {
                     .score(reviewDto.getScore())
                     .user(user.get())
                     .product(product.get())
+                    .orders(orders.get())
                     .build());
 
             for(MultipartFile file : reviewPhoto) {
@@ -137,33 +139,6 @@ public class ReviewServiceImple implements IReviewService {
         return null;
     }
 
-    @Override
-    public List<ReviewOutputDto> getReviewByProductId(Long id) {
-        Optional<Product> product = iProductRepository.findById(id);
-        List<ReviewOutputDto> reviewOutputDtoList = new ArrayList<>();
-
-        if(product.isPresent()) {
-            List<Review> reviewList = iReviewRepository.findAllByProduct(product.get());
-
-            if (!reviewList.isEmpty()) {
-                for (Review review : reviewList) {
-                    reviewOutputDtoList.add(ReviewOutputDto.builder()
-                            .id(review.getId())
-                            .title(review.getTitle())
-                            .mainText(review.getMainText())
-                            .score(review.getScore())
-                            .userId(review.getUser().getUserId())
-                            .productId(review.getProduct().getId())
-                            .createdTime(review.getCreatedDate())
-                            .build());
-                }
-            }
-
-            return reviewOutputDtoList;
-        }
-
-        return null;
-    }
 
     @Override
     public List<ReviewOutputDto> sortedGetReviewByProductId(Long id, int sort) {
@@ -197,12 +172,6 @@ public class ReviewServiceImple implements IReviewService {
         }
 
         return null;
-    }
-
-    @Override
-    public List<Review> getAllReview() {
-
-        return iReviewRepository.findAll();
     }
 
     @Override

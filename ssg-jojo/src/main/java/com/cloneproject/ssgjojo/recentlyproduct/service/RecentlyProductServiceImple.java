@@ -2,7 +2,7 @@ package com.cloneproject.ssgjojo.recentlyproduct.service;
 
 import com.cloneproject.ssgjojo.product.domain.Product;
 import com.cloneproject.ssgjojo.product.repository.IProductRepository;
-import com.cloneproject.ssgjojo.recentlyproduct.domain.RecentlyProduct;
+import com.cloneproject.ssgjojo.productnewservice.domain.RecentlyProduct;
 import com.cloneproject.ssgjojo.recentlyproduct.dto.RecentlyProductAddDto;
 import com.cloneproject.ssgjojo.recentlyproduct.dto.RecentlyProductDeleteDto;
 import com.cloneproject.ssgjojo.recentlyproduct.dto.RecentlyProductOutputDto;

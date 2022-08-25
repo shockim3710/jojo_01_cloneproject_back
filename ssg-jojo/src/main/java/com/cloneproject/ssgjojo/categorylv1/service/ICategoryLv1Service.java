@@ -14,7 +14,6 @@ public interface ICategoryLv1Service {
 
     CategoryLv1 getCategoryById(Long id);
     CategoryLv1 editCategory(CategoryLv1 categoryLv1);
-    List<CategoryLv1> getAllCategory();
     List<CategoryLv1Dto> findAllCategory();
     void deleteCategory(Long id);
 
