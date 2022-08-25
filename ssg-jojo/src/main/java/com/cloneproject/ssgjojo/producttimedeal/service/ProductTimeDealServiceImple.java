@@ -53,11 +53,6 @@ public class ProductTimeDealServiceImple implements IProductTimeDealService{
     }
 
     @Override
-    public List<ProductTimeDeal> getAll() {
-        return iProductTimeDealRepository.findAll();
-    }
-
-    @Override
     public List<ProductTimeDealOutputDto> findTimeDealList() {
         List<ProductTimeDeal> timeDealList = iProductTimeDealRepository.findProductTimeDealList();
         List<ProductTimeDealOutputDto> returnDto = new ArrayList<>();

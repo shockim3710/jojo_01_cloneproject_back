@@ -27,8 +27,15 @@ public class AttentionController {
         iAttentionService.AttentionAddFolder(attentionInputFolderDto);
     }
 
+    @GetMapping("/attention/get/{folderId}")
+    public List<AttentionOutputDto> attentionFindAllByFolder(@PathVariable Long folderId) {
+        return iAttentionService.findAllByAttentionFolder(folderId);
+    }
+
     @PutMapping("/attention/edit")
     public List<AttentionOutputDto> attentionEditFolder(@RequestBody AttentionEditFolderDto attentionEditFolderDto) {
         return iAttentionService.AttentionEditFolder(attentionEditFolderDto);
     }
+
+
 }

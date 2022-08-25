@@ -15,6 +15,7 @@ import java.util.List;
 @Builder
 public class CategoryLv1Dto {
 
+    private Long lv1Id;
     private String lv1name;
     private String lv1imgpath;
 

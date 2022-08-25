@@ -9,8 +9,8 @@ import com.cloneproject.ssgjojo.categorylv3.domain.CategoryLv3;
 import com.cloneproject.ssgjojo.categorylv3.repository.ICategoryLv3Repository;
 import com.cloneproject.ssgjojo.categorylv4.domain.CategoryLv4;
 import com.cloneproject.ssgjojo.categorylv4.repository.ICategoryLv4Repository;
-import com.cloneproject.ssgjojo.categoryProductList.domain.CategoryProductList;
-import com.cloneproject.ssgjojo.categoryProductList.repository.ICategoryProductListRepository;
+import com.cloneproject.ssgjojo.categoryproductlist.domain.CategoryProductList;
+import com.cloneproject.ssgjojo.categoryproductlist.repository.ICategoryProductListRepository;
 import com.cloneproject.ssgjojo.product.domain.Product;
 import com.cloneproject.ssgjojo.product.dto.*;
 import com.cloneproject.ssgjojo.product.repository.IProductRepository;
@@ -91,6 +91,13 @@ public class ProductServiceImple implements IProductService {
                     .build()
             );
 
+            iCategoryProductListRepository.save(CategoryProductList.builder()
+                    .categoryLv1(categoryLv1.get())
+                    .categoryLv2(categoryLv2.get())
+                    .categoryLv3(categoryLv3.get())
+                    .categoryLv4(categoryLv4.get())
+                    .product(product)
+                    .build());
             // 상품 - 카테고리 중칸테이블 저장
             iCategoryProductListRepository.save(CategoryProductList.builder()
                     .categoryLv1(categoryLv1.get())
@@ -610,6 +617,4 @@ public class ProductServiceImple implements IProductService {
                 .QnaList(qnAOutputDtoList)
                 .build();
     }
-
-
 }

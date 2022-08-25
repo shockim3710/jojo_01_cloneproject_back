@@ -26,8 +26,4 @@ public class ProductTimeDealController {
         return iProductTimeDealService.findTimeDealList();
     }
 
-    @GetMapping("/timedeal/getAll")
-    public List<ProductTimeDeal> getAll() {
-        return iProductTimeDealService.getAll();
-    }
 }

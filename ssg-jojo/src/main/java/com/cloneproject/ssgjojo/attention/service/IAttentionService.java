@@ -12,5 +12,5 @@ public interface IAttentionService {
     void AttentionAddFolder(AttentionInputFolderDto addFolderDto);
     List<AttentionOutputDto> AttentionEditFolder(AttentionEditFolderDto attentionInputFolderDto);
 
-
+    List<AttentionOutputDto> findAllByAttentionFolder(Long folderId);
 }

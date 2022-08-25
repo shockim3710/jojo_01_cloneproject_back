@@ -95,6 +95,7 @@ public class CategoryLv1ServiceImple implements ICategoryLv1Service {
                 }
 
                 returnDto.add(CategoryLv1Dto.builder()
+                        .lv1Id(lv1.getId())
                         .lv1name(lv1.getLv1name())
                         .lv1imgpath(lv1.getLv1imgpath())
                         .categoryLv2List(categoryLv2DtoList)

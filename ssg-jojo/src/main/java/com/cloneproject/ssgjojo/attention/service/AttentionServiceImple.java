@@ -115,8 +115,6 @@ public class AttentionServiceImple implements IAttentionService{
                     attentionList.add(attention.get());
             }
 
-
-            //
             for(Long attentionId : attentionEditFolderDto.getAttentionIdList()) {
                 Optional<Attention> attention = iAttentionRepository.findById(attentionId);
 
@@ -155,6 +153,36 @@ public class AttentionServiceImple implements IAttentionService{
             return outputDtoList;
 
         }
+        return null;
+    }
+
+    @Override
+    public List<AttentionOutputDto> findAllByAttentionFolder(Long folderId) {
+        Optional<AttentionFolder> attentionFolder = iAttentionFolderRepository.findById(folderId);
+
+        if(attentionFolder.isPresent()) {
+            List<Attention> attentionList = iAttentionRepository.findAllByAttentionFolder(attentionFolder.get());
+            List<AttentionOutputDto> returnDto = new ArrayList<>();
+
+            for(Attention attention : attentionList) {
+                Product product = attention.getProduct();
+
+                String productInfo = product.getManufactureCompany() + product.getProductName();
+                Long productPrice = product.getPrice();
+
+                if(product.getDiscountRate() != 0)
+                    productPrice = (long) ((float) productPrice * (1 - ((float) product.getDiscountRate() /100 )));
+
+                returnDto.add(AttentionOutputDto.builder()
+                                .productId(attention.getProduct().getId())
+                                .productInfo(productInfo)
+                                .productPrice(productPrice)
+                        .build());
+            }
+
+            return returnDto;
+        }
+
         return null;
     }
 }

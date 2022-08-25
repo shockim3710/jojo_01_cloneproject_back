@@ -8,7 +8,6 @@ import java.util.List;
 
 public interface IProductTimeDealService {
     ProductTimeDealOutputDto addTimeDeal(ProductTimeDealAddDto productTimeDealAddDto);
-    List<ProductTimeDeal> getAll();
 
     List<ProductTimeDealOutputDto> findTimeDealList();
 }

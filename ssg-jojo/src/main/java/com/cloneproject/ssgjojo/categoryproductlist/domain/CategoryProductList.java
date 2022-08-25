@@ -1,14 +1,11 @@
-package com.cloneproject.ssgjojo.categoryProductList.domain;
+package com.cloneproject.ssgjojo.categoryproductlist.domain;
 
 import com.cloneproject.ssgjojo.categorylv1.domain.CategoryLv1;
 import com.cloneproject.ssgjojo.categorylv2.domain.CategoryLv2;
 import com.cloneproject.ssgjojo.categorylv3.domain.CategoryLv3;
 import com.cloneproject.ssgjojo.categorylv4.domain.CategoryLv4;
 import com.cloneproject.ssgjojo.product.domain.Product;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -17,6 +14,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@ToString(exclude = {"categoryLv1","categoryLv2","categoryLv3","categoryLv4","product"})
 public class CategoryProductList {
 
     @Id

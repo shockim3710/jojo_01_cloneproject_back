@@ -24,7 +24,7 @@ public class ProductNewServiceController {
     }
 
     @GetMapping("/newservice/getAll")
-    public List<ProductNewService> getAllBanner() {
+    public List<ProductNewService> getAllNewService() {
         return iProductNewServiceService.getAllProductNewService();
     }
 }
