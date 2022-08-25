@@ -1,5 +1,7 @@
 package com.cloneproject.ssgjojo.user.service;
 
+import com.cloneproject.ssgjojo.attentionfolder.domain.AttentionFolder;
+import com.cloneproject.ssgjojo.attentionfolder.repository.IAttentionFolderRepository;
 import com.cloneproject.ssgjojo.deliveryaddress.domain.DeliveryAddress;
 import com.cloneproject.ssgjojo.deliveryaddress.dto.DeliveryAddressAddDto;
 import com.cloneproject.ssgjojo.deliveryaddress.repository.IDeliveryAddressRepository;
@@ -23,6 +25,7 @@ public class UserServiceImple implements IUserService{
 
     private final IUserRepository iUserRepository;
     private final IDeliveryAddressRepository iDeliveryAddressRepository;
+    private final IAttentionFolderRepository iAttentionFolderRepository;
 
     @Override
     public User addUser(UserSignupDto userSignupDto) { // 회원가입
@@ -52,7 +55,12 @@ public class UserServiceImple implements IUserService{
                         .whetherOnlyThisTime(userSignupDto.isWhetherOnlyThisTime())
                         .build());
 
+        userSignupDto.setFolderName("전체보기");
 
+        iAttentionFolderRepository.save(AttentionFolder.builder()
+                        .user(user)
+                        .folderName(userSignupDto.getFolderName())
+                .build());
 
         return user;
     }
