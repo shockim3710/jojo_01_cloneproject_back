@@ -8,6 +8,8 @@ import java.util.List;
 public interface IUserService {
 
     User addUser(UserSignupDto userSignupDto);
+    User addKakaoUser(UserKakaoSignupDto userKakaoSignupDto);
+
     UserGetIdDto getUserById(Long id);
 
     UserLoginDto getUserLogin(UserLoginDto userLoginDto);

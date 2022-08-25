@@ -16,4 +16,5 @@ public class UserLoginDto {
     private String password; // 비밀번호
     private String name; // 이름
 
+
 }

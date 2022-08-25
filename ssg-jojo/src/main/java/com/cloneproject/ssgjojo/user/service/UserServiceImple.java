@@ -32,6 +32,7 @@ public class UserServiceImple implements IUserService{
 
         userSignupDto.setIsLeave(false);
         userSignupDto.setMembershipLevel("Friends");
+        userSignupDto.setWhetherSnsSignUp(false);
 
         User user = iUserRepository.save(User.builder()
                 .userId(userSignupDto.getUserId())
@@ -43,6 +44,7 @@ public class UserServiceImple implements IUserService{
                 .gender(userSignupDto.getGender())
                 .membershipLevel(userSignupDto.getMembershipLevel())
                 .isLeave(userSignupDto.getIsLeave())
+                .whetherSnsSignUp(userSignupDto.getWhetherSnsSignUp())
                 .build());
 
         userSignupDto.setWhetherDefaultAddress(true);
@@ -60,6 +62,44 @@ public class UserServiceImple implements IUserService{
         iAttentionFolderRepository.save(AttentionFolder.builder()
                         .user(user)
                         .folderName(userSignupDto.getFolderName())
+                .build());
+
+        return user;
+    }
+
+    @Override
+    public User addKakaoUser(UserKakaoSignupDto userKakaoSignupDto) {
+        userKakaoSignupDto.setIsLeave(false);
+        userKakaoSignupDto.setMembershipLevel("Friends");
+        userKakaoSignupDto.setWhetherSnsSignUp(true);
+
+        User user = iUserRepository.save(User.builder()
+                .userId(userKakaoSignupDto.getEmail())
+                .name(userKakaoSignupDto.getName())
+                .birth(userKakaoSignupDto.getBirth())
+                .phone(userKakaoSignupDto.getPhone())
+                .email(userKakaoSignupDto.getEmail())
+                .gender(userKakaoSignupDto.getGender())
+                .membershipLevel(userKakaoSignupDto.getMembershipLevel())
+                .isLeave(userKakaoSignupDto.getIsLeave())
+                .whetherSnsSignUp(userKakaoSignupDto.getWhetherSnsSignUp())
+                .build());
+
+        userKakaoSignupDto.setWhetherDefaultAddress(true);
+        userKakaoSignupDto.setWhetherOnlyThisTime(false);
+
+        iDeliveryAddressRepository.save(DeliveryAddress.builder()
+                .user(user)
+                .address(userKakaoSignupDto.getAddress())
+                .whetherDefaultAddress(userKakaoSignupDto.isWhetherDefaultAddress())
+                .whetherOnlyThisTime(userKakaoSignupDto.isWhetherOnlyThisTime())
+                .build());
+
+                userKakaoSignupDto.setFolderName("전체보기");
+
+        iAttentionFolderRepository.save(AttentionFolder.builder()
+                .user(user)
+                .folderName(userKakaoSignupDto.getFolderName())
                 .build());
 
         return user;
@@ -90,13 +130,13 @@ public class UserServiceImple implements IUserService{
     public UserLoginDto getUserLogin(UserLoginDto userLoginDto) {
         User userIdAndPassword = iUserRepository.findByUserIdAndPassword(userLoginDto.getUserId(), userLoginDto.getPassword());
 
-        if(userIdAndPassword != null) {
+        if(userIdAndPassword != null && userIdAndPassword.getWhetherSnsSignUp() == false && userIdAndPassword.getIsLeave() == false) {
+
             return UserLoginDto.builder()
                     .id(userIdAndPassword.getId())
                     .userId(userIdAndPassword.getUserId())
                     .name(userIdAndPassword.getName())
                     .build();
-
         }
         return null;
     }
@@ -120,6 +160,7 @@ public class UserServiceImple implements IUserService{
                     .membershipLevel(user.getMembershipLevel())
                     .isLeave(user.getIsLeave())
                     .createTime((user.getCreatedDate()))
+                    .whetherSnsSignUp(user.getWhetherSnsSignUp())
                     .build());
                 }
         );
@@ -148,6 +189,7 @@ public class UserServiceImple implements IUserService{
                     .gender(userEditDto.getGender()) // (회원 정보 수정)
                     .membershipLevel(userEditDto.getMembershipLevel())
                     .isLeave(userEditDto.getIsLeave())
+                    .whetherSnsSignUp(userEditDto.getWhetherSnsSignUp())
                     .build());
         }
 

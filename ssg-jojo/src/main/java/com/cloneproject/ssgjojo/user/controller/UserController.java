@@ -22,6 +22,12 @@ public class UserController {
         return iUserService.addUser(userSignupDto);
     }
 
+    @PostMapping("/user/kakaosignup") // 카카오 회원가입
+    public User addUser(@RequestBody UserKakaoSignupDto userKakaoSignupDto) {
+
+        return iUserService.addKakaoUser(userKakaoSignupDto);
+    }
+
     @GetMapping("/user/get/{id}") // 마이페이지
     public UserGetIdDto getUser(@PathVariable Long id) {
         return iUserService.getUserById(id);

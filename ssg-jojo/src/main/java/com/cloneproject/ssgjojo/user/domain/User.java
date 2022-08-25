@@ -16,7 +16,6 @@ import javax.persistence.*;
 @Entity // DB가 해당 객체를 인식 가능
 @DynamicUpdate
 public class User extends BaseTimeEntity {
-
     @Id // 대표값을 지정
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 자동생성 어노테이션
     private Long id; // 기본키
@@ -24,7 +23,7 @@ public class User extends BaseTimeEntity {
     @Column(nullable = false)
     private String userId; // 아이디
 
-    @Column(nullable = false)
+    //    @Column(nullable = false)
     private String password; // 비밀번호
 
     @Column(nullable = false)
@@ -47,4 +46,7 @@ public class User extends BaseTimeEntity {
 
     @Column(nullable = false)
     private Boolean isLeave; // 탈퇴 여부
+
+    @Column(nullable = false, name = "is_sns_sign_up")
+    private Boolean whetherSnsSignUp; // SNS 이용한 가입여부
 }

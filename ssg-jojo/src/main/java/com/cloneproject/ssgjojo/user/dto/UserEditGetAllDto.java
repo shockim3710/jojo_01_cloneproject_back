@@ -23,5 +23,6 @@ public class UserEditGetAllDto {
     private String gender; // 성별 (회원 정보 수정)
     private String membershipLevel; // 회원 등급
     private Boolean isLeave; // 탈퇴 여부 (회원 탈퇴)
+    private Boolean whetherSnsSignUp; // SNS 이용한 가입여부
     private Timestamp createTime;
 }
