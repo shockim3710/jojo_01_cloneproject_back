@@ -17,15 +17,22 @@ public class UserController {
     private final IUserService iUserService;
 
     @PostMapping("/user/signup") // 회원가입
-    public User addUser(@RequestBody UseSignupDto useSignupDto) {
+    public User addUser(@RequestBody UserSignupDto userSignupDto) {
 
-        return iUserService.addUser(useSignupDto);
+        return iUserService.addUser(userSignupDto);
     }
 
     @GetMapping("/user/get/{id}") // 마이페이지
     public UserGetIdDto getUser(@PathVariable Long id) {
         return iUserService.getUserById(id);
     }
+
+    @PostMapping("/user/login")
+    public UserLoginDto getUserLogin(@RequestBody UserLoginDto userLoginDto) {
+
+        return iUserService.getUserLogin(userLoginDto);
+    }
+
 
     @GetMapping("/user/getAll") // 회원 조회
     public List<UserEditGetAllDto> getAll() {
