@@ -6,8 +6,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @AllArgsConstructor
@@ -15,11 +22,11 @@ import javax.persistence.*;
 @Builder
 @Entity // DB가 해당 객체를 인식 가능
 @DynamicUpdate
-public class User extends BaseTimeEntity {
-    @Id // 대표값을 지정
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // 자동생성 어노테이션
-    private Long id; // 기본키
-
+public class User extends BaseTimeEntity implements UserDetails {
+//    @Id // 대표값을 지정
+//    @GeneratedValue(strategy = GenerationType.IDENTITY) // 자동생성 어노테이션
+//    private Long id; // 기본키
+//
     @Column(nullable = false)
     private String userId; // 아이디
 
@@ -49,4 +56,73 @@ public class User extends BaseTimeEntity {
 
     @Column(nullable = false, name = "is_sns_sign_up")
     private Boolean whetherSnsSignUp; // SNS 이용한 가입여부
+
+
+
+
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "USER_SEQUENCE_ID")
+    private Long id;
+
+    @Column(name = "USER_EMAIL", nullable = false, length = 100, unique = true)
+    private String userEmail;
+
+//    @Column(name = "USER_BIRTH", length = 6)
+//    private String userBirth;
+//
+//    @Column(name = "USER_NICKNAME", length = 15)
+//    private String userNickname;
+
+//    @Column(name = "GENDER", length = 1)
+//    @Enumerated(EnumType.STRING)
+//    private Gender gender;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Builder.Default
+    private List<String> roles = new ArrayList<>();
+
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return this.roles.stream()
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public String getPassword() {
+        return null;
+    }
+
+    @Override
+    public String getUsername() {
+        return userEmail;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+
 }
