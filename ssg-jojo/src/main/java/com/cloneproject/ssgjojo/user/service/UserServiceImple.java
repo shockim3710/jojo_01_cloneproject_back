@@ -5,11 +5,14 @@ import com.cloneproject.ssgjojo.attentionfolder.repository.IAttentionFolderRepos
 import com.cloneproject.ssgjojo.deliveryaddress.domain.DeliveryAddress;
 import com.cloneproject.ssgjojo.deliveryaddress.dto.DeliveryAddressAddDto;
 import com.cloneproject.ssgjojo.deliveryaddress.repository.IDeliveryAddressRepository;
+import com.cloneproject.ssgjojo.user.domain.Role;
 import com.cloneproject.ssgjojo.user.domain.User;
 import com.cloneproject.ssgjojo.user.dto.*;
 import com.cloneproject.ssgjojo.user.repository.IUserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -27,45 +30,56 @@ public class UserServiceImple implements IUserService{
     private final IDeliveryAddressRepository iDeliveryAddressRepository;
     private final IAttentionFolderRepository iAttentionFolderRepository;
 
-//    @Override
-//    public User addUser(UserSignupDto userSignupDto) { // 회원가입
-//
-//        userSignupDto.setIsLeave(false);
-//        userSignupDto.setMembershipLevel("Friends");
-//        userSignupDto.setWhetherSnsSignUp(false);
-//
-//        User user = iUserRepository.save(User.builder()
-//                .userId(userSignupDto.getUserId())
-//                .password(userSignupDto.getPassword())
-//                .name(userSignupDto.getName())
-//                .birth(userSignupDto.getBirth())
-//                .phone(userSignupDto.getPhone())
-//                .email(userSignupDto.getEmail())
-//                .gender(userSignupDto.getGender())
-//                .membershipLevel(userSignupDto.getMembershipLevel())
-//                .isLeave(userSignupDto.getIsLeave())
-//                .whetherSnsSignUp(userSignupDto.getWhetherSnsSignUp())
-//                .build());
-//
-//        userSignupDto.setWhetherDefaultAddress(true);
-//        userSignupDto.setWhetherOnlyThisTime(false);
-//
-//        iDeliveryAddressRepository.save(DeliveryAddress.builder()
-//                        .user(user)
-//                        .address(userSignupDto.getAddress())
-//                        .whetherDefaultAddress(userSignupDto.isWhetherDefaultAddress())
-//                        .whetherOnlyThisTime(userSignupDto.isWhetherOnlyThisTime())
-//                        .build());
-//
-//        userSignupDto.setFolderName("전체보기");
-//
-//        iAttentionFolderRepository.save(AttentionFolder.builder()
-//                        .user(user)
-//                        .folderName(userSignupDto.getFolderName())
-//                .build());
-//
-//        return user;
-//    }
+    @Override
+    public User addUser(UserSignupDto userSignupDto) { // 회원가입
+
+        userSignupDto.setIsLeave(false);
+        userSignupDto.setMembershipLevel("Friends");
+        userSignupDto.setWhetherSnsSignUp(false);
+        userSignupDto.setRole(Role.USER);
+
+
+        //userSignupDto.setPwd(~`.encode(userSignupDto.getPwd()));
+
+        /*회원 비밀번호를 암호화 인코딩*/
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        /*비밀번호 암호화하여 다시 user객체에 저장.*/
+        String securePw = encoder.encode(userSignupDto.getPassword());
+        userSignupDto.setPassword(securePw);
+
+        User user = iUserRepository.save(User.builder()
+                .userId(userSignupDto.getUserId())
+                .password(userSignupDto.getPassword())
+                .name(userSignupDto.getName())
+                .birth(userSignupDto.getBirth())
+                .phone(userSignupDto.getPhone())
+                .email(userSignupDto.getEmail())
+                .gender(userSignupDto.getGender())
+                .membershipLevel(userSignupDto.getMembershipLevel())
+                .isLeave(userSignupDto.getIsLeave())
+                .whetherSnsSignUp(userSignupDto.getWhetherSnsSignUp())
+                .role(userSignupDto.getRole())
+                .build());
+
+        userSignupDto.setWhetherDefaultAddress(true);
+        userSignupDto.setWhetherOnlyThisTime(false);
+
+        iDeliveryAddressRepository.save(DeliveryAddress.builder()
+                        .user(user)
+                        .address(userSignupDto.getAddress())
+                        .whetherDefaultAddress(userSignupDto.isWhetherDefaultAddress())
+                        .whetherOnlyThisTime(userSignupDto.isWhetherOnlyThisTime())
+                        .build());
+
+        userSignupDto.setFolderName("전체보기");
+
+        iAttentionFolderRepository.save(AttentionFolder.builder()
+                        .user(user)
+                        .folderName(userSignupDto.getFolderName())
+                .build());
+
+        return user;
+    }
 //
 //    @Override
 //    public User addKakaoUser(UserKakaoSignupDto userKakaoSignupDto) {
@@ -126,10 +140,28 @@ public class UserServiceImple implements IUserService{
 //        return null;
 //    }
 //
-//    @Override
-//    public UserLoginDto getUserLogin(UserLoginDto userLoginDto) {
+    @Override
+    public UserLoginDto getUserLogin(UserLoginDto userLoginDto) {
+
+        User userId = iUserRepository.findByUserId(userLoginDto.getUserId());
+
+
 //        User userIdAndPassword = iUserRepository.findByUserIdAndPassword(userLoginDto.getUserId(), userLoginDto.getPassword());
-//
+
+        //넘겨받은 비밀번호와 user객체에 암호화된 비밀번호와 비교
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        if(userId != null && encoder.matches(userLoginDto.getPassword(), userId.getPassword()) &&
+                userId.getWhetherSnsSignUp() == false && userId.getIsLeave() == false) {
+
+            return UserLoginDto.builder()
+                    .id(userLoginDto.getId())
+                    .userId(userLoginDto.getUserId())
+                    .name(userLoginDto.getName())
+                    .build();
+
+        }
+
+
 //        if(userIdAndPassword != null && userIdAndPassword.getWhetherSnsSignUp() == false && userIdAndPassword.getIsLeave() == false) {
 //
 //            return UserLoginDto.builder()
@@ -138,8 +170,8 @@ public class UserServiceImple implements IUserService{
 //                    .name(userIdAndPassword.getName())
 //                    .build();
 //        }
-//        return null;
-//    }
+        return null;
+    }
 //
 //
 //    @Override

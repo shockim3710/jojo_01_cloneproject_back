@@ -1,5 +1,6 @@
 package com.cloneproject.ssgjojo.jwt;
 
+import com.cloneproject.ssgjojo.user.domain.Role;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -36,9 +37,9 @@ public class JwtTokenProvider {
     }
 
     // JWT 토큰 생성
-    public String createToken(String userPk, List<String> roles) {
-        Claims claims = Jwts.claims().setSubject(userPk); // JWT payload 에 저장되는 정보단위, 보통 여기서 user를 식별하는 값을 넣는다.
-        claims.put("roles", roles); // 정보는 key / value 쌍으로 저장된다.
+    public String createToken(Long userPk, Role role) { // 로그인 후 user 기본키를 토큰으로 프론트에게 넘겨줌
+        Claims claims = Jwts.claims().setSubject(userPk.toString()); // JWT payload 에 저장되는 정보단위, 보통 여기서 user를 식별하는 값을 넣는다.
+        claims.put("role", role); // 정보는 key / value 쌍으로 저장된다.
         Date now = new Date();
         return Jwts.builder()
                 .setClaims(claims) // 정보 저장

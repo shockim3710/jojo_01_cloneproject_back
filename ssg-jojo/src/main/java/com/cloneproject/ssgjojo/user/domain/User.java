@@ -23,10 +23,10 @@ import java.util.stream.Collectors;
 @Entity // DB가 해당 객체를 인식 가능
 @DynamicUpdate
 public class User extends BaseTimeEntity implements UserDetails {
-//    @Id // 대표값을 지정
-//    @GeneratedValue(strategy = GenerationType.IDENTITY) // 자동생성 어노테이션
-//    private Long id; // 기본키
-//
+    @Id // 대표값을 지정
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // 자동생성 어노테이션
+    private Long id; // 기본키
+
     @Column(nullable = false)
     private String userId; // 아이디
 
@@ -57,41 +57,19 @@ public class User extends BaseTimeEntity implements UserDetails {
     @Column(nullable = false, name = "is_sns_sign_up")
     private Boolean whetherSnsSignUp; // SNS 이용한 가입여부
 
-
-
-
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "USER_SEQUENCE_ID")
-    private Long id;
-
-    @Column(name = "USER_EMAIL", nullable = false, length = 100, unique = true)
-    private String userEmail;
-
-//    @Column(name = "USER_BIRTH", length = 6)
-//    private String userBirth;
-//
-//    @Column(name = "USER_NICKNAME", length = 15)
-//    private String userNickname;
-
-//    @Column(name = "GENDER", length = 1)
-//    @Enumerated(EnumType.STRING)
-//    private Gender gender;
-
     @Enumerated(EnumType.STRING)
     private Role role;
-
-    @ElementCollection(fetch = FetchType.EAGER)
-    @Builder.Default
-    private List<String> roles = new ArrayList<>();
 
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.roles.stream()
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
+
+        Role userRole = getRole();
+        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(userRole.toString());
+        Collection<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(authority);
+
+        return authorities;
     }
 
     @Override
@@ -101,7 +79,7 @@ public class User extends BaseTimeEntity implements UserDetails {
 
     @Override
     public String getUsername() {
-        return userEmail;
+        return userId;
     }
 
     @Override

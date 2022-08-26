@@ -1,5 +1,6 @@
 package com.cloneproject.ssgjojo.user.dto;
 
+import com.cloneproject.ssgjojo.user.domain.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,6 +22,7 @@ public class UserSignupDto {
     private String membershipLevel; // 회원 등급
     private Boolean isLeave; // 탈퇴 여부
     private Boolean whetherSnsSignUp; // SNS 이용한 가입여부
+    private Role role;
 
     private String address; // 배송지
     private boolean whetherDefaultAddress; // 기본배송지 여부
