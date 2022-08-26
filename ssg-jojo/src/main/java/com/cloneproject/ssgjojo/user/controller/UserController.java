@@ -33,16 +33,15 @@ public class UserController {
         return iUserService.getUserById(id);
     }
 
+    @GetMapping("/user/getAll") // 회원 조회
+    public List<UserEditGetAllDto> getAll() {
+        return iUserService.getAll();
+    }
+
     @PostMapping("/user/login")
     public UserLoginDto getUserLogin(@RequestBody UserLoginDto userLoginDto) {
 
         return iUserService.getUserLogin(userLoginDto);
-    }
-
-
-    @GetMapping("/user/getAll") // 회원 조회
-    public List<UserEditGetAllDto> getAll() {
-        return iUserService.getAll();
     }
 
     @PutMapping("/user/edit") // 회원 정보 수정

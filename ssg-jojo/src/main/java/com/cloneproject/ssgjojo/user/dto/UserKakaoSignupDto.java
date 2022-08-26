@@ -25,7 +25,7 @@ public class UserKakaoSignupDto {
     private boolean whetherDefaultAddress; // 기본배송지 여부
     private boolean whetherOnlyThisTime; // 이번만배송지 여부
 
-    private String folderName;
+//    private String folderName;
 
     private Long user;
 }

@@ -25,6 +25,7 @@ public class CategoryLv2 {
     @Column(nullable = false)
     private String lv2name;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_lv1_id")
     private CategoryLv1 categoryLv1;
 }

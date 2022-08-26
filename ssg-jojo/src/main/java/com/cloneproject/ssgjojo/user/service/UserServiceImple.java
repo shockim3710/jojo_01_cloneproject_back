@@ -1,9 +1,6 @@
 package com.cloneproject.ssgjojo.user.service;
 
-import com.cloneproject.ssgjojo.attentionfolder.domain.AttentionFolder;
-import com.cloneproject.ssgjojo.attentionfolder.repository.IAttentionFolderRepository;
 import com.cloneproject.ssgjojo.deliveryaddress.domain.DeliveryAddress;
-import com.cloneproject.ssgjojo.deliveryaddress.dto.DeliveryAddressAddDto;
 import com.cloneproject.ssgjojo.deliveryaddress.repository.IDeliveryAddressRepository;
 import com.cloneproject.ssgjojo.user.domain.User;
 import com.cloneproject.ssgjojo.user.dto.*;
@@ -13,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.net.DatagramPacket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -25,14 +21,23 @@ public class UserServiceImple implements IUserService{
 
     private final IUserRepository iUserRepository;
     private final IDeliveryAddressRepository iDeliveryAddressRepository;
-    private final IAttentionFolderRepository iAttentionFolderRepository;
+//    private final IAttentionFolderRepository iAttentionFolderRepository;
 
-    @Override
     public User addUser(UserSignupDto userSignupDto) { // 회원가입
 
         userSignupDto.setIsLeave(false);
         userSignupDto.setMembershipLevel("Friends");
         userSignupDto.setWhetherSnsSignUp(false);
+
+//        userSignupDto.setName("ssd");
+//        userSignupDto.setPassword("ssd");
+//        userSignupDto.setPhone("ssd");
+//        userSignupDto.setEmail("ssd");
+//        userSignupDto.setGender("ssd");
+//        userSignupDto.setUserId("ssd");
+//        userSignupDto.setAddress("ssd");
+
+
 
         User user = iUserRepository.save(User.builder()
                 .userId(userSignupDto.getUserId())
@@ -51,18 +56,18 @@ public class UserServiceImple implements IUserService{
         userSignupDto.setWhetherOnlyThisTime(false);
 
         iDeliveryAddressRepository.save(DeliveryAddress.builder()
-                        .user(user)
-                        .address(userSignupDto.getAddress())
-                        .whetherDefaultAddress(userSignupDto.isWhetherDefaultAddress())
-                        .whetherOnlyThisTime(userSignupDto.isWhetherOnlyThisTime())
-                        .build());
-
-        userSignupDto.setFolderName("전체보기");
-
-        iAttentionFolderRepository.save(AttentionFolder.builder()
-                        .user(user)
-                        .folderName(userSignupDto.getFolderName())
+                .user(user)
+                .address(userSignupDto.getAddress())
+                .whetherDefaultAddress(userSignupDto.isWhetherDefaultAddress())
+                .whetherOnlyThisTime(userSignupDto.isWhetherOnlyThisTime())
                 .build());
+
+//        userSignupDto.setFolderName("전체보기");
+//
+//        iAttentionFolderRepository.save(AttentionFolder.builder()
+//                .user(user)
+//                .folderName(userSignupDto.getFolderName())
+//                .build());
 
         return user;
     }
@@ -95,12 +100,12 @@ public class UserServiceImple implements IUserService{
                 .whetherOnlyThisTime(userKakaoSignupDto.isWhetherOnlyThisTime())
                 .build());
 
-                userKakaoSignupDto.setFolderName("전체보기");
-
-        iAttentionFolderRepository.save(AttentionFolder.builder()
-                .user(user)
-                .folderName(userKakaoSignupDto.getFolderName())
-                .build());
+        //        userKakaoSignupDto.setFolderName("전체보기");
+//
+//        iAttentionFolderRepository.save(AttentionFolder.builder()
+//                .user(user)
+//                .folderName(userKakaoSignupDto.getFolderName())
+//                .build());
 
         return user;
     }
@@ -126,20 +131,6 @@ public class UserServiceImple implements IUserService{
         return null;
     }
 
-    @Override
-    public UserLoginDto getUserLogin(UserLoginDto userLoginDto) {
-        User userIdAndPassword = iUserRepository.findByUserIdAndPassword(userLoginDto.getUserId(), userLoginDto.getPassword());
-
-        if(userIdAndPassword != null && userIdAndPassword.getWhetherSnsSignUp() == false && userIdAndPassword.getIsLeave() == false) {
-
-            return UserLoginDto.builder()
-                    .id(userIdAndPassword.getId())
-                    .userId(userIdAndPassword.getUserId())
-                    .name(userIdAndPassword.getName())
-                    .build();
-        }
-        return null;
-    }
 
 
     @Override
@@ -193,6 +184,21 @@ public class UserServiceImple implements IUserService{
                     .build());
         }
 
+        return null;
+    }
+
+    @Override
+    public UserLoginDto getUserLogin(UserLoginDto userLoginDto) {
+        User userIdAndPassword = iUserRepository.findByUserIdAndPassword(userLoginDto.getUserId(), userLoginDto.getPassword());
+
+        if(userIdAndPassword != null && userIdAndPassword.getWhetherSnsSignUp() == false && userIdAndPassword.getIsLeave() == false) {
+
+               return UserLoginDto.builder()
+                       .id(userIdAndPassword.getId())
+                       .userId(userIdAndPassword.getUserId())
+                       .name(userIdAndPassword.getName())
+                       .build();
+        }
         return null;
     }
 
