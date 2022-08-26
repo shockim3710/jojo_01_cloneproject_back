@@ -11,6 +11,5 @@ public interface IAccountPaymentService {
 
     AccountPaymentOutputDto addAccountPayment(AccountPaymentDto accountPaymentDto);
     List<AccountPaymentOutputDto> getAccountPaymentByUserId(Long id);
-//    List<AccountPayment> getAllAccountPayment();
     void deleteAccountPayment(AccountPaymentDeleteDto accountPaymentDeleteDto);
 }

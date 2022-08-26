@@ -21,10 +21,15 @@ public class CategoryLv3Controller {
         return iCategoryLv3Service.addCategory(categoryLv3Dto);
     }
 
-    @GetMapping("/category/Lv3/getAll")
-    public List<CategoryLv3> getAllCategory() {
-        return iCategoryLv3Service.getAllCategory();
-    }
+//    @GetMapping("/category/Lv3/{id}")
+//    public CategoryLv3 getCategoryById(@PathVariable Long id) {
+//        return iCategoryLv3Service.getCategoryById(id);
+//    }
+
+//    @GetMapping("/category/Lv3/getAll")
+//    public List<CategoryLv3> getAllCategory() {
+//        return iCategoryLv3Service.getAllCategory();
+//    }
 
     @PutMapping("/category/Lv3/edit")
     public CategoryLv3 editCategory(@RequestBody CategoryLv3 categoryLv3) {
@@ -36,8 +41,5 @@ public class CategoryLv3Controller {
         iCategoryLv3Service.deleteCategory(id);
     }
 
-    @GetMapping("/category/Lv3/{id}")
-    public CategoryLv3 getCategoryById(@PathVariable Long id) {
-        return iCategoryLv3Service.getCategoryById(id);
-    }
+
 }

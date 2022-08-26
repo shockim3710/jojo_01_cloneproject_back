@@ -14,14 +14,18 @@ public interface IReviewService {
     ReviewEditDto editReview(ReviewEditDto reviewEditDto);
     List<ReviewOutputDto> sortedGetReviewByProductId(Long id, int sort);
     List<ReviewOutputDto> findAllByProduct(Long productId);
-    Integer getReviewCountByProduct(Long productId);
     void deleteReview(ReviewDeleteDto reviewDeleteDto);
 
-    List<ReviewOutputDto> getTop5(Long productId);
+//    Integer getReviewCountByProduct(Long productId);
 
-    Float getReviewAvgScore(Long id);
+//    List<ReviewOutputDto> getTop5(Long productId);
+
+//    Float getReviewAvgScore(Long id);
 
     List<ReviewOutputDto> findAllByUser(Long userId);
 
     List<ReviewPossibleWriteDto> findPossibleWrite(Long userId);
+
+
+    void test();
 }

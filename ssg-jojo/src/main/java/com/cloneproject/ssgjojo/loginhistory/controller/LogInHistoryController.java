@@ -24,10 +24,10 @@ public class LogInHistoryController {
         return iLogInHistoryService.addLogInHistory(logInHistoryDto);
     }
 
-    @GetMapping("/loginhistory/getAll")
-    public List<LogInHistory> getAllLogInHistory() {
-        return iLogInHistoryService.getAllLogInHistory();
-    }
+//    @GetMapping("/loginhistory/getAll")
+//    public List<LogInHistory> getAllLogInHistory() {
+//        return iLogInHistoryService.getAllLogInHistory();
+//    }
 
 
     @GetMapping("/loginhistory/{id}")

@@ -34,16 +34,10 @@ public class ReviewController {
         return iReviewService.addReviewWithImg(reviewDto, reviewPhoto);
     }
 
-    // 해당 상품에 대한 리뷰 갯수
-    @GetMapping("/review/count/{productId}")
-    public Integer getReviewCountByProduct(@PathVariable Long productId) {
-        return iReviewService.getReviewCountByProduct(productId);
-    }
-
-    // 대표 리뷰 5개 조회
-    @GetMapping("/review/get5/{productId}")
-    public List<ReviewOutputDto> getTop(@PathVariable Long productId) {
-        return iReviewService.getTop5(productId);
+    // 해당 상품의 리뷰 목록 조회
+    @GetMapping("/review/findAllByProduct/{productId}")
+    public List<ReviewOutputDto> findAllByProduct(@PathVariable Long productId) {
+        return iReviewService.findAllByProduct(productId);
     }
 
     // 별점 높은 순, 별점 낮은 순, 최신 순으로 리뷰 정렬
@@ -52,11 +46,24 @@ public class ReviewController {
         return iReviewService.sortedGetReviewByProductId(productId, sort);
     }
 
-    // 리뷰 별점 평균 조회
-    @GetMapping("/review/getAvgScore/{productId}")
-    public Float getReviewAvgScore(@PathVariable Long productId) {
-        return iReviewService.getReviewAvgScore(productId);
-    }
+
+//    // 해당 상품에 대한 리뷰 갯수
+//    @GetMapping("/review/count/{productId}")
+//    public Integer getReviewCountByProduct(@PathVariable Long productId) {
+//        return iReviewService.getReviewCountByProduct(productId);
+//    }
+
+//    // 대표 리뷰 5개 조회
+//    @GetMapping("/review/get5/{productId}")
+//    public List<ReviewOutputDto> getTop(@PathVariable Long productId) {
+//        return iReviewService.getTop5(productId);
+//    }
+
+//    // 리뷰 별점 평균 조회
+//    @GetMapping("/review/getAvgScore/{productId}")
+//    public Float getReviewAvgScore(@PathVariable Long productId) {
+//        return iReviewService.getReviewAvgScore(productId);
+//    }
 
     // 해당 유저가 작성한 리뷰 조회
     @GetMapping("/review/findAllByUser/{userId}")
@@ -64,13 +71,7 @@ public class ReviewController {
         return iReviewService.findAllByUser(userId);
     }
 
-    // 해당 상품의 리뷰 목록 조회
-    @GetMapping("/review/findAllByProduct/{productId}")
-    public List<ReviewOutputDto> findAllByProduct(@PathVariable Long productId) {
-        return iReviewService.findAllByProduct(productId);
-    }
-
-    // 작성 가능한 리뷰 조회
+    // 해당 유저가 작성 가능한 리뷰 조회
     @GetMapping("/review/possible/{userId}")
     public List<ReviewPossibleWriteDto> findPossibleReview(@PathVariable Long userId) {
         return iReviewService.findPossibleWrite(userId);

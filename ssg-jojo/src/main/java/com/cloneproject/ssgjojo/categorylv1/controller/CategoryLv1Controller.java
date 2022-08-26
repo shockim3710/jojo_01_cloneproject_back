@@ -17,30 +17,19 @@ public class CategoryLv1Controller {
 
     private final ICategoryLv1Service iCategoryLv1Service;
 
-    // XL 카테고리 추가
-    @PostMapping("/category/Lv1/add")
-    public CategoryLv1 addCategory(@RequestBody CategoryLv1 categoryLv1) {
-        return iCategoryLv1Service.addCategory(categoryLv1);
-    }
 
-    // XL 카테고리 이미지 추가
+    // XL 카테고리 추가 (이미지 포함)
     @PostMapping("/category/Lv1/addnew")
-    public CategoryLv1 addCategoryWithImage(@RequestParam("categoryImg") MultipartFile img,
+    public CategoryLv1 addCategory(@RequestParam("categoryImg") MultipartFile img,
                                    @RequestPart String categoryLv1Name) {
 
-        return iCategoryLv1Service.addCategoryWithImg(img, categoryLv1Name);
+        return iCategoryLv1Service.addCategory(img, categoryLv1Name);
     }
 
     // XL 카테고리, L 카테고리 리스트 동시 호출
     @GetMapping("/category/Lv1/findAll")
     public List<CategoryLv1Dto> findAllCategory() {
         return iCategoryLv1Service.findAllCategory();
-    }
-
-    // id 통해서 XL 카테고리 찾기
-    @GetMapping("/category/Lv1/{id}")
-    public CategoryLv1 getCategoryById(@PathVariable Long id) {
-        return iCategoryLv1Service.getCategoryById(id);
     }
 
     // XL 카테고리 수정
@@ -54,9 +43,5 @@ public class CategoryLv1Controller {
     public void deleteCategory(@PathVariable Long id) {
         iCategoryLv1Service.deleteCategory(id);
     }
-
-
-
-
 
 }

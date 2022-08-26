@@ -35,15 +35,15 @@ public class CategoryLv3ServiceImple implements ICategoryLv3Service {
         return null;
     }
 
-    @Override
-    public CategoryLv3 getCategoryById(Long id) {
-        Optional<CategoryLv3> categoryLv3 = iCategoryLv3Repository.findById(id);
-
-        if(categoryLv3.isPresent())
-            return categoryLv3.get();
-
-        return null;
-    }
+//    @Override
+//    public CategoryLv3 getCategoryById(Long id) {
+//        Optional<CategoryLv3> categoryLv3 = iCategoryLv3Repository.findById(id);
+//
+//        if(categoryLv3.isPresent())
+//            return categoryLv3.get();
+//
+//        return null;
+//    }
 
     @Override
     public CategoryLv3 editCategory(CategoryLv3 categoryLv3) {
@@ -59,11 +59,6 @@ public class CategoryLv3ServiceImple implements ICategoryLv3Service {
         }
 
         return null;
-    }
-
-    @Override
-    public List<CategoryLv3> getAllCategory() {
-        return iCategoryLv3Repository.findAll();
     }
 
     @Override

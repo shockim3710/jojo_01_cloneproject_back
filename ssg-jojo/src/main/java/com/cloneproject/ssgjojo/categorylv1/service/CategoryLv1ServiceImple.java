@@ -27,13 +27,9 @@ public class CategoryLv1ServiceImple implements ICategoryLv1Service {
     private final ICategoryLv2Repository iCategoryLv2Repository;
     private final AwsS3ResourceStorage awsS3ResourceStorage;
 
-    @Override
-    public CategoryLv1 addCategory(CategoryLv1 categoryLv1) {
-        return iCategoryLv1Repository.save(categoryLv1);
-    }
 
     @Override
-    public CategoryLv1 addCategoryWithImg(MultipartFile categoryImg, String categoryLv1Name) {
+    public CategoryLv1 addCategory(MultipartFile categoryImg, String categoryLv1Name) {
         FileInfoDto CategoryImgDto = FileInfoDto.multipartOf(categoryImg, "category");
         awsS3ResourceStorage.store(CategoryImgDto, categoryImg);
 
@@ -41,16 +37,6 @@ public class CategoryLv1ServiceImple implements ICategoryLv1Service {
                 .lv1imgpath(MultipartUtil.createURL(CategoryImgDto.getRemotePath()))
                 .lv1name(categoryLv1Name)
                 .build());
-    }
-
-    @Override
-    public CategoryLv1 getCategoryById(Long id) {
-        Optional<CategoryLv1> categoryLv1 = iCategoryLv1Repository.findById(id);
-
-        if(categoryLv1.isPresent())
-            return categoryLv1.get();
-
-        return null;
     }
 
     @Override

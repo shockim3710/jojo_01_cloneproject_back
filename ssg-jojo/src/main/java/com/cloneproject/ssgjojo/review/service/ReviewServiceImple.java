@@ -215,37 +215,37 @@ public class ReviewServiceImple implements IReviewService {
         return null;
     }
 
-    @Override
-    public List<ReviewOutputDto> getTop5(Long productId) {
-        Optional<Product> product = iProductRepository.findById(productId);
-        List<ReviewOutputDto> returnDtoList = new ArrayList<>();
+//    @Override
+//    public List<ReviewOutputDto> getTop5(Long productId) {
+//        Optional<Product> product = iProductRepository.findById(productId);
+//        List<ReviewOutputDto> returnDtoList = new ArrayList<>();
+//
+//        if(product.isPresent()) {
+//            List<Review> reviewList = iReviewRepository.findTop5ByProduct(product.get());
+//
+//            for(Review review : reviewList) {
+//                returnDtoList.add(ReviewOutputDto.builder()
+//                        .id(review.getId())
+//                        .title(review.getTitle())
+//                        .mainText(review.getMainText())
+//                        .score(review.getScore())
+//                        .userId(review.getUser().getUserId())
+//                        .productId(review.getProduct().getId())
+//                        .createdTime(review.getCreatedDate())
+//                        .build());
+//            }
+//
+//            return returnDtoList;
+//        }
+//        return null;
+//    }
 
-        if(product.isPresent()) {
-            List<Review> reviewList = iReviewRepository.findTop5ByProduct(product.get());
-
-            for(Review review : reviewList) {
-                returnDtoList.add(ReviewOutputDto.builder()
-                        .id(review.getId())
-                        .title(review.getTitle())
-                        .mainText(review.getMainText())
-                        .score(review.getScore())
-                        .userId(review.getUser().getUserId())
-                        .productId(review.getProduct().getId())
-                        .createdTime(review.getCreatedDate())
-                        .build());
-            }
-
-            return returnDtoList;
-        }
-        return null;
-    }
-
-    @Override
-    public Float getReviewAvgScore(Long productId) {
-
-        Float avgScore = iReviewRepository.getReviewAvgScore(productId);
-        return (float) (Math.round(avgScore*10)/10.0);
-    }
+//    @Override
+//    public Float getReviewAvgScore(Long productId) {
+//
+//        Float avgScore = iReviewRepository.getReviewAvgScore(productId);
+//        return (float) (Math.round(avgScore*10)/10.0);
+//    }
 
     @Override
     public List<ReviewOutputDto> findAllByUser(Long userId) {
@@ -292,13 +292,13 @@ public class ReviewServiceImple implements IReviewService {
         return null;
     }
 
-    // 접근지시자(public) 반환형(Integer) 함수의이름(getReviewCountByProduct) 전달받을변수의이름(자료형 변수이름)
-    @Override
-    public Integer getReviewCountByProduct(Long productId) {
-
-        Integer review = iReviewRepository.getReviewCountByProduct(productId);
-        return review;
-    }
+//    // 접근지시자(public) 반환형(Integer) 함수의이름(getReviewCountByProduct) 전달받을변수의이름(자료형 변수이름)
+//    @Override
+//    public Integer getReviewCountByProduct(Long productId) {
+//
+//        Integer review = iReviewRepository.getReviewCountByProduct(productId);
+//        return review;
+//    }
 
     @Override
     public void deleteReview(ReviewDeleteDto reviewDeleteDto) {
@@ -344,5 +344,10 @@ public class ReviewServiceImple implements IReviewService {
         }
 
         return null;
+    }
+
+    @Override
+    public void test() {
+
     }
 }
