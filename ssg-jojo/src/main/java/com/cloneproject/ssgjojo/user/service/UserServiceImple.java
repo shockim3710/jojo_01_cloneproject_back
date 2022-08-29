@@ -62,7 +62,7 @@ public class UserServiceImple implements IUserService{
         iAttentionFolderRepository.save(AttentionFolder.builder()
                         .user(user)
                         .folderName(userSignupDto.getFolderName())
-                .build());
+                        .build());
 
         return user;
     }

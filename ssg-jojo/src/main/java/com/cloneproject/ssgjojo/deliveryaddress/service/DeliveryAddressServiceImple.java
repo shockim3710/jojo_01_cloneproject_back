@@ -32,6 +32,8 @@ public class DeliveryAddressServiceImple implements IDeliveryAddressService {
                             .address(deliveryAddressAddDto.getAddress())
                             .whetherDefaultAddress(deliveryAddressAddDto.isWhetherDefaultAddress())
                             .whetherOnlyThisTime(deliveryAddressAddDto.isWhetherOnlyThisTime())
+                            .receiveName(deliveryAddressAddDto.getReceiveName())
+                            .address(deliveryAddressAddDto.getAddressName())
                             .user(user.get())
                             .build());
 
@@ -60,6 +62,8 @@ public class DeliveryAddressServiceImple implements IDeliveryAddressService {
                                 .address(user.getAddress())
                                 .whetherDefaultAddress(user.isWhetherDefaultAddress())
                                 .whetherOnlyThisTime(user.isWhetherOnlyThisTime())
+                                .addressName(user.getAddressName())
+                                .receiveName(user.getReceiveName())
                                 .user(user.getUser().getId())
                                 .build());
 
@@ -82,6 +86,8 @@ public class DeliveryAddressServiceImple implements IDeliveryAddressService {
                             .address(deliveryAddressEditGetIdDto.getAddress())
                             .whetherDefaultAddress(deliveryAddressEditGetIdDto.isWhetherDefaultAddress())
                             .whetherOnlyThisTime(deliveryAddressEditGetIdDto.isWhetherOnlyThisTime())
+                            .addressName(deliveryAddressEditGetIdDto.getAddressName())
+                            .receiveName(deliveryAddressEditGetIdDto.getReceiveName())
                             .user(iUserRepository.findById(deliveryAddressEditGetIdDto.getUser()).get())
                             .build());
 
@@ -90,6 +96,8 @@ public class DeliveryAddressServiceImple implements IDeliveryAddressService {
                     .address(temp.getAddress())
                     .whetherDefaultAddress(temp.isWhetherDefaultAddress())
                     .whetherOnlyThisTime(temp.isWhetherOnlyThisTime())
+                    .addressName(temp.getAddressName())
+                    .receiveName(temp.getReceiveName())
                     .user(temp.getUser().getId())
                     .build();
         }
