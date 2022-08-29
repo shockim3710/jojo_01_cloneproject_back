@@ -1,4 +1,4 @@
-package com.cloneproject.ssgjojo.recentlyproduct.domain;
+package com.cloneproject.ssgjojo.productnewservice.domain;
 
 import com.cloneproject.ssgjojo.product.domain.Product;
 import com.cloneproject.ssgjojo.user.domain.User;

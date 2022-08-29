@@ -74,10 +74,6 @@ public class PayingCreditCardServiceImple implements IPayingCreditCardService {
         return null;
     }
 
-    @Override
-    public List<PayingCreditCard> getAllPayingCreditCard() {
-        return iPayingCreditCardRepository.findAll();
-    }
 
     @Override
     public void deletePayingCreditCard(PayingCreditCardDeleteDto payingCreditCardDeleteDto) {

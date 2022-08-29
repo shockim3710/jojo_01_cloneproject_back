@@ -18,6 +18,7 @@ public class ProductNewServiceService implements IProductNewServiceService{
     private final AwsS3ResourceStorage awsS3ResourceStorage;
     private final IProductNewServiceRepository iProductNewServiceRepository;
 
+    // 뉴 서비스 등록
     @Override
     public ProductNewService addProductNewService(ProductNewServiceAddDto productNewServiceAddDto, MultipartFile newServicePhoto) {
         FileInfoDto newServicePhotoFile = FileInfoDto.multipartOf(newServicePhoto, "newService");
@@ -31,23 +32,10 @@ public class ProductNewServiceService implements IProductNewServiceService{
                 .build());
     }
 
-    @Override
-    public ProductNewService getProductNewServiceById(Long id) {
-        return null;
-    }
-
+    // 뉴 서비스 조회
     @Override
     public List<ProductNewService> getAllProductNewService() {
         return iProductNewServiceRepository.findAll();
     }
 
-    @Override
-    public void deleteProductNewService(Long id) {
-
-    }
-
-    @Override
-    public ProductNewService editProductNewService(ProductNewService productNewService) {
-        return null;
-    }
 }

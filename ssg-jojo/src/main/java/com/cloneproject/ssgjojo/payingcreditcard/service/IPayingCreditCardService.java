@@ -11,7 +11,6 @@ public interface IPayingCreditCardService {
 
     PayingCreditCardOutputDto addPayingCreditCard(PayingCreditCardInputDto payingCreditCardInputDto);
     List<PayingCreditCardOutputDto> getPayingCreditCardByUserId(Long id);
-    List<PayingCreditCard> getAllPayingCreditCard();
     void deletePayingCreditCard(PayingCreditCardDeleteDto payingCreditCardDeleteDto);
 
 }

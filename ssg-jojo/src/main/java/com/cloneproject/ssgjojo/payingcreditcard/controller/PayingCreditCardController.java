@@ -23,11 +23,6 @@ public class PayingCreditCardController {
         return iPayingCreditCardService.addPayingCreditCard(payingCreditCardInputDto);
     }
 
-    @GetMapping("/payingcreditcard/getAll")
-    public List<PayingCreditCard> getAllPayingCreditCard() {
-        return iPayingCreditCardService.getAllPayingCreditCard();
-    }
-
     @GetMapping("/payingcreditcard/{id}")
     public List<PayingCreditCardOutputDto> getPayingCreditCardByUserId(@PathVariable Long id) {
         return iPayingCreditCardService.getPayingCreditCardByUserId(id);

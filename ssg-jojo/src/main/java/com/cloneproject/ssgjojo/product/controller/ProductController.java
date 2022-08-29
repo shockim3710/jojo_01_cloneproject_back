@@ -65,5 +65,10 @@ public class ProductController {
     public List<ProductListDto> findByCategory(@RequestParam(name = "lv", defaultValue = "1") Long lv,
                                                @RequestParam(name = "id") Long id){
         return iProductService.findProductByCategoryLv(lv, id);
+
+    // 상품 검색
+    @GetMapping("/product/search")
+    public List<ProductListDto> searchProduct(@RequestParam String keyword) {
+        return iProductService.productSearch(keyword);
     }
 }

@@ -18,31 +18,32 @@ import java.util.List;
 public class BannerController {
     private final IBannerService iBannerService;
 
+    // 배너 추가
     @PostMapping(value = "/banner/add", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public Banner addBanner(@RequestParam("bannerPhoto") MultipartFile bannerPhoto,
                             @RequestPart BannerAddDto bannerAddDto) {
         return iBannerService.addBanner(bannerPhoto, bannerAddDto);
     }
 
+    // 배너 조회
     @GetMapping("/banner/getAll")
     public List<Banner> getAllBanner() {
         return iBannerService.getAllBanner();
     }
 
-    @GetMapping("/banner/{id}")
-    public Banner getBannerById(@PathVariable Long id) {
-        return iBannerService.getBannerById(id);
+    // 배너 편집
+    @PutMapping("/banner/edit")
+    public Banner editBanner(@RequestBody Banner banner) {
+        return iBannerService.editBanner(banner);
     }
 
+    // 배너 삭제
     @DeleteMapping("/banner/{id}")
     public void deleteBanner(@PathVariable Long id) {
         iBannerService.deleteBanner(id);
     }
 
-    @PutMapping("/banner/edit")
-    public Banner editBanner(@RequestBody Banner banner) {
-        return iBannerService.editBanner(banner);
-    }
+
 
 
 }

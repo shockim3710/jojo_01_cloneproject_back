@@ -16,4 +16,5 @@ public interface IProductService {
     List<ProductListDto> getAllProductList();
     ProductDetailDto getProductDetail(Long productId);
     List<ProductListDto> findProductByCategoryLv(Long lv, Long id);
+    List<ProductListDto> productSearch(String keyword);
 }

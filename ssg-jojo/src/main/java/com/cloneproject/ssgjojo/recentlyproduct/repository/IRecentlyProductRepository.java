@@ -1,7 +1,6 @@
 package com.cloneproject.ssgjojo.recentlyproduct.repository;
 
-import com.cloneproject.ssgjojo.producttimedeal.domain.ProductTimeDeal;
-import com.cloneproject.ssgjojo.recentlyproduct.domain.RecentlyProduct;
+import com.cloneproject.ssgjojo.productnewservice.domain.RecentlyProduct;
 import com.cloneproject.ssgjojo.user.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 

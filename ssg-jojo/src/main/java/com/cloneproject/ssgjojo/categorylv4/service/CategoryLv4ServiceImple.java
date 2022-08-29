@@ -20,6 +20,7 @@ public class CategoryLv4ServiceImple implements ICategoryLv4Service {
     private final ICategoryLv4Repository iCategoryLv4Repository;
     private final ICategoryLv3Repository iCategoryLv3Repository;
 
+    // s 카테고리 추가
     @Override
     public CategoryLv4 addCategory(CategoryLv4Dto categoryLv4Dto) {
 
@@ -34,16 +35,7 @@ public class CategoryLv4ServiceImple implements ICategoryLv4Service {
         return null;
     }
 
-    @Override
-    public CategoryLv4 getCategoryById(Long id) {
-        Optional<CategoryLv4> categoryLv4 = iCategoryLv4Repository.findById(id);
-
-        if(categoryLv4.isPresent())
-            return categoryLv4.get();
-
-        return null;
-    }
-
+    // s 카테고리 수정
     @Override
     public CategoryLv4 editCategory(CategoryLv4Dto categoryLv4Dto) {
 
@@ -61,11 +53,7 @@ public class CategoryLv4ServiceImple implements ICategoryLv4Service {
         return null;
     }
 
-    @Override
-    public List<CategoryLv4> getAllCategory() {
-        return iCategoryLv4Repository.findAll();
-    }
-
+    // s 카테고리 삭제
     @Override
     public void deleteCategory(Long id) {
         Optional<CategoryLv4> temp = iCategoryLv4Repository.findById(id);

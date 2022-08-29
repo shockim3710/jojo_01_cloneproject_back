@@ -21,6 +21,7 @@ public class CategoryLv3ServiceImple implements ICategoryLv3Service {
     private final ICategoryLv2Repository iCategoryLv2Repository;
 
 
+    // m 카테고리 추가
     @Override
     public CategoryLv3 addCategory(CategoryLv3Dto categoryLv3Dto) {
 
@@ -35,16 +36,7 @@ public class CategoryLv3ServiceImple implements ICategoryLv3Service {
         return null;
     }
 
-    @Override
-    public CategoryLv3 getCategoryById(Long id) {
-        Optional<CategoryLv3> categoryLv3 = iCategoryLv3Repository.findById(id);
-
-        if(categoryLv3.isPresent())
-            return categoryLv3.get();
-
-        return null;
-    }
-
+    // m 카테고리 수정
     @Override
     public CategoryLv3 editCategory(CategoryLv3 categoryLv3) {
         Optional<CategoryLv3> temp = iCategoryLv3Repository.findById(categoryLv3.getId());
@@ -61,11 +53,7 @@ public class CategoryLv3ServiceImple implements ICategoryLv3Service {
         return null;
     }
 
-    @Override
-    public List<CategoryLv3> getAllCategory() {
-        return iCategoryLv3Repository.findAll();
-    }
-
+    // m 카테고리 삭제
     @Override
     public void deleteCategory(Long id) {
         Optional<CategoryLv3> temp = iCategoryLv3Repository.findById(id);

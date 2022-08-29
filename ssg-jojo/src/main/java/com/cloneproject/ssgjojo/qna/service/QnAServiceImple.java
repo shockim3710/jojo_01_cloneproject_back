@@ -26,6 +26,7 @@ public class QnAServiceImple implements IQnAService {
     private final IUserRepository iUserRepository;
     private final IProductRepository iProductRepository;
 
+    // 유저가 상품문의글 작성
     @Override
     public QnAOutputDto addQ(QuestionInputDto questionInputDto) {
 
@@ -57,39 +58,7 @@ public class QnAServiceImple implements IQnAService {
     }
 
 
-    @Override
-    public List<QnAOutputDto> getQnaByProuductId(Long id) {
-
-        Optional<Product> product = iProductRepository.findById(id);
-        List<QnAOutputDto> qnAOutputDtoList = new ArrayList<>();
-        List<QnA> temp = new ArrayList<>();
-
-        if(product.isPresent()) {
-            List<QnA> qnAList = iQnARepository.findAllByProduct(product.get());
-
-            if (!product.isEmpty()) {
-                for (QnA qnA : qnAList) {
-                    qnAOutputDtoList.add(QnAOutputDto.builder()
-                            .id(qnA.getId())
-                            .title(qnA.getTitle())
-                            .questionMain(qnA.getQuestionMain())
-                            .answerMain(qnA.getAnswerMain())
-                            .questionDate(qnA.getQuestionDate())
-                            .answerDate(qnA.getAnswerDate())
-                            .lockCase(qnA.isLockCase())
-                            .userId(qnA.getUser().getId())
-                            .productId(qnA.getProduct().getId())
-                            .build());
-                }
-            }
-
-            return qnAOutputDtoList;
-
-        }
-
-        return null;
-    }
-
+    // 유저가 작성한 기존 상품문의글 편집
     @Override
     public QnAOutputDto editQ(QnAEditDto qnAEditDto) {
 
@@ -127,42 +96,8 @@ public class QnAServiceImple implements IQnAService {
         return null;
     }
 
-    @Override
-    public Integer getQuestionCountByProduct(Long productId) {
-        Integer qna = iQnARepository.getQuestionCountByProduct(productId);
-        return qna;
-    }
 
-    @Override
-    public List<QnAOutputDto> getTop5(Long productId) {
-
-        Optional<Product> product =  iProductRepository.findById(productId);
-        List<QnAOutputDto> returnQnaList = new ArrayList<>();
-
-        if(product.isPresent()) {
-            List<QnA> qnaList = iQnARepository.findTop5ByProduct(product.get());
-
-            for(QnA qnA : qnaList) {
-                returnQnaList.add(QnAOutputDto.builder()
-                        .id(qnA.getId())
-                        .title(qnA.getTitle())
-                        .questionMain(qnA.getQuestionMain())
-                        .questionDate(qnA.getQuestionDate())
-                        .answerMain(qnA.getAnswerMain())
-                        .answerDate(qnA.getAnswerDate())
-                        .lockCase(qnA.isLockCase())
-                        .userId(qnA.getUser().getId())
-                        .productId(qnA.getProduct().getId())
-                        .userAccount(qnA.getUser().getUserId().substring(3)+"******")
-                        .build());
-            }
-
-            return returnQnaList;
-        }
-
-        return null;
-    }
-
+    // 해당 상품에 대한 상품문의 목록 최신순으로 정렬, 조회
     @Override
     public List<QnAOutputDto> sortedGetQnaByProductId(Long id) {
 
@@ -192,6 +127,8 @@ public class QnAServiceImple implements IQnAService {
         return null;
     }
 
+
+    // 유저가 작성된 상품문의글 삭제
     @Override
     public void deleteQuestion(QnADeleteDto qnADeleteDto) {
 
@@ -206,6 +143,8 @@ public class QnAServiceImple implements IQnAService {
 
     }
 
+
+    // 관리자가 상품문의에 대한 답변 추가
     @Override
     @Transactional
     public QnAOutputDto addA(AnswerInputDto answerInputDto) {

@@ -8,9 +8,5 @@ import java.util.List;
 
 public interface IReviewPhotoRepository extends JpaRepository<ReviewPhoto, Long> {
 
-
-
-//    select * from review_photo rp
-//    where rp.review_id = 24
     List<ReviewPhoto> findAllByReview(Review review);
 }

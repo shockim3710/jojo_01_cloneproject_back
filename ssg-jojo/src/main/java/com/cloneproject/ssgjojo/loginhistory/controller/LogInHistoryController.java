@@ -19,17 +19,12 @@ public class LogInHistoryController {
     private final ILogInHistoryService iLogInHistoryService;
     private final IUserRepository iUserRepository;
 
-    @PostMapping("/loginhistory/add")
-    public LogInHistoryOutputDto addLogInHistory(@RequestBody LogInHistoryDto logInHistoryDto) {
-        return iLogInHistoryService.addLogInHistory(logInHistoryDto);
-    }
+//    @PostMapping("/loginhistory/add")
+//    public LogInHistoryOutputDto addLogInHistory(@RequestBody LogInHistoryDto logInHistoryDto) {
+//        return iLogInHistoryService.addLogInHistory(logInHistoryDto);
+//    }
 
-    @GetMapping("/loginhistory/getAll")
-    public List<LogInHistory> getAllLogInHistory() {
-        return iLogInHistoryService.getAllLogInHistory();
-    }
-
-
+    // 해당 유저의 로그인 기록 조회
     @GetMapping("/loginhistory/{id}")
     public List<LogInHistoryOutputDto> getHistoryByUserId(@PathVariable Long id) {
         return iLogInHistoryService.getHistoryByUserId(id);
