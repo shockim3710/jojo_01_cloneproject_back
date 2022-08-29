@@ -13,7 +13,6 @@ import java.util.List;
 @RequestMapping("/api")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*", allowedHeaders = "*")
-
 public class CartProductListController {
 
     private final ICartProductListService iCartProductListService;
