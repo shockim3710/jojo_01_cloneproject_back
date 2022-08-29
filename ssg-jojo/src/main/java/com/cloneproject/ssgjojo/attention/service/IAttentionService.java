@@ -12,4 +12,5 @@ public interface IAttentionService {
     List<AttentionOutputDto> findAllByAttentionFolder(Long folderId);
 
     boolean deleteAttention(AttentionDeleteDto deleteDto);
+    boolean deleteAttentionInFolder(AttentionDeleteFolderDto deleteDto);
 }

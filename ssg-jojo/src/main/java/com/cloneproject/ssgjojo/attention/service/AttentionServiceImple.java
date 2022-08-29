@@ -183,6 +183,7 @@ public class AttentionServiceImple implements IAttentionService{
         return null;
     }
 
+    // 전체 폴더에서 삭제
     @Override
     @Transactional
     public boolean deleteAttention(AttentionDeleteDto deleteDto) {
@@ -202,5 +203,23 @@ public class AttentionServiceImple implements IAttentionService{
         return false;
     }
 
+    // 특정 폴더에서 삭제
+    @Override
+    public boolean deleteAttentionInFolder(AttentionDeleteFolderDto deleteDto) {
+        Optional<User> user = iUserRepository.findById(deleteDto.getUserId());
 
+        if(user.isPresent()) {
+            for(Long attentionId : deleteDto.getAttentionId()) {
+                Optional<Attention> attention = iAttentionRepository.findById(attentionId);
+                if(!attention.isPresent())
+                    continue;
+                if(attention.get().getUser().getId() == user.get().getId())
+                    iAttentionRepository.deleteById(attentionId);
+            }
+
+            return true;
+        }
+
+        return false;
+    }
 }

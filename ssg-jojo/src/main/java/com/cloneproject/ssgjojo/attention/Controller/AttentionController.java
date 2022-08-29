@@ -39,4 +39,8 @@ public class AttentionController {
         return iAttentionService.deleteAttention(attentionDeleteDto);
     }
 
+    @DeleteMapping("/attention/infolder/delete")
+    public boolean attentionDeleteInFolder(@RequestBody AttentionDeleteFolderDto attentionDeleteFolderDto) {
+        return iAttentionService.deleteAttentionInFolder(attentionDeleteFolderDto);
+    }
 }
