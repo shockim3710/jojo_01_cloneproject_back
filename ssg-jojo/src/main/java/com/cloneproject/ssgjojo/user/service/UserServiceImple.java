@@ -62,12 +62,15 @@ public class UserServiceImple implements IUserService{
 
         userSignupDto.setWhetherDefaultAddress(true);
         userSignupDto.setWhetherOnlyThisTime(false);
+        userSignupDto.setAddressName("자택");
 
         iDeliveryAddressRepository.save(DeliveryAddress.builder()
                         .user(user)
                         .address(userSignupDto.getAddress())
                         .whetherDefaultAddress(userSignupDto.isWhetherDefaultAddress())
                         .whetherOnlyThisTime(userSignupDto.isWhetherOnlyThisTime())
+                        .receiveName(userSignupDto.getName())
+                        .addressName(userSignupDto.getAddressName())
                         .build());
 
         userSignupDto.setFolderName("전체보기");
