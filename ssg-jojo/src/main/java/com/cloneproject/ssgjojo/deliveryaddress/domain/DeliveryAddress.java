@@ -28,6 +28,12 @@ public class DeliveryAddress {
     @Column(nullable = false, name = "is_only_this_time")
     private boolean whetherOnlyThisTime; // 이번만배송지 여부
 
+    @Column(nullable = false)
+    private String addressName; // 주소별칭
+
+    @Column(nullable = false)
+    private String receiveName; // 받는분
+
     @ManyToOne
     private User user;
 

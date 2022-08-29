@@ -3,15 +3,23 @@ package com.cloneproject.ssgjojo.user.service;
 import com.cloneproject.ssgjojo.user.domain.User;
 import com.cloneproject.ssgjojo.user.dto.*;
 
-import java.util.List;
-import java.util.Optional;
+import javax.servlet.http.HttpServletRequest;
 
 public interface IUserService {
 
-    User addUser(UseSignupDto useSignupDto);
-    UserGetIdDto getUserById(Long id);
-    User editUser(UserEditGetAllDto userEditGetAllDto);
-    List<UserEditGetAllDto> getAll();
+    String addUser(UserSignupDto userSignupDto);
+//    User addKakaoUser(UserKakaoSignupDto userKakaoSignupDto);
 
-    User deleteUser(Long id);
+    String getUserSignUpId(UserSignupDto userSignupDto);
+
+//
+    UserGetIdDto getUserById(HttpServletRequest request);
+//
+    String getUserLogin(UserLoginDto userLoginDto);
+//
+    String editUser(UserEditGetAllDto userEditDto, HttpServletRequest request);
+
+    //    List<UserEditGetAllDto> getAll();
+//
+    String deleteUser(HttpServletRequest request);
 }

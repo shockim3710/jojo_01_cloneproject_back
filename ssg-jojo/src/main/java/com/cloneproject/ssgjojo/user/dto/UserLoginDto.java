@@ -1,5 +1,6 @@
 package com.cloneproject.ssgjojo.user.dto;
 
+import com.cloneproject.ssgjojo.user.domain.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,8 +10,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserGetIdDto {
+public class UserLoginDto {
 
-    private String name; // 이름
-    private String membershipLevel; // 회원 등급
+    private String userId; // 아이디
+    private String password; // 비밀번호
+
+    private String logInIp;
 }

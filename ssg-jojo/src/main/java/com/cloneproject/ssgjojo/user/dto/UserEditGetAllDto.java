@@ -1,5 +1,6 @@
 package com.cloneproject.ssgjojo.user.dto;
 
+import com.cloneproject.ssgjojo.user.domain.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,7 +14,6 @@ import java.sql.Timestamp;
 @Builder
 public class UserEditGetAllDto {
 
-    private Long id; // 기본키
     private String userId; // 아이디
     private String password; // 비밀번호 (회원 정보 수정)
     private String name; // 이름 (회원 정보 수정)
@@ -23,5 +23,8 @@ public class UserEditGetAllDto {
     private String gender; // 성별 (회원 정보 수정)
     private String membershipLevel; // 회원 등급
     private Boolean isLeave; // 탈퇴 여부 (회원 탈퇴)
+    private Boolean whetherSnsSignUp; // SNS 이용한 가입여부
     private Timestamp createTime;
+    private Role role;
+
 }
