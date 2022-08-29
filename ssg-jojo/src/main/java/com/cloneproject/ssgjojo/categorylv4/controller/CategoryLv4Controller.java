@@ -21,12 +21,6 @@ public class CategoryLv4Controller {
         return iCategoryLv4Service.addCategory(categoryLv4Dto);
     }
 
-//    @GetMapping("/category/Lv4/getAll")
-//    public List<CategoryLv4> getAllCategory() {
-//
-//        return iCategoryLv4Service.getAllCategory();
-//    }
-
     @PutMapping("/category/Lv4/edit")
     public CategoryLv4 editCategory(@RequestBody CategoryLv4Dto categoryLv4Dto) {
         return iCategoryLv4Service.editCategory(categoryLv4Dto);
@@ -38,9 +32,4 @@ public class CategoryLv4Controller {
         iCategoryLv4Service.deleteCategory(id);
     }
 
-//    @GetMapping("/category/Lv4/{id}")
-//    public CategoryLv4 getCategoryById(@PathVariable Long id) {
-//
-//        return iCategoryLv4Service.getCategoryById(id);
-//    }
 }

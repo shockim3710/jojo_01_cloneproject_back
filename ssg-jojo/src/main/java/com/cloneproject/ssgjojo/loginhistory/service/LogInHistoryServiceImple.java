@@ -75,8 +75,4 @@ public class LogInHistoryServiceImple implements ILogInHistoryService {
         return null;
     }
 
-//    @Override
-//    public List<LogInHistory> getAllLogInHistory() {
-//        return iLogInHistoryRepository.findAll();
-//    }
 }

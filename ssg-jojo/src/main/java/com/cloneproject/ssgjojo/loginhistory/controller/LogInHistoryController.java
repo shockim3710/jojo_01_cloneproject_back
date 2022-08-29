@@ -24,12 +24,6 @@ public class LogInHistoryController {
         return iLogInHistoryService.addLogInHistory(logInHistoryDto);
     }
 
-//    @GetMapping("/loginhistory/getAll")
-//    public List<LogInHistory> getAllLogInHistory() {
-//        return iLogInHistoryService.getAllLogInHistory();
-//    }
-
-
     @GetMapping("/loginhistory/{id}")
     public List<LogInHistoryOutputDto> getHistoryByUserId(@PathVariable Long id) {
         return iLogInHistoryService.getHistoryByUserId(id);

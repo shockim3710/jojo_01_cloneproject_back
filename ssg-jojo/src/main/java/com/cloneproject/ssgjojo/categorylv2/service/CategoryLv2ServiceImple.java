@@ -36,16 +36,6 @@ public class CategoryLv2ServiceImple implements ICategoryLv2Service {
         return null;
     }
 
-//    @Override
-//    public CategoryLv2 getCategoryById(Long id) {
-//        Optional<CategoryLv2> categoryLv2 = iCategoryLv2Repository.findById(id);
-//
-//        if(categoryLv2.isPresent())
-//            return categoryLv2.get();
-//
-//        return null;
-//    }
-
     @Override
     public CategoryLv2 editCategory(CategoryLv2Dto categoryLv2Dto) {
 
@@ -61,11 +51,6 @@ public class CategoryLv2ServiceImple implements ICategoryLv2Service {
 
         return null;
     }
-
-//    @Override
-//    public List<CategoryLv2> getAllCategory() {
-//        return iCategoryLv2Repository.findAll();
-//    }
 
     @Override
     public void deleteCategory(Long id) {

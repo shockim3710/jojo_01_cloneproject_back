@@ -4,8 +4,11 @@ import com.cloneproject.ssgjojo.qna.dto.AnswerInputDto;
 import com.cloneproject.ssgjojo.qna.dto.QnAOutputDto;
 import com.cloneproject.ssgjojo.review.domain.Review;
 import com.cloneproject.ssgjojo.review.dto.*;
+import com.cloneproject.ssgjojo.review.repository.IReviewRepository;
 import com.cloneproject.ssgjojo.review.service.IReviewService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,6 +22,7 @@ import java.util.List;
 public class ReviewController {
 
     private final IReviewService iReviewService;
+    private final IReviewRepository iReviewRepository;
 
     // 리뷰 작성
     @PostMapping("/review/add")
@@ -46,25 +50,6 @@ public class ReviewController {
         return iReviewService.sortedGetReviewByProductId(productId, sort);
     }
 
-
-//    // 해당 상품에 대한 리뷰 갯수
-//    @GetMapping("/review/count/{productId}")
-//    public Integer getReviewCountByProduct(@PathVariable Long productId) {
-//        return iReviewService.getReviewCountByProduct(productId);
-//    }
-
-//    // 대표 리뷰 5개 조회
-//    @GetMapping("/review/get5/{productId}")
-//    public List<ReviewOutputDto> getTop(@PathVariable Long productId) {
-//        return iReviewService.getTop5(productId);
-//    }
-
-//    // 리뷰 별점 평균 조회
-//    @GetMapping("/review/getAvgScore/{productId}")
-//    public Float getReviewAvgScore(@PathVariable Long productId) {
-//        return iReviewService.getReviewAvgScore(productId);
-//    }
-
     // 해당 유저가 작성한 리뷰 조회
     @GetMapping("/review/findAllByUser/{userId}")
     public List<ReviewOutputDto> findAllByUser(@PathVariable Long userId) {
@@ -88,4 +73,13 @@ public class ReviewController {
     public void deleteReview(@RequestBody ReviewDeleteDto reviewDeleteDto) {
         iReviewService.deleteReview(reviewDeleteDto);
     }
+
+    // review 페이징
+    @GetMapping("/review/paging/{productId}")
+    public Page<Review> reviewPage(@RequestParam int page, @RequestParam int size, @PathVariable Long productId) {
+        PageRequest pr = PageRequest.of(page, size);
+        return iReviewService.pageList(pr, productId);
+
+    }
+
 }

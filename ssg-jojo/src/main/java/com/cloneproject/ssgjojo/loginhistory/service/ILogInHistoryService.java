@@ -10,5 +10,4 @@ public interface ILogInHistoryService {
 
     LogInHistoryOutputDto addLogInHistory(LogInHistoryDto logInHistoryDto);
     List<LogInHistoryOutputDto> getHistoryByUserId(Long id);
-//    List<LogInHistory> getAllLogInHistory();
 }

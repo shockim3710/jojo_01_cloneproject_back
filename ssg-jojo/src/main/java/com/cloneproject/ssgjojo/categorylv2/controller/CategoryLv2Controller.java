@@ -23,17 +23,6 @@ public class CategoryLv2Controller {
         return iCategoryLv2Service.addCategory(categoryLv2Dto);
     }
 
-//    @GetMapping("/category/Lv2/{id}")
-//    public CategoryLv2 getCategoryById(@PathVariable Long id) {
-//        return iCategoryLv2Service.getCategoryById(id);
-//    }
-
-//    // l 카테고리 전체 조회
-//    @GetMapping("/category/Lv2/getAll")
-//    public List<CategoryLv2> getAllCategory() {
-//        return iCategoryLv2Service.getAllCategory();
-//    }
-
     // l 카테고리 수정
     @PutMapping("/category/Lv2/edit")
     public CategoryLv2 editCategory(@RequestBody CategoryLv2Dto categoryLv2Dto) {

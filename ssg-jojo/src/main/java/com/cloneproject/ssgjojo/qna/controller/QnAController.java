@@ -32,12 +32,6 @@ public class QnAController {
         return iQnAService.sortedGetQnaByProductId(id);
     }
 
-//    // 해당 상품에 대한 상품문의 건수
-//    @GetMapping("/qna/count/{productId}")
-//    public Integer getQuestionCountByProduct(@PathVariable Long productId) {
-//        return iQnAService.getQuestionCountByProduct(productId);
-//    }
-
     // 유저가 작성된 상품문의글 삭제
     @DeleteMapping("/qna/deleteQ")
     public void deleteQuestion(@RequestBody QnADeleteDto qnADeleteDto) {

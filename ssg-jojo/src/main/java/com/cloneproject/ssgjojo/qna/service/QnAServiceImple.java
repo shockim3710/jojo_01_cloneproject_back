@@ -94,12 +94,6 @@ public class QnAServiceImple implements IQnAService {
         return null;
     }
 
-//    @Override
-//    public Integer getQuestionCountByProduct(Long productId) {
-//        Integer qna = iQnARepository.getQuestionCountByProduct(productId);
-//        return qna;
-//    }
-
     @Override
     public List<QnAOutputDto> sortedGetQnaByProductId(Long id) {
 
