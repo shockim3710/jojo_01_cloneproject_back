@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -13,6 +15,8 @@ public class DeliveryAddressAddDto {
     private String address; // 배송지
     private boolean whetherDefaultAddress; // 기본배송지 여부
     private boolean whetherOnlyThisTime; // 이번만배송지 여부
+    private String addressName; // 주소별칭
+    private String receiveName; // 받는분
 
     private Long user;
 }

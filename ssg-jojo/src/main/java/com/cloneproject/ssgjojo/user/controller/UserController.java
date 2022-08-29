@@ -1,57 +1,67 @@
 package com.cloneproject.ssgjojo.user.controller;
 
+import com.cloneproject.ssgjojo.jwt.JwtTokenProvider;
 import com.cloneproject.ssgjojo.user.domain.User;
 import com.cloneproject.ssgjojo.user.dto.*;
+import com.cloneproject.ssgjojo.user.repository.IUserRepository;
 import com.cloneproject.ssgjojo.user.service.IUserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 
+@Slf4j
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/api")
 @RequiredArgsConstructor
 public class UserController {
-
     private final IUserService iUserService;
 
     @PostMapping("/user/signup") // 회원가입
-    public User addUser(@RequestBody UserSignupDto userSignupDto) {
+    public String addUser(@RequestBody UserSignupDto userSignupDto) {
 
         return iUserService.addUser(userSignupDto);
     }
 
-    @GetMapping("/user/get/{id}") // 마이페이지
-    public UserGetIdDto getUser(@PathVariable Long id) {
-        return iUserService.getUserById(id);
+    @PostMapping("/user/signupid")
+    public String getUserSignUpId(@RequestBody UserSignupDto userSignupDto) {
+
+        return iUserService.getUserSignUpId(userSignupDto);
+    }
+
+//    @PostMapping("/user/kakaosignup") // 카카오 회원가입
+//    public User addUser(@RequestBody UserKakaoSignupDto userKakaoSignupDto) {
+//
+//        return iUserService.addKakaoUser(userKakaoSignupDto);
+//    }
+
+    @GetMapping("/user/get") // 마이페이지
+    public UserGetIdDto getUser(HttpServletRequest request) {
+        return iUserService.getUserById(request);
     }
 
     @PostMapping("/user/login")
-    public UserLoginDto getUserLogin(@RequestBody UserLoginDto userLoginDto) {
+    public String getUserLogin(@RequestBody UserLoginDto userLoginDto) {
 
         return iUserService.getUserLogin(userLoginDto);
     }
 
 
-    @GetMapping("/user/getAll") // 회원 조회
-    public List<UserEditGetAllDto> getAll() {
-        return iUserService.getAll();
-    }
-
-    @PutMapping("/user/edit") // 회원 정보 수정
-    public User editUser(@RequestBody UserEditGetAllDto userEditDto) {
-        return iUserService.editUser(userEditDto);
-    }
-
-//    @PutMapping("/user/delete") // 회원 탈퇴
-//    public void deleteUser(@PathVariable UserEditDto userEditDto) {
-//        iUserService.deleteUser(userEditDto);
+//    @GetMapping("/user/getAll") // 전체 회원 조회
+//    public List<UserEditGetAllDto> getAll() {
+//        return iUserService.getAll();
 //    }
 
-    @PutMapping("/user/delete/{id}") // 회원 탈퇴
-    public User deleteUser(@PathVariable Long id) {
-        return iUserService.deleteUser(id);
+    @PutMapping("/user/edit") // 회원 정보 수정
+    public String editUser(@RequestBody UserEditGetAllDto userEditDto, HttpServletRequest request) {
+        return iUserService.editUser(userEditDto, request);
+    }
+
+    @PutMapping("/user/delete") // 회원 탈퇴
+    public String deleteUser(HttpServletRequest request) {
+        return iUserService.deleteUser(request);
     }
 
 }
