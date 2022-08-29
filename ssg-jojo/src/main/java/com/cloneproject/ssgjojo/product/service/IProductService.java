@@ -13,7 +13,7 @@ public interface IProductService {
     List<ProductInfoDto> getAllProduct();
     void deleteProduct(Long id);
     Product editProduct(ProductUpdateDto productUpdateDto);
-    List<ProductAllListDto> getAllProductList();
-
+    List<ProductListDto> getAllProductList();
     ProductDetailDto getProductDetail(Long productId);
+    List<ProductListDto> findProductByCategoryLv(Long lv, Long id);
 }

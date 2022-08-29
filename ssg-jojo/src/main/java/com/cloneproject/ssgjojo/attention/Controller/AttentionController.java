@@ -1,9 +1,6 @@
 package com.cloneproject.ssgjojo.attention.Controller;
 
-import com.cloneproject.ssgjojo.attention.dto.AttentionAddDto;
-import com.cloneproject.ssgjojo.attention.dto.AttentionEditFolderDto;
-import com.cloneproject.ssgjojo.attention.dto.AttentionInputFolderDto;
-import com.cloneproject.ssgjojo.attention.dto.AttentionOutputDto;
+import com.cloneproject.ssgjojo.attention.dto.*;
 import com.cloneproject.ssgjojo.attention.service.IAttentionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -37,5 +34,9 @@ public class AttentionController {
         return iAttentionService.AttentionEditFolder(attentionEditFolderDto);
     }
 
+    @DeleteMapping("/attention/delete")
+    public boolean attentionDeleteById(@RequestBody AttentionDeleteDto attentionDeleteDto) {
+        return iAttentionService.deleteAttention(attentionDeleteDto);
+    }
 
 }

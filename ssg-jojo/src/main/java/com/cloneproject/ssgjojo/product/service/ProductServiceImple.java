@@ -474,9 +474,9 @@ public class ProductServiceImple implements IProductService {
     }
 
     @Override
-    public List<ProductAllListDto> getAllProductList() {
+    public List<ProductListDto> getAllProductList() {
         List<Product> productList = iProductRepository.findAll();
-        List<ProductAllListDto> allList = new ArrayList<>();
+        List<ProductListDto> allList = new ArrayList<>();
 
 
         for(Product product : productList) {
@@ -493,7 +493,7 @@ public class ProductServiceImple implements IProductService {
             else
                 newPrice= product.getPrice();
 
-            allList.add(ProductAllListDto.builder()
+            allList.add(ProductListDto.builder()
                     .id(product.getId())
                     .thumbnailUri(product.getThumbnail())
                     .mallName("신세계몰")
@@ -616,5 +616,54 @@ public class ProductServiceImple implements IProductService {
                 .reviewList(reviewOutputDtoList)
                 .QnaList(qnAOutputDtoList)
                 .build();
+    }
+
+    @Override
+    public List<ProductListDto> findProductByCategoryLv(Long lv, Long id) {
+        List<Product> findResult = new ArrayList<>();
+        List<ProductListDto> returnList = new ArrayList<>();
+
+        if(lv == 1)
+            findResult = iCategoryProductListRepository.findByCategoryLv1id(id);
+        else if(lv == 2)
+            findResult = iCategoryProductListRepository.findByCategoryLv2id(id);
+        else if(lv == 3)
+            findResult = iCategoryProductListRepository.findByCategoryLv3id(id);
+        else if(lv == 4)
+            findResult = iCategoryProductListRepository.findByCategoryLv4id(id);
+        else
+            return null;
+
+        for(Product product : findResult) {
+            Long newPrice = 0L;
+            Long oldPrice = 0L;
+            Float reviewScore = iReviewRepository.getReviewAvgScore(product.getId());
+            int reviewNum = iReviewRepository.getReviewCountByProduct(product.getId());
+
+            int discountRate = product.getDiscountRate();
+            if(discountRate != 0) {
+                oldPrice = product.getPrice();
+                newPrice = (long) ((float) oldPrice * (1 - ((float) discountRate /100 )));
+            }
+            else
+                newPrice= product.getPrice();
+
+            returnList.add(ProductListDto.builder()
+                    .id(product.getId())
+                    .thumbnailUri(product.getThumbnail())
+                    .mallName("신세계몰")
+                    .productName(product.getProductName())
+                    .manufactureCompany(product.getManufactureCompany())
+                    .discountRate(product.getDiscountRate())
+                    .oldPrice(oldPrice)
+                    .newPrice(newPrice)
+                    .reviewScore(reviewScore == null ? 0 : reviewScore)
+                    .reviewNum(reviewNum)
+                    .fee(product.getFee())
+                    .adultCase(product.isAdultCase())
+                    .build());
+        }
+
+        return returnList;
     }
 }

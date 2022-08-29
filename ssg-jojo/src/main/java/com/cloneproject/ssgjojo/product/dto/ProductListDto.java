@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductAllListDto {
+public class ProductListDto {
     /**
      * id : 상품아이디
      * thumbnailUri : 썸네일 이미지 경로

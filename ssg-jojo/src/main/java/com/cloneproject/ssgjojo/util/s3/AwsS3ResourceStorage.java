@@ -1,6 +1,7 @@
 package com.cloneproject.ssgjojo.util.s3;
 
 import com.amazonaws.services.s3.AmazonS3;
+import com.cloneproject.ssgjojo.util.MultipartUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -16,7 +17,15 @@ public class AwsS3ResourceStorage {
     private final AmazonS3 amazonS3;
 
     public void store(FileInfoDto fileInfoDto, MultipartFile multipartFile) {
+        File local = new File(MultipartUtil.getBaseDir());
+
+        if(!local.exists()) {
+            local.mkdir();
+        }
+
         File file = new File(fileInfoDto.getLocalPath());
+
+
 
         try {
             multipartFile.transferTo(file);

@@ -12,7 +12,6 @@ import java.util.List;
 @RequestMapping("/api")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*", allowedHeaders = "*")
-
 public class DeliveryAddressController {
 
     private final IDeliveryAddressService iDeliveryAddressService;

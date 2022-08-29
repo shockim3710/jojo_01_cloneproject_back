@@ -24,7 +24,7 @@ public class ProductDetailDto {
     private Long oldPrice;
     private Long newPrice;
     private int discountRate;
-    private float reviewScore;
+    private Float reviewScore;
     private int reviewNum;
 
     private List<ProductPhotoDto> productPhotoList;

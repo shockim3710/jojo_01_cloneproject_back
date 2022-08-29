@@ -1,13 +1,8 @@
 package com.cloneproject.ssgjojo.product.controller;
 
 import com.cloneproject.ssgjojo.product.domain.Product;
-import com.cloneproject.ssgjojo.product.dto.ProductAddDto;
-import com.cloneproject.ssgjojo.product.dto.ProductDetailDto;
-import com.cloneproject.ssgjojo.product.dto.ProductUpdateDto;
-import com.cloneproject.ssgjojo.product.dto.ProductInfoDto;
+import com.cloneproject.ssgjojo.product.dto.*;
 import com.cloneproject.ssgjojo.product.service.IProductService;
-import com.cloneproject.ssgjojo.productoption.domain.ProductOption;
-import com.cloneproject.ssgjojo.productoption.dto.ProductOptionDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -51,6 +46,11 @@ public class ProductController {
         return iProductService.getProductDetail(id);
     }
 
+    @GetMapping("/product/getlist")
+    public List<ProductListDto> getProductAllList() {
+        return iProductService.getAllProductList();
+    }
+
     @DeleteMapping("/product/{id}")
     public void deleteProduct(@PathVariable Long id) {
         iProductService.deleteProduct(id);
@@ -59,5 +59,11 @@ public class ProductController {
     @PutMapping("/product")
     public Product editProduct(@RequestBody ProductUpdateDto productUpdateDto) {
         return iProductService.editProduct(productUpdateDto);
+    }
+
+    @GetMapping("/findbycategory")
+    public List<ProductListDto> findByCategory(@RequestParam(name = "lv", defaultValue = "1") Long lv,
+                                               @RequestParam(name = "id") Long id){
+        return iProductService.findProductByCategoryLv(lv, id);
     }
 }

@@ -12,4 +12,5 @@ import java.util.List;
 public interface IAttentionRepository extends JpaRepository<Attention, Long> {
     List<Attention> findByUserAndProduct(User user, Product product);
     List<Attention> findAllByAttentionFolder(AttentionFolder attentionFolder);
+    void deleteAllByProductAndUser( Product product, User user);
 }

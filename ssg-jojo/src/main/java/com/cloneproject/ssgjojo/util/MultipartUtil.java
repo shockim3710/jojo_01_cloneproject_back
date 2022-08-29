@@ -10,6 +10,9 @@ import java.util.UUID;
 public class MultipartUtil {
     private static final String BASE_DIR = System.getProperty("user.home") + "/temp";
 
+    public static String getBaseDir() {
+        return BASE_DIR;
+    }
 
     private static String bucket;
 

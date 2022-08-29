@@ -230,6 +230,7 @@ public class QnAServiceImple implements IQnAService {
                     .answerDate(aAdd.get().getAnswerDate())
                     .lockCase(aAdd.get().isLockCase())
                     .userId(aAdd.get().getUser().getId())
+                    .userAccount(aAdd.get().getUser().getUserId().substring(3)+"******")
                     .productId(aAdd.get().getProduct().getId())
                     .build();
         }

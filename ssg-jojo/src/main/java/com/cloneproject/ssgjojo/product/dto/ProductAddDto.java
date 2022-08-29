@@ -29,7 +29,6 @@ public class ProductAddDto {
     private Long categoryLv2;
     private Long categoryLv1;
 
-    private int stock;
 
     private List<ProductOptionDto> productOptionDtoList;
 }

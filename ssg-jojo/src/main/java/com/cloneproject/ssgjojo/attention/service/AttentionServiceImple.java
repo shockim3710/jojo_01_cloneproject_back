@@ -1,10 +1,7 @@
 package com.cloneproject.ssgjojo.attention.service;
 
 import com.cloneproject.ssgjojo.attention.domain.Attention;
-import com.cloneproject.ssgjojo.attention.dto.AttentionAddDto;
-import com.cloneproject.ssgjojo.attention.dto.AttentionEditFolderDto;
-import com.cloneproject.ssgjojo.attention.dto.AttentionInputFolderDto;
-import com.cloneproject.ssgjojo.attention.dto.AttentionOutputDto;
+import com.cloneproject.ssgjojo.attention.dto.*;
 import com.cloneproject.ssgjojo.attention.repository.IAttentionRepository;
 import com.cloneproject.ssgjojo.attentionfolder.domain.AttentionFolder;
 import com.cloneproject.ssgjojo.attentionfolder.repository.IAttentionFolderRepository;
@@ -185,4 +182,25 @@ public class AttentionServiceImple implements IAttentionService{
 
         return null;
     }
+
+    @Override
+    @Transactional
+    public boolean deleteAttention(AttentionDeleteDto deleteDto) {
+        Optional<User> user = iUserRepository.findById(deleteDto.getUserId());
+
+        if(user.isPresent()) {
+            for (Long productId : deleteDto.getProductId()) {
+                Optional<Product> product = iProductRepository.findById(productId);
+                if(!product.isPresent())
+                    continue;
+
+                iAttentionRepository.deleteAllByProductAndUser(product.get(), user.get());
+            }
+            return true;
+        }
+
+        return false;
+    }
+
+
 }

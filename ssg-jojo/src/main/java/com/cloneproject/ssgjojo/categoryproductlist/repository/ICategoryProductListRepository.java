@@ -15,7 +15,19 @@ public interface ICategoryProductListRepository extends JpaRepository<CategoryPr
 
     List<CategoryProductList> findByCategoryLv2_Id(Long categoryLv2);
 
-    @Query("select ct ,ct.product from CategoryProductList ct " +
+    @Query("select ct.product from CategoryProductList ct " +
+            "where ct.categoryLv1.id =:categoryLv1")
+    List<Product> findByCategoryLv1id(@Param("categoryLv1") Long categoryLv1);
+
+    @Query("select ct.product from CategoryProductList ct " +
+            "where ct.categoryLv2.id =:categoryLv2")
+    List<Product> findByCategoryLv2id(@Param("categoryLv2") Long categoryLv2);
+
+    @Query("select ct.product from CategoryProductList ct " +
             "where ct.categoryLv3.id =:categoryLv3")
     List<Product> findByCategoryLv3id(@Param("categoryLv3") Long categoryLv3);
+
+    @Query("select ct.product from CategoryProductList ct " +
+            "where ct.categoryLv4.id =:categoryLv4")
+    List<Product> findByCategoryLv4id(@Param("categoryLv4") Long categoryLv4);
 }
