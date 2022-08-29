@@ -17,12 +17,14 @@ import java.util.List;
 public class ProductNewServiceController {
     private final IProductNewServiceService iProductNewServiceService;
 
+    // 뉴 서비스 등록
     @PostMapping("/newservice/add")
     public ProductNewService addNewService(@RequestParam("newServicePhoto")MultipartFile newServicePhoto,
                                            @RequestPart ProductNewServiceAddDto productNewServiceAddDto) {
         return iProductNewServiceService.addProductNewService(productNewServiceAddDto, newServicePhoto);
     }
 
+    // 뉴 서비스 조회
     @GetMapping("/newservice/getAll")
     public List<ProductNewService> getAllBanner() {
         return iProductNewServiceService.getAllProductNewService();

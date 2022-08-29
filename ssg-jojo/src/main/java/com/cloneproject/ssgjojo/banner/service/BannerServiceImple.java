@@ -21,6 +21,7 @@ public class BannerServiceImple implements IBannerService{
     private final IBannerRepository iBannerRepository;
     private final AwsS3ResourceStorage awsS3ResourceStorage;
 
+    // 배너 추가
     @Override
     public Banner addBanner(MultipartFile bannerPhoto, BannerAddDto bannerAddDto) {
         FileInfoDto bannerDto = FileInfoDto.multipartOf(bannerPhoto, "banner");
@@ -35,27 +36,13 @@ public class BannerServiceImple implements IBannerService{
         );
     }
 
-    @Override
-    public Banner getBannerById(Long id) {
-        Optional<Banner> banner = iBannerRepository.findById(id);
-
-        if(banner.isPresent()) {
-            return banner.get();
-        }
-        return null;
-    }
+    // 배너 조회
     @Override
     public List<Banner> getAllBanner() {
         return iBannerRepository.findAll();
     }
 
-    @Override
-    public void deleteBanner(Long id) {
-        Optional<Banner> banner = iBannerRepository.findById(id);
-        if(banner.isPresent())
-            iBannerRepository.deleteById(id);
-    }
-
+    // 배너 편집
     @Override
     public Banner editBanner(Banner banner) {
         Optional<Banner> updateBanner = iBannerRepository.findById(banner.getId());
@@ -70,4 +57,13 @@ public class BannerServiceImple implements IBannerService{
         }
         return null;
     }
+
+    // 배너 삭제
+    @Override
+    public void deleteBanner(Long id) {
+        Optional<Banner> banner = iBannerRepository.findById(id);
+        if(banner.isPresent())
+            iBannerRepository.deleteById(id);
+    }
+
 }

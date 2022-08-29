@@ -20,7 +20,7 @@ public class QnAController {
         return iQnAService.addQ(questionInputDto);
     }
 
-    // 유저가 작성한 기존의 상품문의글 편집
+    // 유저가 작성한 기존 상품문의글 편집
     @PutMapping("/qna/qEdit")
     public QnAOutputDto editQ(@RequestBody QnAEditDto qnAEditDto) {
         return iQnAService.editQ(qnAEditDto);

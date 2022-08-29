@@ -24,6 +24,7 @@ public class AccountPaymentServiceImple implements IAccountPaymentService{
     private final IUserRepository iUserRepository;
 
 
+    // 결제 계좌 등록
     @Override
     public AccountPaymentOutputDto addAccountPayment(AccountPaymentDto accountPaymentDto) {
 
@@ -47,6 +48,7 @@ public class AccountPaymentServiceImple implements IAccountPaymentService{
         return null;
     }
 
+    // 해당 유저 id로 결제 계좌 조회
     @Override
     public List<AccountPaymentOutputDto> getAccountPaymentByUserId(Long id) {
 
@@ -74,6 +76,7 @@ public class AccountPaymentServiceImple implements IAccountPaymentService{
     }
 
 
+    // 결제 계좌 삭제
     @Override
     public void deleteAccountPayment(AccountPaymentDeleteDto accountPaymentDeleteDto) {
 

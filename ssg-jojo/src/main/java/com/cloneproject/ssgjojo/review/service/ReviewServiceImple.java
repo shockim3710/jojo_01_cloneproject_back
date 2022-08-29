@@ -44,6 +44,7 @@ public class ReviewServiceImple implements IReviewService {
     private final IOrdersProductListRepository iOrdersProductListRepository;
     private final AwsS3ResourceStorage awsS3ResourceStorage;
 
+    // 리뷰 작성
     @Override
     public ReviewOutputDto addReview(ReviewDto reviewDto) {
 
@@ -75,6 +76,7 @@ public class ReviewServiceImple implements IReviewService {
         return null;
     }
 
+    // 리뷰 작성 시 이미지 첨부
     @Override
     public boolean addReviewWithImg(ReviewDto reviewDto, List<MultipartFile> reviewPhoto) {
 
@@ -109,6 +111,7 @@ public class ReviewServiceImple implements IReviewService {
         return false;
     }
 
+    // 작성한 리뷰 수정
     @Override
     public ReviewEditDto editReview(ReviewEditDto reviewEditDto) {
 
@@ -142,6 +145,7 @@ public class ReviewServiceImple implements IReviewService {
     }
 
 
+    // 리뷰 정렬 (별점 높은 순, 별점 낮은 순, 최신순)
     @Override
     public List<ReviewOutputDto> sortedGetReviewByProductId(Long id, int sort) {
         Optional<Product> product = iProductRepository.findById(id);
@@ -176,6 +180,7 @@ public class ReviewServiceImple implements IReviewService {
         return null;
     }
 
+    // 해당 상품의 리뷰 목록 조회
     @Override
     public List<ReviewOutputDto> findAllByProduct(Long productId) {
 
@@ -217,6 +222,7 @@ public class ReviewServiceImple implements IReviewService {
         return null;
     }
 
+    // 해당 유저가 작성한 리뷰 조회
     @Override
     public List<ReviewOutputDto> findAllByUser(Long userId) {
 
@@ -262,19 +268,7 @@ public class ReviewServiceImple implements IReviewService {
         return null;
     }
 
-    @Override
-    public void deleteReview(ReviewDeleteDto reviewDeleteDto) {
-
-        Optional<User> user = iUserRepository.findById(reviewDeleteDto.getUserId());
-        Optional<Review> review = iReviewRepository.findById(reviewDeleteDto.getId());
-
-        if (user.isPresent() && review.isPresent()) {
-            if(review.get().getUser().getId() == reviewDeleteDto.getUserId()) {
-                iReviewRepository.deleteById(reviewDeleteDto.getId());
-            }
-        }
-    }
-
+    // 해당 유저가 작성 가능한 리뷰 조회
     @Override
     public List<ReviewPossibleWriteDto> findPossibleWrite(Long userId) {
         Optional<User> user = iUserRepository.findById(userId);
@@ -294,10 +288,10 @@ public class ReviewServiceImple implements IReviewService {
                     List<Review> reviewList = iReviewRepository.findAllByOrdersAndProduct(orders, product);
                     if(reviewList.isEmpty())
                         returnDtoList.add(ReviewPossibleWriteDto.builder()
-                                        .productId(product.getId())
-                                        .ordersId(orders.getId())
-                                        .productThumbnail(product.getThumbnail())
-                                        .deliveryDate(orders.getDeliveryDate())
+                                .productId(product.getId())
+                                .ordersId(orders.getId())
+                                .productThumbnail(product.getThumbnail())
+                                .deliveryDate(orders.getDeliveryDate())
                                 .build());
                 }
             }
@@ -308,6 +302,21 @@ public class ReviewServiceImple implements IReviewService {
         return null;
     }
 
+    // 리뷰 삭제
+    @Override
+    public void deleteReview(ReviewDeleteDto reviewDeleteDto) {
+
+        Optional<User> user = iUserRepository.findById(reviewDeleteDto.getUserId());
+        Optional<Review> review = iReviewRepository.findById(reviewDeleteDto.getId());
+
+        if (user.isPresent() && review.isPresent()) {
+            if(review.get().getUser().getId() == reviewDeleteDto.getUserId()) {
+                iReviewRepository.deleteById(reviewDeleteDto.getId());
+            }
+        }
+    }
+
+    // review 페이징
     @Override
     public Page<Review> pageList(Pageable pageable, Long productId) {
 

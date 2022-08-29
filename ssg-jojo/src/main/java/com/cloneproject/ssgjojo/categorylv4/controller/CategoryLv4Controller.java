@@ -16,16 +16,19 @@ public class CategoryLv4Controller {
 
     private final ICategoryLv4Service iCategoryLv4Service;
 
+    // s 카테고리 추가
     @PostMapping("/category/Lv4/add")
     public CategoryLv4 addCategory(@RequestBody CategoryLv4Dto categoryLv4Dto) {
         return iCategoryLv4Service.addCategory(categoryLv4Dto);
     }
 
+    // s 카테고리 수정
     @PutMapping("/category/Lv4/edit")
     public CategoryLv4 editCategory(@RequestBody CategoryLv4Dto categoryLv4Dto) {
         return iCategoryLv4Service.editCategory(categoryLv4Dto);
     }
 
+    // s 카테고리 삭제
     @DeleteMapping("/category/Lv4/{id}")
     public void deleteCategory(@PathVariable Long id) {
 

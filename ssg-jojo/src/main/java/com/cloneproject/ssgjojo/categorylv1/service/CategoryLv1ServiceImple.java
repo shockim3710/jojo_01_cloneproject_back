@@ -27,7 +27,7 @@ public class CategoryLv1ServiceImple implements ICategoryLv1Service {
     private final ICategoryLv2Repository iCategoryLv2Repository;
     private final AwsS3ResourceStorage awsS3ResourceStorage;
 
-
+    // xl 카테고리 추가
     @Override
     public CategoryLv1 addCategory(MultipartFile categoryImg, String categoryLv1Name) {
         FileInfoDto CategoryImgDto = FileInfoDto.multipartOf(categoryImg, "category");
@@ -39,6 +39,7 @@ public class CategoryLv1ServiceImple implements ICategoryLv1Service {
                 .build());
     }
 
+    // xl 카테고리 수정
     @Override
     public CategoryLv1 editCategory(CategoryLv1 categoryLv1) {
 
@@ -55,6 +56,7 @@ public class CategoryLv1ServiceImple implements ICategoryLv1Service {
 
     }
 
+    // xl 카테고리, l 카테고리 리스트 동시 호출, 순차 조회
     @Override
     public List<CategoryLv1Dto> findAllCategory() {
 
@@ -87,6 +89,7 @@ public class CategoryLv1ServiceImple implements ICategoryLv1Service {
 
     }
 
+    // xl 카테고리 삭제
     @Override
     public void deleteCategory(Long id) {
 

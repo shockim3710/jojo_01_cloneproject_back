@@ -23,30 +23,31 @@ public class LogInHistoryServiceImple implements ILogInHistoryService {
     private final ILogInHistoryRepository iLogInHistoryRepository;
     private final IUserRepository iUserRepository;
 
-    @Override
-    public LogInHistoryOutputDto addLogInHistory(LogInHistoryDto logInHistoryDto) {
+//    @Override
+//    public LogInHistoryOutputDto addLogInHistory(LogInHistoryDto logInHistoryDto) {
+//
+//        Optional<User> user = iUserRepository.findById(logInHistoryDto.getUserId());
+//
+//        if(user.isPresent()) {
+//            LogInHistory logInHistory = iLogInHistoryRepository.save(LogInHistory.builder()
+//                    .logInTime(new Timestamp(System.currentTimeMillis()))
+//                    .logInIp(logInHistoryDto.getLogInIp())
+//                    .user(user.get())
+//                    .build());
+//
+//            return LogInHistoryOutputDto.builder()
+//                    .id(logInHistory.getId())
+//                    .logInIp(logInHistory.getLogInIp())
+//                    .userId(logInHistory.getUser().getId())
+//                    .logInTime(logInHistory.getLogInTime())
+//                    .build();
+//
+//        }
+//
+//        return null;
+//    }
 
-        Optional<User> user = iUserRepository.findById(logInHistoryDto.getUserId());
-
-        if(user.isPresent()) {
-            LogInHistory logInHistory = iLogInHistoryRepository.save(LogInHistory.builder()
-                    .logInTime(new Timestamp(System.currentTimeMillis()))
-                    .logInIp(logInHistoryDto.getLogInIp())
-                    .user(user.get())
-                    .build());
-
-            return LogInHistoryOutputDto.builder()
-                    .id(logInHistory.getId())
-                    .logInIp(logInHistory.getLogInIp())
-                    .userId(logInHistory.getUser().getId())
-                    .logInTime(logInHistory.getLogInTime())
-                    .build();
-
-        }
-
-        return null;
-    }
-
+    // 해당 유저의 로그인 기록 조회
     @Override
     public List<LogInHistoryOutputDto> getHistoryByUserId(Long id) {
 

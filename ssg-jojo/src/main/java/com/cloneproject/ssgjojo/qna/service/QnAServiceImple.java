@@ -26,6 +26,7 @@ public class QnAServiceImple implements IQnAService {
     private final IUserRepository iUserRepository;
     private final IProductRepository iProductRepository;
 
+    // 유저가 상품문의글 작성
     @Override
     public QnAOutputDto addQ(QuestionInputDto questionInputDto) {
 
@@ -57,6 +58,7 @@ public class QnAServiceImple implements IQnAService {
     }
 
 
+    // 유저가 작성한 기존 상품문의글 편집
     @Override
     public QnAOutputDto editQ(QnAEditDto qnAEditDto) {
 
@@ -94,6 +96,8 @@ public class QnAServiceImple implements IQnAService {
         return null;
     }
 
+
+    // 해당 상품에 대한 상품문의 목록 최신순으로 정렬, 조회
     @Override
     public List<QnAOutputDto> sortedGetQnaByProductId(Long id) {
 
@@ -123,6 +127,8 @@ public class QnAServiceImple implements IQnAService {
         return null;
     }
 
+
+    // 유저가 작성된 상품문의글 삭제
     @Override
     public void deleteQuestion(QnADeleteDto qnADeleteDto) {
 
@@ -137,6 +143,8 @@ public class QnAServiceImple implements IQnAService {
 
     }
 
+
+    // 관리자가 상품문의에 대한 답변 추가
     @Override
     @Transactional
     public QnAOutputDto addA(AnswerInputDto answerInputDto) {

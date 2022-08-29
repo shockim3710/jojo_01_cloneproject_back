@@ -22,6 +22,7 @@ public class CategoryLv2ServiceImple implements ICategoryLv2Service {
     private final ICategoryLv2Repository iCategoryLv2Repository;
     private final ICategoryLv1Repository iCategoryLv1Repository;
 
+    // l 카테고리 추가
     @Override
     public CategoryLv2 addCategory(CategoryLv2Dto categoryLv2Dto) {
 
@@ -36,6 +37,7 @@ public class CategoryLv2ServiceImple implements ICategoryLv2Service {
         return null;
     }
 
+    // l 카테고리 수정
     @Override
     public CategoryLv2 editCategory(CategoryLv2Dto categoryLv2Dto) {
 
@@ -52,6 +54,7 @@ public class CategoryLv2ServiceImple implements ICategoryLv2Service {
         return null;
     }
 
+    // l 카테고리 삭제
     @Override
     public void deleteCategory(Long id) {
         Optional<CategoryLv2> temp = iCategoryLv2Repository.findById(id);

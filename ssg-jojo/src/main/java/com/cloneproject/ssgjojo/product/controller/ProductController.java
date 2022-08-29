@@ -1,10 +1,7 @@
 package com.cloneproject.ssgjojo.product.controller;
 
 import com.cloneproject.ssgjojo.product.domain.Product;
-import com.cloneproject.ssgjojo.product.dto.ProductAddDto;
-import com.cloneproject.ssgjojo.product.dto.ProductDetailDto;
-import com.cloneproject.ssgjojo.product.dto.ProductUpdateDto;
-import com.cloneproject.ssgjojo.product.dto.ProductInfoDto;
+import com.cloneproject.ssgjojo.product.dto.*;
 import com.cloneproject.ssgjojo.product.service.IProductService;
 import com.cloneproject.ssgjojo.productoption.domain.ProductOption;
 import com.cloneproject.ssgjojo.productoption.dto.ProductOptionDto;
@@ -59,5 +56,11 @@ public class ProductController {
     @PutMapping("/product")
     public Product editProduct(@RequestBody ProductUpdateDto productUpdateDto) {
         return iProductService.editProduct(productUpdateDto);
+    }
+
+    // 상품 검색
+    @GetMapping("/product/search")
+    public List<ProductListDto> searchProduct(@RequestParam String keyword) {
+        return iProductService.productSearch(keyword);
     }
 }

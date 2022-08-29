@@ -467,9 +467,9 @@ public class ProductServiceImple implements IProductService {
     }
 
     @Override
-    public List<ProductAllListDto> getAllProductList() {
+    public List<ProductListDto> getAllProductList() {
         List<Product> productList = iProductRepository.findAll();
-        List<ProductAllListDto> allList = new ArrayList<>();
+        List<ProductListDto> allList = new ArrayList<>();
 
 
         for(Product product : productList) {
@@ -486,7 +486,7 @@ public class ProductServiceImple implements IProductService {
             else
                 newPrice= product.getPrice();
 
-            allList.add(ProductAllListDto.builder()
+            allList.add(ProductListDto.builder()
                     .id(product.getId())
                     .thumbnailUri(product.getThumbnail())
                     .mallName("신세계몰")
@@ -611,5 +611,52 @@ public class ProductServiceImple implements IProductService {
                 .build();
     }
 
+    // 상품 검색
+    @Override
+    public List<ProductListDto> productSearch(String keyword) {
 
+        List<Product> productList = iProductRepository.findByProductNameContaining(keyword);
+        List<ProductListDto> productListDtoList = new ArrayList<>();
+
+
+        for(Product product : productList) {
+
+            if(!productList.isEmpty()) {
+                Long newPrice = 0L;
+                Long oldPrice = 0L;
+                Float reviewScore = iReviewRepository.getReviewAvgScore(product.getId());
+                int reviewNum = iReviewRepository.getReviewCountByProduct(product.getId());
+
+
+                int discountRate = product.getDiscountRate();
+                if(discountRate != 0) {
+                    oldPrice = product.getPrice();
+                    newPrice = (long) ((float) oldPrice * (1 - ((float) discountRate /100 )));
+                }
+                else
+                    newPrice= product.getPrice();
+
+
+                productListDtoList.add(ProductListDto.builder()
+                        .id(product.getId())
+                        .thumbnailUri(product.getThumbnail())
+                        .mallName("신세계몰")
+                        .productName(product.getProductName())
+                        .manufactureCompany(product.getManufactureCompany())
+                        .discountRate(product.getDiscountRate())
+                        .oldPrice(oldPrice)
+                        .newPrice(newPrice)
+                        .reviewScore(reviewScore == null ? 0 : reviewScore)
+                        .reviewNum(reviewNum)
+                        .fee(product.getFee())
+                        .adultCase(product.isAdultCase())
+                        .build());
+
+            }
+
+
+        }
+
+        return productListDtoList;
+    }
 }
