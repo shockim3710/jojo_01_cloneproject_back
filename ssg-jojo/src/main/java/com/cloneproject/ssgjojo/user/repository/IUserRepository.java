@@ -6,9 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface IUserRepository extends JpaRepository<User, Long> {
-    User findByUserIdAndPassword(String userId, String password);
-    User findByUserId(String userId);
+    Optional<User> findByUserId(String userId); // 사용자 아이디
+    Optional<User> findById(Long id); // 사용자 기본키
 
-
-//    Optional<User> findByUserId(String username);
 }

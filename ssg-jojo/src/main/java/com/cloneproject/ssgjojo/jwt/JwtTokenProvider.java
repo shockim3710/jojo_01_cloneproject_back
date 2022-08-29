@@ -1,11 +1,13 @@
 package com.cloneproject.ssgjojo.jwt;
 
 import com.cloneproject.ssgjojo.user.domain.Role;
+import com.cloneproject.ssgjojo.user.service.CustomUserDetailService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,13 +24,14 @@ import java.util.List;
 // 해당 컴포넌트는 필터클래스에서 사전 검증을 거칩니다.
 @RequiredArgsConstructor
 @Component
+@Slf4j
 public class JwtTokenProvider {
     private String secretKey = "myprojectsecret";
 
     // 토큰 유효시간 30분
     private long tokenValidTime = 30 * 60 * 1000L;
 
-    private final UserDetailsService userDetailsService;
+    private final CustomUserDetailService userDetailsService;
 
     // 객체 초기화, secretKey를 Base64로 인코딩한다.
     @PostConstruct
@@ -52,6 +55,8 @@ public class JwtTokenProvider {
 
     // JWT 토큰에서 인증 정보 조회
     public Authentication getAuthentication(String token) {
+        log.info(token);
+        log.info(this.getUserPk(token));
         UserDetails userDetails = userDetailsService.loadUserByUsername(this.getUserPk(token));
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }

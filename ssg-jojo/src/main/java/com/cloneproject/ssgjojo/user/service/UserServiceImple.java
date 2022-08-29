@@ -3,22 +3,22 @@ package com.cloneproject.ssgjojo.user.service;
 import com.cloneproject.ssgjojo.attentionfolder.domain.AttentionFolder;
 import com.cloneproject.ssgjojo.attentionfolder.repository.IAttentionFolderRepository;
 import com.cloneproject.ssgjojo.deliveryaddress.domain.DeliveryAddress;
-import com.cloneproject.ssgjojo.deliveryaddress.dto.DeliveryAddressAddDto;
 import com.cloneproject.ssgjojo.deliveryaddress.repository.IDeliveryAddressRepository;
+import com.cloneproject.ssgjojo.jwt.JwtTokenProvider;
+import com.cloneproject.ssgjojo.loginhistory.domain.LogInHistory;
+import com.cloneproject.ssgjojo.loginhistory.repository.ILogInHistoryRepository;
 import com.cloneproject.ssgjojo.user.domain.Role;
 import com.cloneproject.ssgjojo.user.domain.User;
 import com.cloneproject.ssgjojo.user.dto.*;
 import com.cloneproject.ssgjojo.user.repository.IUserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
-import java.net.DatagramPacket;
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.Timestamp;
 import java.util.Optional;
 
 @Slf4j
@@ -29,17 +29,16 @@ public class UserServiceImple implements IUserService{
     private final IUserRepository iUserRepository;
     private final IDeliveryAddressRepository iDeliveryAddressRepository;
     private final IAttentionFolderRepository iAttentionFolderRepository;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final ILogInHistoryRepository iLogInHistoryRepository;
 
     @Override
-    public User addUser(UserSignupDto userSignupDto) { // 회원가입
+    public String addUser(UserSignupDto userSignupDto) { // 회원가입
 
         userSignupDto.setIsLeave(false);
         userSignupDto.setMembershipLevel("Friends");
         userSignupDto.setWhetherSnsSignUp(false);
         userSignupDto.setRole(Role.USER);
-
-
-        //userSignupDto.setPwd(~`.encode(userSignupDto.getPwd()));
 
         /*회원 비밀번호를 암호화 인코딩*/
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
@@ -78,11 +77,11 @@ public class UserServiceImple implements IUserService{
                         .folderName(userSignupDto.getFolderName())
                 .build());
 
-        return user;
+        return "환영합니다.";
     }
-//
+
 //    @Override
-//    public User addKakaoUser(UserKakaoSignupDto userKakaoSignupDto) {
+//    public User addKakaoUser(UserKakaoSignupDto userKakaoSignupDto) { // 카카오로 회원가입
 //        userKakaoSignupDto.setIsLeave(false);
 //        userKakaoSignupDto.setMembershipLevel("Friends");
 //        userKakaoSignupDto.setWhetherSnsSignUp(true);
@@ -118,64 +117,112 @@ public class UserServiceImple implements IUserService{
 //
 //        return user;
 //    }
-//
-//    @Override
-//    public UserGetIdDto getUserById(Long id) { // 마이페이지
-//        Optional<User> user = iUserRepository.findById(id);
-//
-//        if(user.isPresent()) {
-//            return UserGetIdDto.builder()
-//                    .id(user.get().getId())
-//                    .userId(user.get().getUserId())
-//                    .password(user.get().getPassword())
-//                    .name(user.get().getName())
-//                    .birth(user.get().getBirth())
-//                    .phone(user.get().getPhone())
-//                    .email(user.get().getEmail())
-//                    .gender(user.get().getGender())
-//                    .membershipLevel(user.get().getMembershipLevel())
-//                    .build();
-//        }
-//
-//        return null;
-//    }
-//
+
     @Override
-    public UserLoginDto getUserLogin(UserLoginDto userLoginDto) {
+    public UserGetIdDto getUserById(HttpServletRequest request) { // 마이페이지
+        // Request의 Header에서 token 값을 가져옵니다. "Authorization" : "TOKEN값'
+        // 토큰에서 회원 정보 추출
+        String userId = jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request));
+        User user = iUserRepository.findById(Long.valueOf(userId)).orElseThrow();
 
-        User userId = iUserRepository.findByUserId(userLoginDto.getUserId());
+        if(user != null && user.getIsLeave() == false) {
+            return UserGetIdDto.builder()
+                    .name(user.getName())
+                    .membershipLevel(user.getMembershipLevel())
+                    .build();
+        }
 
+        return null;
+    }
 
-//        User userIdAndPassword = iUserRepository.findByUserIdAndPassword(userLoginDto.getUserId(), userLoginDto.getPassword());
+    @Override
+    public String getUserLogin(UserLoginDto userLoginDto) { // 로그인
 
-        //넘겨받은 비밀번호와 user객체에 암호화된 비밀번호와 비교
+        User userId = iUserRepository.findByUserId(userLoginDto.getUserId()).orElseThrow();
+
+        //회원가입했는지 비교, 넘겨받은 비밀번호와 암호화된 비밀번호와 비교, 탈퇴여부 비교, SNS 회원가입인지 비교
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         if(userId != null && encoder.matches(userLoginDto.getPassword(), userId.getPassword()) &&
                 userId.getWhetherSnsSignUp() == false && userId.getIsLeave() == false) {
 
-            return UserLoginDto.builder()
-                    .id(userLoginDto.getId())
-                    .userId(userLoginDto.getUserId())
-                    .name(userLoginDto.getName())
-                    .build();
+            iLogInHistoryRepository.save(LogInHistory.builder()
+                    .user(userId)
+                    .logInTime(new Timestamp(System.currentTimeMillis()))
+                    .logInIp(userLoginDto.getLogInIp())
+                    .build());
+
+            return jwtTokenProvider.createToken(userId.getId(), userId.getRole());
 
         }
 
-
-//        if(userIdAndPassword != null && userIdAndPassword.getWhetherSnsSignUp() == false && userIdAndPassword.getIsLeave() == false) {
-//
-//            return UserLoginDto.builder()
-//                    .id(userIdAndPassword.getId())
-//                    .userId(userIdAndPassword.getUserId())
-//                    .name(userIdAndPassword.getName())
-//                    .build();
-//        }
         return null;
     }
-//
-//
+
+    @Override
+    public String editUser(UserEditGetAllDto userEditDto, HttpServletRequest request) { // 회원 정보 수정
+
+        // Request의 Header에서 token 값을 가져옵니다. "Authorization" : "TOKEN값'
+        // 토큰에서 회원 정보 추출
+        String userId = jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request));
+        User user = iUserRepository.findById(Long.valueOf(userId)).orElseThrow();
+
+        userEditDto.setIsLeave(false);
+        userEditDto.setMembershipLevel("Friends");
+        userEditDto.setWhetherSnsSignUp(false);
+        userEditDto.setRole(Role.USER);
+
+        /*회원 비밀번호를 암호화 인코딩*/
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        /*비밀번호 암호화하여 다시 user객체에 저장.*/
+        String securePw = encoder.encode(userEditDto.getPassword());
+        userEditDto.setPassword(securePw);
+
+        if(user != null && user.getIsLeave() == false) {
+            iUserRepository.save(User.builder()
+                    .id(Long.valueOf(userId))
+                    .userId(userEditDto.getUserId())
+                    .password(userEditDto.getPassword()) // (회원 정보 수정)
+                    .name(userEditDto.getName()) // (회원 정보 수정)
+                    .birth(userEditDto.getBirth()) // (회원 정보 수정)
+                    .phone(userEditDto.getPhone()) // (회원 정보 수정)
+                    .email(userEditDto.getEmail()) // (회원 정보 수정)
+                    .gender(userEditDto.getGender()) // (회원 정보 수정)
+                    .membershipLevel(userEditDto.getMembershipLevel())
+                    .isLeave(userEditDto.getIsLeave())
+                    .whetherSnsSignUp(userEditDto.getWhetherSnsSignUp())
+                    .role(userEditDto.getRole())
+                    .build());
+
+            return jwtTokenProvider.createToken(Long.valueOf(userId), userEditDto.getRole());
+        }
+
+        return null;
+    }
+
+    @Override
+    @Transactional
+    public String deleteUser(HttpServletRequest request) { // 회원 탈퇴
+        String userId = jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request));
+        Optional<User> user = iUserRepository.findById(Long.valueOf(userId));
+
+        if(user.isPresent()) {
+            user.get().setIsLeave(true);
+            return "탈퇴하였습니다.";
+        }
+        return null;
+
+
+        /*
+         * ExceptionHandler를 활용해서 서비스에서 던져주면 컨트롤러에서 처리할 수 있음
+         */
+        /*return iUserRepository.save(User.builder()
+                .isLeave(userEditDto.getIsLeave()) // (회원 탈퇴)
+                .build());*/
+    }
+
+
 //    @Override
-//    public List<UserEditGetAllDto> getAll() { // 회원 조회
+//    public List<UserEditGetAllDto> getAll() { // 전체 회원 조회
 //        List<User> userList = iUserRepository.findAll();
 //        List<UserEditGetAllDto> userDtoUserGetAllDtoList = new ArrayList<>();
 //
@@ -199,56 +246,4 @@ public class UserServiceImple implements IUserService{
 //
 //        return userDtoUserGetAllDtoList;
 //    }
-//
-//
-//
-//    @Override
-//    public User editUser(UserEditGetAllDto userEditDto) { // 회원 정보 수정
-//
-//        Optional<User> user = iUserRepository.findById(userEditDto.getId());
-//
-//        userEditDto.setIsLeave(false);
-//
-//        if(user.isPresent()) {
-//            return iUserRepository.save(User.builder()
-//                    .id(userEditDto.getId())
-//                    .userId(userEditDto.getUserId())
-//                    .password(userEditDto.getPassword()) // (회원 정보 수정)
-//                    .name(userEditDto.getName()) // (회원 정보 수정)
-//                    .birth(userEditDto.getBirth()) // (회원 정보 수정)
-//                    .phone(userEditDto.getPhone()) // (회원 정보 수정)
-//                    .email(userEditDto.getEmail()) // (회원 정보 수정)
-//                    .gender(userEditDto.getGender()) // (회원 정보 수정)
-//                    .membershipLevel(userEditDto.getMembershipLevel())
-//                    .isLeave(userEditDto.getIsLeave())
-//                    .whetherSnsSignUp(userEditDto.getWhetherSnsSignUp())
-//                    .build());
-//        }
-//
-//        return null;
-//    }
-//
-//    @Override
-//    @Transactional
-//    public User deleteUser(Long id) { // 회원 탈퇴
-////        if(iUserRepository.findById(id).isEmpty())
-////            throw new IllegalArgumentException("존재하지않는 유저입니다.");
-//
-//        Optional<User> user = iUserRepository.findById(id);
-//
-//        if(user.isPresent()) {
-//            user.get().setIsLeave(true);
-//            return user.get();
-//        }
-//        return null;
-//
-//
-//        /*
-//         * ExceptionHandler를 활용해서 서비스에서 던져주면 컨트롤러에서 처리할 수 있음
-//         */
-//        /*return iUserRepository.save(User.builder()
-//                .isLeave(userEditDto.getIsLeave()) // (회원 탈퇴)
-//                .build());*/
-//    }
-
 }
