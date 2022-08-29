@@ -9,6 +9,9 @@ public interface IUserService {
 
     String addUser(UserSignupDto userSignupDto);
 //    User addKakaoUser(UserKakaoSignupDto userKakaoSignupDto);
+
+    String getUserSignUpId(UserSignupDto userSignupDto);
+
 //
     UserGetIdDto getUserById(HttpServletRequest request);
 //

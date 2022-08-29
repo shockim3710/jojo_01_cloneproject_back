@@ -80,6 +80,18 @@ public class UserServiceImple implements IUserService{
         return "환영합니다.";
     }
 
+    @Override
+    public String getUserSignUpId(UserSignupDto userSignupDto) { // 아이디 중복확인
+
+        Optional<User> user = iUserRepository.findByUserId(userSignupDto.getUserId());
+
+        if(user.isPresent()) {
+            return "이미 가입한 아이디입니다.";
+        }
+
+        return null;
+    }
+
 //    @Override
 //    public User addKakaoUser(UserKakaoSignupDto userKakaoSignupDto) { // 카카오로 회원가입
 //        userKakaoSignupDto.setIsLeave(false);
