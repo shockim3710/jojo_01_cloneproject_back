@@ -624,30 +624,29 @@ public class ProductServiceImple implements IProductService {
         List<Product> findResult = new ArrayList<>();
         List<ProductListDto> returnList = new ArrayList<>();
 
-        if(lv == 1)
+        if (lv == 1)
             findResult = iCategoryProductListRepository.findByCategoryLv1id(id);
-        else if(lv == 2)
+        else if (lv == 2)
             findResult = iCategoryProductListRepository.findByCategoryLv2id(id);
-        else if(lv == 3)
+        else if (lv == 3)
             findResult = iCategoryProductListRepository.findByCategoryLv3id(id);
-        else if(lv == 4)
+        else if (lv == 4)
             findResult = iCategoryProductListRepository.findByCategoryLv4id(id);
         else
             return null;
 
-        for(Product product : findResult) {
+        for (Product product : findResult) {
             Long newPrice = 0L;
             Long oldPrice = 0L;
             Float reviewScore = iReviewRepository.getReviewAvgScore(product.getId());
             int reviewNum = iReviewRepository.getReviewCountByProduct(product.getId());
 
             int discountRate = product.getDiscountRate();
-            if(discountRate != 0) {
+            if (discountRate != 0) {
                 oldPrice = product.getPrice();
-                newPrice = (long) ((float) oldPrice * (1 - ((float) discountRate /100 )));
-            }
-            else
-                newPrice= product.getPrice();
+                newPrice = (long) ((float) oldPrice * (1 - ((float) discountRate / 100)));
+            } else
+                newPrice = product.getPrice();
 
             returnList.add(ProductListDto.builder()
                     .id(product.getId())
@@ -666,6 +665,7 @@ public class ProductServiceImple implements IProductService {
         }
 
         return returnList;
+    }
 
     // 상품 검색
     @Override

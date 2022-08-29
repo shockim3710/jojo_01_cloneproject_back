@@ -29,18 +29,20 @@ public class DeliveryAddressServiceImple implements IDeliveryAddressService {
         if (user.isPresent()) {
 
             DeliveryAddress temp = iDeliveryAddressRepository.save(DeliveryAddress.builder()
-                            .address(deliveryAddressAddDto.getAddress())
-                            .whetherDefaultAddress(deliveryAddressAddDto.isWhetherDefaultAddress())
-                            .whetherOnlyThisTime(deliveryAddressAddDto.isWhetherOnlyThisTime())
-                            .receiveName(deliveryAddressAddDto.getReceiveName())
-                            .address(deliveryAddressAddDto.getAddressName())
-                            .user(user.get())
-                            .build());
+                    .address(deliveryAddressAddDto.getAddress())
+                    .whetherDefaultAddress(deliveryAddressAddDto.isWhetherDefaultAddress())
+                    .whetherOnlyThisTime(deliveryAddressAddDto.isWhetherOnlyThisTime())
+                    .receiveName(deliveryAddressAddDto.getReceiveName())
+                    .address(deliveryAddressAddDto.getAddressName())
+                    .user(user.get())
+                    .build());
 
             return DeliveryAddressAddDto.builder()
                     .address(temp.getAddress())
                     .whetherDefaultAddress(temp.isWhetherDefaultAddress())
                     .whetherOnlyThisTime(temp.isWhetherOnlyThisTime())
+                    .receiveName(temp.getReceiveName())
+                    .addressName(temp.getAddressName())
                     .user(temp.getUser().getId())
                     .build();
         }
@@ -58,14 +60,14 @@ public class DeliveryAddressServiceImple implements IDeliveryAddressService {
 
             deliveryAddressList.forEach(user -> {
                 deliveryAddressEditGetIdDtoList.add(DeliveryAddressEditGetIdDto.builder()
-                                .id(user.getId())
-                                .address(user.getAddress())
-                                .whetherDefaultAddress(user.isWhetherDefaultAddress())
-                                .whetherOnlyThisTime(user.isWhetherOnlyThisTime())
-                                .addressName(user.getAddressName())
-                                .receiveName(user.getReceiveName())
-                                .user(user.getUser().getId())
-                                .build());
+                        .id(user.getId())
+                        .address(user.getAddress())
+                        .whetherDefaultAddress(user.isWhetherDefaultAddress())
+                        .whetherOnlyThisTime(user.isWhetherOnlyThisTime())
+                        .addressName(user.getAddressName())
+                        .receiveName(user.getReceiveName())
+                        .user(user.getUser().getId())
+                        .build());
 
             });
 
@@ -82,14 +84,14 @@ public class DeliveryAddressServiceImple implements IDeliveryAddressService {
 
         if(deliveryAddress.isPresent() && user.isPresent()) {
             DeliveryAddress temp = iDeliveryAddressRepository.save(DeliveryAddress.builder()
-                            .id(deliveryAddressEditGetIdDto.getId())
-                            .address(deliveryAddressEditGetIdDto.getAddress())
-                            .whetherDefaultAddress(deliveryAddressEditGetIdDto.isWhetherDefaultAddress())
-                            .whetherOnlyThisTime(deliveryAddressEditGetIdDto.isWhetherOnlyThisTime())
-                            .addressName(deliveryAddressEditGetIdDto.getAddressName())
-                            .receiveName(deliveryAddressEditGetIdDto.getReceiveName())
-                            .user(iUserRepository.findById(deliveryAddressEditGetIdDto.getUser()).get())
-                            .build());
+                    .id(deliveryAddressEditGetIdDto.getId())
+                    .address(deliveryAddressEditGetIdDto.getAddress())
+                    .whetherDefaultAddress(deliveryAddressEditGetIdDto.isWhetherDefaultAddress())
+                    .whetherOnlyThisTime(deliveryAddressEditGetIdDto.isWhetherOnlyThisTime())
+                    .addressName(deliveryAddressEditGetIdDto.getAddressName())
+                    .receiveName(deliveryAddressEditGetIdDto.getReceiveName())
+                    .user(iUserRepository.findById(deliveryAddressEditGetIdDto.getUser()).get())
+                    .build());
 
             return DeliveryAddressEditGetIdDto.builder()
                     .id(temp.getId())

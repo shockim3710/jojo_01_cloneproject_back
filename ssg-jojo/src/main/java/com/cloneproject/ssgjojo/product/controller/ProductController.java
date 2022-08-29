@@ -63,8 +63,9 @@ public class ProductController {
 
     @GetMapping("/findbycategory")
     public List<ProductListDto> findByCategory(@RequestParam(name = "lv", defaultValue = "1") Long lv,
-                                               @RequestParam(name = "id") Long id){
+                                               @RequestParam(name = "id") Long id) {
         return iProductService.findProductByCategoryLv(lv, id);
+    }
 
     // 상품 검색
     @GetMapping("/product/search")
