@@ -28,10 +28,5 @@ public class ReviewOutputDto {
 
     List<ReviewPhotoDto> reviewPhotoDtoList;
 
-    String jpql = "select rev from Review rev order by rev.createdTime desc";
-    private EntityManager em;
-    List<ReviewDto> reviewDtoList = em.createQuery("select rev from Review rev order by rev.createdTime desc", ReviewDto.class)
-            .setFirstResult(1)
-            .setMaxResults(10)
-            .getResultList();
+
 }

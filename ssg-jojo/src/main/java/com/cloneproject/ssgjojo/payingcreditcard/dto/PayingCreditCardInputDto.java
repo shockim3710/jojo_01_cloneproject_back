@@ -13,6 +13,4 @@ public class PayingCreditCardInputDto {
 
     private String creditCardName;
     private String creditCardCompany;
-
-    private Long userId;
 }

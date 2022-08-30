@@ -7,21 +7,22 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public interface IReviewService {
 
-    ReviewOutputDto addReview(ReviewDto reviewDto);
-    boolean addReviewWithImg(ReviewDto reviewDto, List<MultipartFile> reviewPhoto);
-    ReviewEditDto editReview(ReviewEditDto reviewEditDto);
+    ReviewOutputDto addReview(ReviewDto reviewDto, HttpServletRequest request);
+    boolean addReviewWithImg(ReviewDto reviewDto, List<MultipartFile> reviewPhoto, HttpServletRequest request);
+    ReviewEditDto editReview(ReviewEditDto reviewEditDto, HttpServletRequest request);
     List<ReviewOutputDto> sortedGetReviewByProductId(Long id, int sort);
     List<ReviewOutputDto> findAllByProduct(Long productId);
-    void deleteReview(ReviewDeleteDto reviewDeleteDto);
+    void deleteReview(ReviewDeleteDto reviewDeleteDto, HttpServletRequest request);
 
-    List<ReviewOutputDto> findAllByUser(Long userId);
+    List<ReviewOutputDto> findAllByUser(HttpServletRequest request);
 
-    List<ReviewPossibleWriteDto> findPossibleWrite(Long userId);
+    List<ReviewPossibleWriteDto> findPossibleWrite(HttpServletRequest request);
 
-    public Page<Review> pageList(Pageable pageable, Long productId);
+    public List<Review> pageList(Pageable pageable, Long productId);
 
 }

@@ -5,12 +5,14 @@ import com.cloneproject.ssgjojo.accountpayment.dto.AccountPaymentDeleteDto;
 import com.cloneproject.ssgjojo.accountpayment.dto.AccountPaymentDto;
 import com.cloneproject.ssgjojo.accountpayment.dto.AccountPaymentOutputDto;
 import com.cloneproject.ssgjojo.accountpayment.repository.IAccountPaymentRepository;
+import com.cloneproject.ssgjojo.jwt.JwtTokenProvider;
 import com.cloneproject.ssgjojo.user.domain.User;
 import com.cloneproject.ssgjojo.user.repository.IUserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -22,13 +24,16 @@ public class AccountPaymentServiceImple implements IAccountPaymentService{
 
     private final IAccountPaymentRepository iAccountPaymentRepository;
     private final IUserRepository iUserRepository;
+    private final JwtTokenProvider jwtTokenProvider;
+
 
 
     // 결제 계좌 등록
     @Override
-    public AccountPaymentOutputDto addAccountPayment(AccountPaymentDto accountPaymentDto) {
+    public AccountPaymentOutputDto addAccountPayment(AccountPaymentDto accountPaymentDto, HttpServletRequest request) {
 
-        Optional<User> user = iUserRepository.findById(accountPaymentDto.getUserId());
+        Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
+        Optional<User> user = iUserRepository.findById(userId);
 
         if(user.isPresent()) {
             AccountPayment accountPayment = iAccountPaymentRepository.save(AccountPayment.builder()
@@ -41,7 +46,6 @@ public class AccountPaymentServiceImple implements IAccountPaymentService{
                     .id(accountPayment.getId())
                     .accountNumber(accountPayment.getAccountNumber())
                     .bank(accountPaymentDto.getBank())
-                    .userId(accountPayment.getUser().getId())
                     .build();
         }
 
@@ -50,9 +54,10 @@ public class AccountPaymentServiceImple implements IAccountPaymentService{
 
     // 해당 유저 id로 결제 계좌 조회
     @Override
-    public List<AccountPaymentOutputDto> getAccountPaymentByUserId(Long id) {
+    public List<AccountPaymentOutputDto> getAccountPaymentByUserId(HttpServletRequest request) {
 
-        Optional<User> user = iUserRepository.findById(id);
+        Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
+        Optional<User> user = iUserRepository.findById(userId);
 
         if(user.isPresent()) {
             List<AccountPayment> accountPaymentList = iAccountPaymentRepository.findAllByUser(user.get());
@@ -64,7 +69,6 @@ public class AccountPaymentServiceImple implements IAccountPaymentService{
                             .id(payment.getId())
                             .bank(payment.getBank())
                             .accountNumber(payment.getAccountNumber())
-                            .userId(payment.getUser().getId())
                             .build());
                 }
             }
@@ -78,10 +82,11 @@ public class AccountPaymentServiceImple implements IAccountPaymentService{
 
     // 결제 계좌 삭제
     @Override
-    public void deleteAccountPayment(AccountPaymentDeleteDto accountPaymentDeleteDto) {
+    public void deleteAccountPayment(AccountPaymentDeleteDto accountPaymentDeleteDto, HttpServletRequest request) {
 
+        Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
         Optional<AccountPayment> accountPayment = iAccountPaymentRepository.findById(accountPaymentDeleteDto.getId());
-        Optional<User> user = iUserRepository.findById(accountPaymentDeleteDto.getUserId());
+        Optional<User> user = iUserRepository.findById(userId);
 
         if(user.isPresent() && accountPayment.isPresent()) {
                 iAccountPaymentRepository.deleteById(accountPaymentDeleteDto.getId());

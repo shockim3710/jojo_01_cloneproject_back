@@ -3,19 +3,13 @@ package com.cloneproject.ssgjojo.review.repository;
 import com.cloneproject.ssgjojo.orders.domain.Orders;
 import com.cloneproject.ssgjojo.product.domain.Product;
 import com.cloneproject.ssgjojo.review.domain.Review;
-import com.cloneproject.ssgjojo.review.dto.ReviewDto;
-import com.cloneproject.ssgjojo.review.dto.ReviewOutputDto;
 import com.cloneproject.ssgjojo.user.domain.User;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import javax.persistence.EntityManager;
 import java.util.List;
-import java.util.Optional;
 
 public interface IReviewRepository extends JpaRepository<Review, Long> {
 
@@ -35,6 +29,8 @@ public interface IReviewRepository extends JpaRepository<Review, Long> {
     @Query(value = "select avg(rev.score) from Review rev where rev.product.id =:id")
     Float getReviewAvgScore(@Param("id") Long id);
 
-    public Page<Review> findByProductOrderByCreatedDateAsc(Product product, Pageable pageable);
+//    Page<Review> findByProductOrderByCreatedDateAsc(Product product, Pageable pageable);
+
+    List<Review> findAllByProductOrderByCreatedDateAsc(Product product, Pageable pageable);
 
 }

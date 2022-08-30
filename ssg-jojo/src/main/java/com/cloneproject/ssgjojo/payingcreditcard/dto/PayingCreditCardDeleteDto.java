@@ -12,5 +12,4 @@ import lombok.NoArgsConstructor;
 public class PayingCreditCardDeleteDto {
 
     private Long id;
-    private Long userId;
 }

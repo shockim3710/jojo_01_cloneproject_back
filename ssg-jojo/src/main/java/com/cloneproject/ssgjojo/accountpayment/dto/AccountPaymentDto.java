@@ -13,6 +13,4 @@ public class AccountPaymentDto {
 
     private String accountNumber;
     private String bank;
-
-    private Long userId;
 }

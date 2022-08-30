@@ -1,5 +1,6 @@
 package com.cloneproject.ssgjojo.payingcreditcard.service;
 
+import com.cloneproject.ssgjojo.jwt.JwtTokenProvider;
 import com.cloneproject.ssgjojo.payingcreditcard.domain.PayingCreditCard;
 import com.cloneproject.ssgjojo.payingcreditcard.dto.PayingCreditCardDeleteDto;
 import com.cloneproject.ssgjojo.payingcreditcard.dto.PayingCreditCardInputDto;
@@ -11,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -22,12 +24,15 @@ public class PayingCreditCardServiceImple implements IPayingCreditCardService {
 
     private final IPayingCreditCardRepository iPayingCreditCardRepository;
     private final IUserRepository iUserRepository;
+    private final JwtTokenProvider jwtTokenProvider;
 
 
+    // 결제 카드 등록
     @Override
-    public PayingCreditCardOutputDto addPayingCreditCard(PayingCreditCardInputDto payingCreditCardInputDto) {
+    public PayingCreditCardOutputDto addPayingCreditCard(PayingCreditCardInputDto payingCreditCardInputDto, HttpServletRequest request) {
 
-        Optional<User> user = iUserRepository.findById(payingCreditCardInputDto.getUserId());
+        Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
+        Optional<User> user = iUserRepository.findById(userId);
 
         if(user.isPresent()) {
             PayingCreditCard payingCreditCard = iPayingCreditCardRepository.save(PayingCreditCard.builder()
@@ -40,17 +45,18 @@ public class PayingCreditCardServiceImple implements IPayingCreditCardService {
                     .id(payingCreditCard.getId())
                     .creditCardName(payingCreditCard.getCreditCardName())
                     .creditCardCompany(payingCreditCard.getCreditCardCompany())
-                    .userId(payingCreditCard.getUser().getId())
                     .build();
         }
         return null;
     }
 
+    // 해당 유저의 결제 카드 조회
     @Override
-    public List<PayingCreditCardOutputDto> getPayingCreditCardByUserId(Long id) {
+    public List<PayingCreditCardOutputDto> getPayingCreditCardByUserId(HttpServletRequest request) {
 
+        Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
         // user에 대한 데이터 유효성 검증 후 있으면 repository finaAllBy 통해 user의 데이터 반환
-        Optional<User> user = iUserRepository.findById(id);
+        Optional<User> user = iUserRepository.findById(userId);
 
         if(user.isPresent()) {
 
@@ -63,7 +69,6 @@ public class PayingCreditCardServiceImple implements IPayingCreditCardService {
                             .id(payingCreditCard.getId())
                             .creditCardName(payingCreditCard.getCreditCardName())
                             .creditCardCompany(payingCreditCard.getCreditCardCompany())
-                            .userId(payingCreditCard.getUser().getId())
                             .build());
                 }
             }
@@ -74,15 +79,21 @@ public class PayingCreditCardServiceImple implements IPayingCreditCardService {
         return null;
     }
 
-
+    // 결제 카드 삭제
     @Override
-    public void deletePayingCreditCard(PayingCreditCardDeleteDto payingCreditCardDeleteDto) {
+    public boolean deletePayingCreditCard(PayingCreditCardDeleteDto payingCreditCardDeleteDto, HttpServletRequest request) {
+        Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
+        Optional<User> user = iUserRepository.findById(userId);
 
-        Optional<User> user = iUserRepository.findById(payingCreditCardDeleteDto.getUserId());
         Optional<PayingCreditCard> payingCreditCard = iPayingCreditCardRepository.findById(payingCreditCardDeleteDto.getId());
 
         if(user.isPresent() && payingCreditCard.isPresent()) {
-            iPayingCreditCardRepository.deleteById(payingCreditCardDeleteDto.getId());
+            if(user.get().getId() == payingCreditCard.get().getUser().getId()) {
+                iPayingCreditCardRepository.deleteById(payingCreditCardDeleteDto.getId());
+                return true;
+            }
         }
+
+        return false;
     }
 }

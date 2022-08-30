@@ -19,8 +19,6 @@ public class QnAOutputDto {
     private Timestamp questionDate;
     private Timestamp answerDate;
     private boolean lockCase;
-
-    private Long userId;
     private String userAccount;
     private Long productId;
 }

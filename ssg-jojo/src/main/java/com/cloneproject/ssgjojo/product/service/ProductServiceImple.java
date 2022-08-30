@@ -588,7 +588,6 @@ public class ProductServiceImple implements IProductService {
                     .answerMain(qnA.getAnswerMain())
                     .answerDate(qnA.getAnswerDate())
                     .lockCase(qnA.isLockCase())
-                    .userId(qnA.getUser().getId())
                     .userAccount(qnA.getUser().getUserId().substring(3)+"******")
                     .productId(qnA.getProduct().getId())
                     .build());
