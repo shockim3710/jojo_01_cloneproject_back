@@ -110,10 +110,6 @@ public class CartServiceImple implements ICartService {
 
             cartList.forEach(user -> {
 
-
-
-
-
                 Optional<Cart> cartOptional = iCartRepository.findById(user.getId());
 
 //                if(cartOptional.isPresent()) {
@@ -121,6 +117,20 @@ public class CartServiceImple implements ICartService {
                     List<CartProductListGetIdEditDto> listGetIdDto = new ArrayList<>();
 
                     cartProductLists.forEach(cart -> {
+                        Product product = cart.getProduct();
+                        Long newPrice = 0L;
+                        Long oldPrice = 0L;
+                        int discountRate = product.getDiscountRate();
+
+                        if(discountRate != 0) {
+                            oldPrice = product.getPrice();
+                            newPrice = (long) ((float) oldPrice * (1 - ((float) discountRate /100 )));
+                        }
+                        else
+                            newPrice= product.getPrice();
+
+
+
                         listGetIdDto.add(CartProductListGetIdEditDto.builder()
                                         .id(cart.getId())
                                         .cartCount(cart.getCartCount())
@@ -129,7 +139,8 @@ public class CartServiceImple implements ICartService {
                                         .productName(cart.getProduct().getProductName())
                                         .manufactureCompany(cart.getProduct().getManufactureCompany())
                                         .thumbnail(cart.getProduct().getThumbnail())
-                                        .price(cart.getProduct().getPrice())
+                                        .newPrice(newPrice)
+                                        .oldPrice(oldPrice)
                                         .discountRate(cart.getProduct().getDiscountRate())
                                         .fee(cart.getProduct().getFee())
                                         .productOption(cart.getProductOption().getId())

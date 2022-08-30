@@ -89,10 +89,10 @@ public class UserServiceImple implements IUserService{
         Optional<User> user = iUserRepository.findByUserId(userSignupDto.getUserId());
 
         if(user.isPresent()) {
-            return "이미 가입한 아이디입니다.";
+            return "가입 불가능";
         }
 
-        return null;
+        return "가입 가능";
     }
 
 //    @Override

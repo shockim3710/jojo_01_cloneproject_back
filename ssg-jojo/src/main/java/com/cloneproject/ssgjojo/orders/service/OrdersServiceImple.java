@@ -20,6 +20,7 @@ import com.cloneproject.ssgjojo.user.repository.IUserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +40,7 @@ public class OrdersServiceImple implements IOrdersService{
     private final IOrdersProductListRepository iOrdersProductListRepository;
 
     @Override
+    @Transactional
     public OrdersAddDto addOrders(OrdersAddDto ordersAddDto) {
         Optional<User> user = iUserRepository.findById(ordersAddDto.getUser());
         Optional<DeliveryAddress> deliveryAddress = iDeliveryAddressRepository.findById(ordersAddDto.getDeliveryAddress());
@@ -66,6 +68,8 @@ public class OrdersServiceImple implements IOrdersService{
 
                 ordersProductListAddDto.setWhetherRefund(false);
 
+                productOption.get().setStock(productOption.get().getStock()-1);
+
                 OrdersProductList temp = iOrdersProductListRepository.save(OrdersProductList.builder()
                         .count(ordersProductListAddDto.getCount())
                         .whetherRefund(ordersProductListAddDto.isWhetherRefund())
@@ -86,22 +90,6 @@ public class OrdersServiceImple implements IOrdersService{
                         .orders(orders.getId())
                         .build()
                 );
-
-
-                iProductOptionRepository.save(ProductOption.builder()
-                        .id(temp.getProductOption().getId())
-                        .stock((temp.getProductOption().getStock())-1)
-                        .build());
-
-
-//                iDeliveryAddressRepository.save(DeliveryAddress.builder()
-//                        .user(user)
-//                        .address(userSignupDto.getAddress())
-//                        .whetherDefaultAddress(userSignupDto.isWhetherDefaultAddress())
-//                        .whetherOnlyThisTime(userSignupDto.isWhetherOnlyThisTime())
-//                        .receiveName(userSignupDto.getName())
-//                        .addressName(userSignupDto.getAddressName())
-//                        .build());
             }
 
             return OrdersAddDto.builder()
@@ -120,7 +108,6 @@ public class OrdersServiceImple implements IOrdersService{
                     .address(deliveryAddress.get().getAddress())
                     .ordersProductListAddDtoList(listAddDto)
                     .build();
-
         }
 
         return null;

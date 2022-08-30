@@ -14,6 +14,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@DynamicUpdate
 public class ProductOption {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
