@@ -32,13 +32,18 @@ public class CartController {
         return iCartService.getCartByUserId(id);
     }
 
-    @PutMapping("/cart/edit")
-    public CartEditGetIdDto editCart(@RequestBody CartEditGetIdDto cartEditGetIdDto) {
-        return iCartService.editCart(cartEditGetIdDto);
-    }
+//    @PutMapping("/cart/edit")
+//    public CartEditGetIdDto editCart(@RequestBody CartEditGetIdDto cartEditGetIdDto) {
+//        return iCartService.editCart(cartEditGetIdDto);
+//    }
 
     @DeleteMapping("/cart/delete/{id}")
     public void deleteCart(@PathVariable Long id) {
+        iCartService.deleteCart(id);
+    }
+
+    @DeleteMapping("/cart/deleteall/{id}")
+    public void deleteCartAll(@PathVariable Long id) {
         iCartService.deleteCart(id);
     }
 

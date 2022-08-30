@@ -13,8 +13,10 @@ public interface ICartService {
 
     CartAddDto addCart(CartAddDto cartAddDto);
     List<CartEditGetIdDto> getCartByUserId(Long id);
-    CartEditGetIdDto editCart(CartEditGetIdDto cartEditGetIdDto);
+//    CartEditGetIdDto editCart(CartEditGetIdDto cartEditGetIdDto);
 
     void deleteCart(Long id);
+    void deleteCartAll(Long id);
+
 
 }

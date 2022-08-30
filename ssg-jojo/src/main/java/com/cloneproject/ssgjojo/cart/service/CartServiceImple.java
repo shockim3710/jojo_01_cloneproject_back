@@ -64,28 +64,36 @@ public class CartServiceImple implements ICartService {
                 Optional<Product> product = iProductRepository.findById(cartProductListAddDto.getProduct());
                 Optional<ProductOption> productOption = iProductOptionRepository.findById(cartProductListAddDto.getProductOption());
 
-                CartProductList temp = iCartProductListRepository.save(CartProductList.builder()
-                                .cartCount(cartProductListAddDto.getCartCount())
-                                .cart(cart)
-                                .product(product.get())
-                                .productOption(productOption.get())
-                                .build());
+                List<CartProductList> tmp = iCartProductListRepository.findTest(productOption.get().getId(), user.get().getId());
 
-                listAddDto.add(CartProductListAddDto.builder()
-                                .cartCount(temp.getCartCount())
-                                .cart(cart.getId())
-                                .product(temp.getProduct().getId())
-                                .productName(temp.getProduct().getProductName())
-                                .manufactureCompany(temp.getProduct().getManufactureCompany())
-                                .thumbnail(temp.getProduct().getThumbnail())
-                                .price(temp.getProduct().getPrice())
-                                .discountRate(temp.getProduct().getDiscountRate())
-                                .fee(temp.getProduct().getFee())
-                                .productOption(temp.getProductOption().getId())
-                                .productOption1Contents(temp.getProductOption().getProductOption1Contents())
-                                .productOption2Contents(temp.getProductOption().getProductOption2Contents())
-                                .stock(temp.getProductOption().getStock())
-                                .build());
+                if(tmp.size() != 0) {
+                    CartProductList cpl = tmp.get(0);
+                    cpl.setCartCount(cpl.getCartCount() + cartProductListAddDto.getCartCount());
+                }
+                else {
+                    CartProductList temp = iCartProductListRepository.save(CartProductList.builder()
+                            .cartCount(cartProductListAddDto.getCartCount())
+                            .cart(cart)
+                            .product(product.get())
+                            .productOption(productOption.get())
+                            .build());
+
+                    listAddDto.add(CartProductListAddDto.builder()
+                            .cartCount(temp.getCartCount())
+                            .cart(cart.getId())
+                            .product(temp.getProduct().getId())
+                            .productName(temp.getProduct().getProductName())
+                            .manufactureCompany(temp.getProduct().getManufactureCompany())
+                            .thumbnail(temp.getProduct().getThumbnail())
+                            .price(temp.getProduct().getPrice())
+                            .discountRate(temp.getProduct().getDiscountRate())
+                            .fee(temp.getProduct().getFee())
+                            .productOption(temp.getProductOption().getId())
+                            .productOption1Contents(temp.getProductOption().getProductOption1Contents())
+                            .productOption2Contents(temp.getProductOption().getProductOption2Contents())
+                            .stock(temp.getProductOption().getStock())
+                            .build());
+                }
             }
 
             return CartAddDto.builder()
@@ -166,67 +174,94 @@ public class CartServiceImple implements ICartService {
         return null;
     }
 
-    @Override
-    public CartEditGetIdDto editCart(CartEditGetIdDto cartEditGetIdDto) {
-
-        Optional<Cart> cart = iCartRepository.findById(cartEditGetIdDto.getId());
-        Optional<User> user = iUserRepository.findById(cartEditGetIdDto.getUser());
-        Optional<DeliveryAddress> deliveryAddress = iDeliveryAddressRepository.findById(cartEditGetIdDto.getDeliveryAddress());
-
-        if(cart.isPresent() && user.isPresent() && deliveryAddress.isPresent()) {
-
-            Cart temp = iCartRepository.save(Cart.builder()
-                            .id(cartEditGetIdDto.getId())
-                            .user(user.get())
-                            .deliveryAddress(deliveryAddress.get())
-                            .build());
-
-            List<CartProductListGetIdEditDto> listEditDto = new ArrayList<>();
-            for (CartProductListGetIdEditDto cartProductListGetIdEditDto : cartEditGetIdDto.getCartProductListGetIdEditDtoList()) {
-                Optional<CartProductList> cartProductListOptional = iCartProductListRepository.findById(cartProductListGetIdEditDto.getId());
-                Optional<Product> product = iProductRepository.findById(cartProductListGetIdEditDto.getProduct());
-                Optional<ProductOption> productOption = iProductOptionRepository.findById(cartProductListGetIdEditDto.getProductOption());
-
-                CartProductList cartProductList = iCartProductListRepository.save(CartProductList.builder()
-                                .id(cartProductListGetIdEditDto.getId())
-                                .cartCount(cartProductListGetIdEditDto.getCartCount())
-                                .cart(temp)
-                                .product(product.get())
-                                .productOption(productOption.get())
-                                .build());
-
-                listEditDto.add(CartProductListGetIdEditDto.builder()
-                                .id(cartProductList.getId())
-                                .cartCount(cartProductList.getCartCount())
-                                .cart(temp.getId())
-                                .product(cartProductList.getProduct().getId())
-                                .productName(product.get().getProductName())
-                                .manufactureCompany(product.get().getManufactureCompany())
-                                .thumbnail(product.get().getThumbnail())
-                                .price(product.get().getPrice())
-                                .discountRate(product.get().getDiscountRate())
-                                .fee(product.get().getFee())
-                                .productOption(cartProductList.getProductOption().getId())
-                                .productOption1Contents(productOption.get().getProductOption1Contents())
-                                .productOption2Contents(productOption.get().getProductOption2Contents())
-                                .stock(productOption.get().getStock())
-                                .build());
-            }
-
-            return CartEditGetIdDto.builder()
-                    .id(temp.getId())
-                    .user(user.get().getId())
-                    .deliveryAddress(deliveryAddress.get().getId())
-                    .address(deliveryAddress.get().getAddress())
-                    .cartProductListGetIdEditDtoList(listEditDto)
-                    .build();
-        }
-
-        return null;
-    }
+//    @Override
+//    public CartEditGetIdDto editCart(CartEditGetIdDto cartEditGetIdDto) {
+//
+//        Optional<Cart> cart = iCartRepository.findById(cartEditGetIdDto.getId());
+//        Optional<User> user = iUserRepository.findById(cartEditGetIdDto.getUser());
+//        Optional<DeliveryAddress> deliveryAddress = iDeliveryAddressRepository.findById(cartEditGetIdDto.getDeliveryAddress());
+//
+//        if(cart.isPresent() && user.isPresent() && deliveryAddress.isPresent()) {
+//
+//            Cart temp = iCartRepository.save(Cart.builder()
+//                            .id(cartEditGetIdDto.getId())
+//                            .user(user.get())
+//                            .deliveryAddress(deliveryAddress.get())
+//                            .build());
+//
+//            List<CartProductListGetIdEditDto> listEditDto = new ArrayList<>();
+//            for (CartProductListGetIdEditDto cartProductListGetIdEditDto : cartEditGetIdDto.getCartProductListGetIdEditDtoList()) {
+//                Optional<CartProductList> cartProductListOptional = iCartProductListRepository.findById(cartProductListGetIdEditDto.getId());
+//                Optional<Product> product = iProductRepository.findById(cartProductListGetIdEditDto.getProduct());
+//                Optional<ProductOption> productOption = iProductOptionRepository.findById(cartProductListGetIdEditDto.getProductOption());
+//
+//                //                productOption.get().setStock(productOption.get().getStock()-1);
+////                userEditDto.setIsLeave(false);
+//
+////                if(cartProductListGetIdEditDto.getPlma() == "plus") {
+////                    cartProductListGetIdEditDto.setCartCount(cartProductListOptional.get().getCartCount() + cartProductListGetIdEditDto.getCnt());
+////
+////                } else if (cartProductListGetIdEditDto.getPlma() == "minus") {
+////                    cartProductListGetIdEditDto.setCartCount(cartProductListOptional.get().getCartCount() - cartProductListGetIdEditDto.getCnt());
+////
+////                }
+//
+//                CartProductList cartProductList = iCartProductListRepository.save(CartProductList.builder()
+//                                .id(cartProductListGetIdEditDto.getId())
+//                                .cartCount(cartProductListGetIdEditDto.getCartCount())
+//                                .cart(temp)
+//                                .product(product.get())
+//                                .productOption(productOption.get())
+//                                .build());
+//
+//                listEditDto.add(CartProductListGetIdEditDto.builder()
+//                                .id(cartProductList.getId())
+//                                .cartCount(cartProductList.getCartCount())
+//                                .cart(temp.getId())
+//                                .product(cartProductList.getProduct().getId())
+//                                .productName(product.get().getProductName())
+//                                .manufactureCompany(product.get().getManufactureCompany())
+//                                .thumbnail(product.get().getThumbnail())
+//                                .price(product.get().getPrice())
+//                                .discountRate(product.get().getDiscountRate())
+//                                .fee(product.get().getFee())
+//                                .productOption(cartProductList.getProductOption().getId())
+//                                .productOption1Contents(productOption.get().getProductOption1Contents())
+//                                .productOption2Contents(productOption.get().getProductOption2Contents())
+//                                .stock(productOption.get().getStock())
+//                                .build());
+//            }
+//
+//            return CartEditGetIdDto.builder()
+//                    .id(temp.getId())
+//                    .user(user.get().getId())
+//                    .deliveryAddress(deliveryAddress.get().getId())
+//                    .address(deliveryAddress.get().getAddress())
+//                    .cartProductListGetIdEditDtoList(listEditDto)
+//                    .build();
+//        }
+//
+//        return null;
+//    }
 
     @Override
     public void deleteCart(Long id) {
+
+        Optional<CartProductList> cartProductList = iCartProductListRepository.findById(id);
+
+        if(cartProductList.isPresent()) {
+            iCartProductListRepository.deleteById(id);
+
+            Optional<CartProductList> cartProductListOptional = iCartProductListRepository.findByCartId(cartProductList.get().getCart().getId());
+
+            if(cartProductListOptional.isEmpty()) {
+                iCartRepository.deleteById(cartProductList.get().getCart().getId());
+            }
+        }
+    }
+
+    @Override
+    public void deleteCartAll(Long id) {
         Optional<Cart> cart = iCartRepository.findById(id);
 
         if(cart.isPresent()) {

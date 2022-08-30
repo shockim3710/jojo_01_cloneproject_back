@@ -28,5 +28,8 @@ public class CartProductListGetIdEditDto {
     private String productOption2Contents; // 옵션2
     private int stock; // 재고
 
+    private String plma;
+    private int cnt;
+
     private Long cart;
 }
