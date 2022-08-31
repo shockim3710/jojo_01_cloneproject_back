@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
@@ -60,7 +61,7 @@ public class ProductController {
 
     // 상품 검색
     @GetMapping("/product/search")
-    public List<ProductListDto> searchProduct(@RequestParam String keyword) {
-        return iProductService.productSearch(keyword);
+    public List<ProductListDto> searchProduct(@RequestParam String keyword, HttpServletRequest request) {
+        return iProductService.productSearch(keyword, request);
     }
 }

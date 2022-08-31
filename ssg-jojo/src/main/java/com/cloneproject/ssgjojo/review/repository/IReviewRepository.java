@@ -29,8 +29,6 @@ public interface IReviewRepository extends JpaRepository<Review, Long> {
     @Query(value = "select avg(rev.score) from Review rev where rev.product.id =:id")
     Float getReviewAvgScore(@Param("id") Long id);
 
-//    Page<Review> findByProductOrderByCreatedDateAsc(Product product, Pageable pageable);
-
     List<Review> findAllByProductOrderByCreatedDateAsc(Product product, Pageable pageable);
 
 }

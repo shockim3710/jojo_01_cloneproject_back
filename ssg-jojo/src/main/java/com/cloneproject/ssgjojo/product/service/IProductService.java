@@ -4,6 +4,7 @@ import com.cloneproject.ssgjojo.product.domain.Product;
 import com.cloneproject.ssgjojo.product.dto.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public interface IProductService {
@@ -15,5 +16,5 @@ public interface IProductService {
     Product editProduct(ProductUpdateDto productUpdateDto);
     List<ProductListDto> getAllProductList();
     ProductDetailDto getProductDetail(Long productId);
-    List<ProductListDto> productSearch(String keyword);
+    List<ProductListDto> productSearch(String keyword, HttpServletRequest request);
 }

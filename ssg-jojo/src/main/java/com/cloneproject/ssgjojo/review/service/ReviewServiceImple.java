@@ -336,16 +336,4 @@ public class ReviewServiceImple implements IReviewService {
         return null;
     }
 
-//    @Override
-//    public Page<Review> pageList(Pageable pageable, Long productId) {
-//
-//        Optional<Product> product = iProductRepository.findById(productId);
-//        if(product.isPresent()) {
-//            Page<Review> reviewPage = iReviewRepository.findByProductOrderByCreatedDateAsc(product.get(), pageable);
-//            Long test=1L;
-//
-//            return reviewPage;
-//        }
-//        return null;
-//    }
 }

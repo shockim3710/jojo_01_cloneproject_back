@@ -11,6 +11,7 @@ import com.cloneproject.ssgjojo.categorylv4.domain.CategoryLv4;
 import com.cloneproject.ssgjojo.categorylv4.repository.ICategoryLv4Repository;
 import com.cloneproject.ssgjojo.categoryProductList.domain.CategoryProductList;
 import com.cloneproject.ssgjojo.categoryProductList.repository.ICategoryProductListRepository;
+import com.cloneproject.ssgjojo.jwt.JwtTokenProvider;
 import com.cloneproject.ssgjojo.product.domain.Product;
 import com.cloneproject.ssgjojo.product.dto.*;
 import com.cloneproject.ssgjojo.product.repository.IProductRepository;
@@ -27,12 +28,16 @@ import com.cloneproject.ssgjojo.productphoto.repository.IProductPhotoRepository;
 import com.cloneproject.ssgjojo.qna.domain.QnA;
 import com.cloneproject.ssgjojo.qna.dto.QnAOutputDto;
 import com.cloneproject.ssgjojo.qna.repository.IQnARepository;
+import com.cloneproject.ssgjojo.recentsearches.domain.RecentSearches;
+import com.cloneproject.ssgjojo.recentsearches.repository.IRecentSearchesRepository;
 import com.cloneproject.ssgjojo.review.domain.Review;
 import com.cloneproject.ssgjojo.review.dto.ReviewOutputDto;
 import com.cloneproject.ssgjojo.review.repository.IReviewRepository;
 import com.cloneproject.ssgjojo.reviewphoto.domain.ReviewPhoto;
 import com.cloneproject.ssgjojo.reviewphoto.dto.ReviewPhotoDto;
 import com.cloneproject.ssgjojo.reviewphoto.repository.IReviewPhotoRepository;
+import com.cloneproject.ssgjojo.user.domain.User;
+import com.cloneproject.ssgjojo.user.repository.IUserRepository;
 import com.cloneproject.ssgjojo.util.MultipartUtil;
 import com.cloneproject.ssgjojo.util.s3.AwsS3ResourceStorage;
 import com.cloneproject.ssgjojo.util.s3.FileInfoDto;
@@ -42,6 +47,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -64,6 +70,9 @@ public class ProductServiceImple implements IProductService {
     private final IReviewPhotoRepository iReviewPhotoRepository;
     private final IQnARepository iQnARepository;
     private final AwsS3ResourceStorage awsS3ResourceStorage;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final IUserRepository iUserRepository;
+    private final IRecentSearchesRepository iRecentSearchesRepository;
 
 
     
@@ -612,7 +621,21 @@ public class ProductServiceImple implements IProductService {
 
     // 상품 검색
     @Override
-    public List<ProductListDto> productSearch(String keyword) {
+    public List<ProductListDto> productSearch(String keyword, HttpServletRequest request) {
+
+        // Request 헤더에서 Authorization에 대한 설정이 있을 경우
+        // 최근 본 상품에 등록
+        if(request.getHeader("Authorization") != null) {
+            Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
+            Optional<User> user = iUserRepository.findById(userId);
+
+            if(user.isPresent())
+                iRecentSearchesRepository.save(RecentSearches.builder()
+                        .histories(keyword)
+                        .user(user.get())
+                        .build());
+
+        }
 
         List<Product> productList = iProductRepository.findByProductNameContaining(keyword);
         List<ProductListDto> productListDtoList = new ArrayList<>();

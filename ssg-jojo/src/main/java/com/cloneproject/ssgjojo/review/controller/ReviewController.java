@@ -81,18 +81,8 @@ public class ReviewController {
         iReviewService.deleteReview(reviewDeleteDto, request);
     }
 
-    // review 페이징
-//    @GetMapping("/review/paging/{productId}")
-//    public Page<Review> reviewPage(@RequestParam int page, @RequestParam int size, @PathVariable Long productId) {
-////        PageRequest pr = PageRequest.of(page, size, Sort.by("id").descending());
-//        Pageable pr = PageRequest.of(page, size);
-//        return iReviewService.pageList(pr, productId);
-//
-//    }
-
     @GetMapping("/review/paging/{productId}")
     public ResponseEntity<List<Review>> reviewPage(@RequestParam int page, @RequestParam int size, @PathVariable Long productId) {
-//        PageRequest pr = PageRequest.of(page, size, Sort.by("id").descending());
         Pageable pr = PageRequest.of(page, size);
 
         log.info("page = {} , size = {}", page, size);
