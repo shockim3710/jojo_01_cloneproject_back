@@ -70,6 +70,7 @@ public class UserServiceImple implements IUserService{
                         .whetherDefaultAddress(userSignupDto.isWhetherDefaultAddress())
                         .whetherOnlyThisTime(userSignupDto.isWhetherOnlyThisTime())
                         .receiveName(userSignupDto.getName())
+                        .zipCode(userSignupDto.getZipCode())
                         .addressName(userSignupDto.getAddressName())
                         .build());
 

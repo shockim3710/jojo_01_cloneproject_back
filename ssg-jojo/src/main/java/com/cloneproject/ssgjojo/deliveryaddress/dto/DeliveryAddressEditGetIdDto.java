@@ -18,6 +18,7 @@ public class DeliveryAddressEditGetIdDto {
     private boolean whetherOnlyThisTime; // 이번만배송지 여부 (배송지 수정)
     private String addressName; // 주소별칭
     private String receiveName; // 받는분
+    private String zipCode; // 우편번호
 
     private Long user;
 }

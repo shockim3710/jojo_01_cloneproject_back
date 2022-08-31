@@ -68,7 +68,7 @@ public class OrdersServiceImple implements IOrdersService{
 
                 ordersProductListAddDto.setWhetherRefund(false);
 
-                productOption.get().setStock(productOption.get().getStock()-1);
+
 
                 OrdersProductList temp = iOrdersProductListRepository.save(OrdersProductList.builder()
                         .count(ordersProductListAddDto.getCount())
@@ -90,6 +90,8 @@ public class OrdersServiceImple implements IOrdersService{
                         .orders(orders.getId())
                         .build()
                 );
+
+                productOption.get().setStock(productOption.get().getStock() - temp.getCount());
             }
 
             return OrdersAddDto.builder()

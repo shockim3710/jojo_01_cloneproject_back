@@ -21,7 +21,7 @@ public interface ICartProductListRepository extends JpaRepository<CartProductLis
 //            "where ct.categoryLv1.id =:categoryLv1")
 //    List<Product> findByCategoryLv1id(@Param("categoryLv1") Long categoryLv1);
 
-    @Query("select ct.productOption from CartProductList ct " +
+    @Query("select ct from CartProductList ct " +
             "where ct.productOption.id = :optionId " +
             "and ct.cart.user.id = :user ")
     List<CartProductList> findTest(@Param("optionId") Long optionId, @Param("user") Long user);

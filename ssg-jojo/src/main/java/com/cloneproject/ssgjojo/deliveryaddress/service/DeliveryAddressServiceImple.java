@@ -34,6 +34,7 @@ public class DeliveryAddressServiceImple implements IDeliveryAddressService {
                     .whetherOnlyThisTime(deliveryAddressAddDto.isWhetherOnlyThisTime())
                     .receiveName(deliveryAddressAddDto.getReceiveName())
                     .address(deliveryAddressAddDto.getAddressName())
+                    .zipCode(deliveryAddressAddDto.getZipCode())
                     .user(user.get())
                     .build());
 
@@ -43,6 +44,7 @@ public class DeliveryAddressServiceImple implements IDeliveryAddressService {
                     .whetherOnlyThisTime(temp.isWhetherOnlyThisTime())
                     .receiveName(temp.getReceiveName())
                     .addressName(temp.getAddressName())
+                    .zipCode(temp.getZipCode())
                     .user(temp.getUser().getId())
                     .build();
         }
@@ -66,6 +68,7 @@ public class DeliveryAddressServiceImple implements IDeliveryAddressService {
                         .whetherOnlyThisTime(user.isWhetherOnlyThisTime())
                         .addressName(user.getAddressName())
                         .receiveName(user.getReceiveName())
+                        .zipCode(user.getZipCode())
                         .user(user.getUser().getId())
                         .build());
 
@@ -90,6 +93,7 @@ public class DeliveryAddressServiceImple implements IDeliveryAddressService {
                     .whetherOnlyThisTime(deliveryAddressEditGetIdDto.isWhetherOnlyThisTime())
                     .addressName(deliveryAddressEditGetIdDto.getAddressName())
                     .receiveName(deliveryAddressEditGetIdDto.getReceiveName())
+                    .zipCode(deliveryAddressEditGetIdDto.getZipCode())
                     .user(iUserRepository.findById(deliveryAddressEditGetIdDto.getUser()).get())
                     .build());
 
@@ -100,6 +104,7 @@ public class DeliveryAddressServiceImple implements IDeliveryAddressService {
                     .whetherOnlyThisTime(temp.isWhetherOnlyThisTime())
                     .addressName(temp.getAddressName())
                     .receiveName(temp.getReceiveName())
+                    .zipCode(temp.getZipCode())
                     .user(temp.getUser().getId())
                     .build();
         }

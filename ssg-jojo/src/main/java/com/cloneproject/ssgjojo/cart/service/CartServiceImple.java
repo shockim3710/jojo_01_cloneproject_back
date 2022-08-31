@@ -8,8 +8,10 @@ import com.cloneproject.ssgjojo.cartproductlist.domain.CartProductList;
 import com.cloneproject.ssgjojo.cartproductlist.dto.CartProductListAddDto;
 import com.cloneproject.ssgjojo.cartproductlist.dto.CartProductListGetIdEditDto;
 import com.cloneproject.ssgjojo.cartproductlist.repository.ICartProductListRepository;
+import com.cloneproject.ssgjojo.coupon.domain.Coupon;
 import com.cloneproject.ssgjojo.deliveryaddress.domain.DeliveryAddress;
 import com.cloneproject.ssgjojo.deliveryaddress.repository.IDeliveryAddressRepository;
+import com.cloneproject.ssgjojo.jwt.JwtTokenProvider;
 import com.cloneproject.ssgjojo.orders.domain.Orders;
 import com.cloneproject.ssgjojo.orders.dto.OrdersAddDto;
 import com.cloneproject.ssgjojo.orders.dto.OrdersEditGetAllDto;
@@ -28,7 +30,9 @@ import com.cloneproject.ssgjojo.user.repository.IUserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -45,18 +49,21 @@ public class CartServiceImple implements ICartService {
     private final IDeliveryAddressRepository iDeliveryAddressRepository;
 
     private final ICartProductListRepository iCartProductListRepository;
+    private final JwtTokenProvider jwtTokenProvider;
+
 
 
     @Override
-    public CartAddDto addCart(CartAddDto cartAddDto) {
-        Optional<User> user = iUserRepository.findById(cartAddDto.getUser());
-        Optional<DeliveryAddress> deliveryAddress = iDeliveryAddressRepository.findById(cartAddDto.getDeliveryAddress());
+    @Transactional
+    public CartAddDto addCart(CartAddDto cartAddDto, HttpServletRequest request) {
+        String userId = jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request));
 
-        if(user.isPresent() && deliveryAddress.isPresent()) {
+        Optional<User> user = iUserRepository.findById(Long.valueOf(userId));
+
+        if(user.isPresent()) {
 
             Cart cart = iCartRepository.save(Cart.builder()
                             .user(user.get())
-                            .deliveryAddress(deliveryAddress.get())
                             .build());
 
             List<CartProductListAddDto> listAddDto = new ArrayList<>();
@@ -66,11 +73,7 @@ public class CartServiceImple implements ICartService {
 
                 List<CartProductList> tmp = iCartProductListRepository.findTest(productOption.get().getId(), user.get().getId());
 
-                if(tmp.size() != 0) {
-                    CartProductList cpl = tmp.get(0);
-                    cpl.setCartCount(cpl.getCartCount() + cartProductListAddDto.getCartCount());
-                }
-                else {
+                if(tmp.size() == 0) {
                     CartProductList temp = iCartProductListRepository.save(CartProductList.builder()
                             .cartCount(cartProductListAddDto.getCartCount())
                             .cart(cart)
@@ -94,12 +97,13 @@ public class CartServiceImple implements ICartService {
                             .stock(temp.getProductOption().getStock())
                             .build());
                 }
+                else {
+                    CartProductList cpl = tmp.get(0);
+                    cpl.setCartCount(cpl.getCartCount() + cartProductListAddDto.getCartCount());
+                }
             }
 
             return CartAddDto.builder()
-                    .user(user.get().getId())
-                    .deliveryAddress(deliveryAddress.get().getId())
-                    .address(deliveryAddress.get().getAddress())
                     .cartProductListAddDtoList(listAddDto)
                     .build();
         }
@@ -108,70 +112,72 @@ public class CartServiceImple implements ICartService {
     }
 
     @Override
-    public List<CartEditGetIdDto> getCartByUserId(Long id) {
-        Optional<User> userOptional = iUserRepository.findById(id);
+    public List<CartProductListGetIdEditDto> getCartByUserId(HttpServletRequest request) {
+
+        String userId = jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request));
+        Optional<User> userOptional = iUserRepository.findById(Long.valueOf(userId));
 
         if(userOptional.isPresent()) {
 
-            List<Cart> cartList = iCartRepository.findAllByUser(userOptional.get());
-            List<CartEditGetIdDto> cartEditGetIdDtoList = new ArrayList<>();
+            Optional<Cart> cartOptional = iCartRepository.findByUserId(userOptional.get().getId());
 
-            cartList.forEach(user -> {
+            if(cartOptional.isPresent()) {
 
-                Optional<Cart> cartOptional = iCartRepository.findById(user.getId());
+                List<CartProductList> cartProductLists = iCartProductListRepository.findAllByCart(cartOptional.get());
+                List<CartProductListGetIdEditDto> listGetIdDto = new ArrayList<>();
 
-//                if(cartOptional.isPresent()) {
-                    List<CartProductList> cartProductLists = iCartProductListRepository.findAllByCart(cartOptional.get());
-                    List<CartProductListGetIdEditDto> listGetIdDto = new ArrayList<>();
+                cartProductLists.forEach(cart -> {
+                    Product product = cart.getProduct();
+                    Long newPrice = 0L;
+                    Long oldPrice = 0L;
+                    int discountRate = product.getDiscountRate();
 
-                    cartProductLists.forEach(cart -> {
-                        Product product = cart.getProduct();
-                        Long newPrice = 0L;
-                        Long oldPrice = 0L;
-                        int discountRate = product.getDiscountRate();
+                    if(discountRate != 0) {
+                        oldPrice = product.getPrice();
+                        newPrice = (long) ((float) oldPrice * (1 - ((float) discountRate /100 )));
+                    }
+                    else
+                        newPrice= product.getPrice();
 
-                        if(discountRate != 0) {
-                            oldPrice = product.getPrice();
-                            newPrice = (long) ((float) oldPrice * (1 - ((float) discountRate /100 )));
-                        }
-                        else
-                            newPrice= product.getPrice();
+                    listGetIdDto.add(CartProductListGetIdEditDto.builder()
+                            .id(cart.getId())
+                            .cartCount(cart.getCartCount())
+                            .cart(cart.getCart().getId())
+                            .product(cart.getProduct().getId())
+                            .productName(cart.getProduct().getProductName())
+                            .manufactureCompany(cart.getProduct().getManufactureCompany())
+                            .thumbnail(cart.getProduct().getThumbnail())
+                            .newPrice(newPrice)
+                            .oldPrice(oldPrice)
+                            .discountRate(cart.getProduct().getDiscountRate())
+                            .fee(cart.getProduct().getFee())
+                            .productOption(cart.getProductOption().getId())
+                            .productOption1Contents(cart.getProductOption().getProductOption1Contents())
+                            .productOption2Contents(cart.getProductOption().getProductOption2Contents())
+                            .stock(cart.getProductOption().getStock())
+                            .build());
+                });
 
-
-
-                        listGetIdDto.add(CartProductListGetIdEditDto.builder()
-                                        .id(cart.getId())
-                                        .cartCount(cart.getCartCount())
-                                        .cart(cart.getCart().getId())
-                                        .product(cart.getProduct().getId())
-                                        .productName(cart.getProduct().getProductName())
-                                        .manufactureCompany(cart.getProduct().getManufactureCompany())
-                                        .thumbnail(cart.getProduct().getThumbnail())
-                                        .newPrice(newPrice)
-                                        .oldPrice(oldPrice)
-                                        .discountRate(cart.getProduct().getDiscountRate())
-                                        .fee(cart.getProduct().getFee())
-                                        .productOption(cart.getProductOption().getId())
-                                        .productOption1Contents(cart.getProductOption().getProductOption1Contents())
-                                        .productOption2Contents(cart.getProductOption().getProductOption2Contents())
-                                        .stock(cart.getProductOption().getStock())
-                                        .build());
-                    });
-//                }
-
-                cartEditGetIdDtoList.add(CartEditGetIdDto.builder()
-                                .id(user.getId())
-                                .user(user.getUser().getId())
-                                .deliveryAddress(user.getDeliveryAddress().getId())
-                                .address(user.getDeliveryAddress().getAddress())
-                                .cartProductListGetIdEditDtoList(listGetIdDto)
-                                .build());
-            });
-
-            return cartEditGetIdDtoList;
+                return listGetIdDto;
+            }
         }
 
         return null;
+    }
+
+    @Override
+    @Transactional
+    public CartProductList editCart(CartProductListGetIdEditDto cartProductListGetIdEditDto) {
+
+        Optional<CartProductList> cartProductListOptional = iCartProductListRepository.findById(cartProductListGetIdEditDto.getId());
+
+        if(cartProductListGetIdEditDto.getPlma().equals("plus")) {
+            cartProductListOptional.get().setCartCount(cartProductListOptional.get().getCartCount() + 1);
+        } else if (cartProductListGetIdEditDto.getPlma().equals("minus")) {
+            cartProductListOptional.get().setCartCount(cartProductListOptional.get().getCartCount() - 1);
+        }
+
+        return cartProductListOptional.get();
     }
 
 //    @Override
