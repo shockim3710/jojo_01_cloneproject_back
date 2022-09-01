@@ -1,5 +1,6 @@
 package com.cloneproject.ssgjojo.recentsearches.service;
 
+import com.cloneproject.ssgjojo.jwt.JwtTokenProvider;
 import com.cloneproject.ssgjojo.recentsearches.domain.RecentSearches;
 import com.cloneproject.ssgjojo.recentsearches.dto.RecentSearchesAddDto;
 import com.cloneproject.ssgjojo.recentsearches.dto.RecentSearchesDto;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -21,10 +23,12 @@ public class RecentSearchesServiceImple implements IRecentSearchesService {
 
     private final IRecentSearchesRepository iRecentSearchesRepository;
     private final IUserRepository iUserRepository;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Override
-    public RecentSearchesAddDto addRecentSearches(RecentSearchesAddDto recentSearchesAddDto) { // 최근검색어 추가
-        Optional<User> user = iUserRepository.findById(recentSearchesAddDto.getUser());
+    public RecentSearchesAddDto addRecentSearches(RecentSearchesAddDto recentSearchesAddDto, HttpServletRequest request) { // 최근검색어 추가
+        Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
+        Optional<User> user = iUserRepository.findById(userId);
 
         if(user.isPresent()) {
             RecentSearches temp = iRecentSearchesRepository.save(RecentSearches.builder()
@@ -42,8 +46,9 @@ public class RecentSearchesServiceImple implements IRecentSearchesService {
     }
 
     @Override
-    public List<RecentSearchesDto> getRecentSearchesByUserId(Long id) { // 해당 사용자의 최근검색어 조회
-        Optional<User> userOptional = iUserRepository.findById(id);
+    public List<RecentSearchesDto> getRecentSearchesByUserId(HttpServletRequest request) { // 해당 사용자의 최근검색어 조회
+        Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
+        Optional<User> userOptional = iUserRepository.findById(userId);
 
         if(userOptional.isPresent()) {
             List<RecentSearches> recentSearchesList = iRecentSearchesRepository.findAllByUser(userOptional.get());
@@ -53,7 +58,6 @@ public class RecentSearchesServiceImple implements IRecentSearchesService {
                 recentSearchesDtoList.add(RecentSearchesDto.builder()
                         .id(user.getId())
                         .histories(user.getHistories())
-                        .user(user.getUser().getId())
                         .build());
             });
 

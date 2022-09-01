@@ -6,6 +6,7 @@ import com.cloneproject.ssgjojo.recentsearches.service.IRecentSearchesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
@@ -17,13 +18,13 @@ public class RecentSearchesController {
     private final IRecentSearchesService iRecentSearchesService;
 
     @PostMapping("/recentsearches/add") // 최근검색어 추가
-    public RecentSearchesAddDto addRecentSearches(@RequestBody RecentSearchesAddDto recentSearchesAddDto) {
-        return iRecentSearchesService.addRecentSearches(recentSearchesAddDto);
+    public RecentSearchesAddDto addRecentSearches(@RequestBody RecentSearchesAddDto recentSearchesAddDto, HttpServletRequest request) {
+        return iRecentSearchesService.addRecentSearches(recentSearchesAddDto, request);
     }
 
-    @GetMapping("/recentsearches/get/{id}") // 해당 사용자의 최근검색어 조회
-    public List<RecentSearchesDto> getRecentSearches(@PathVariable Long id) {
-        return iRecentSearchesService.getRecentSearchesByUserId(id);
+    @GetMapping("/recentsearches/get") // 해당 사용자의 최근검색어 조회
+    public List<RecentSearchesDto> getRecentSearches(HttpServletRequest request) {
+        return iRecentSearchesService.getRecentSearchesByUserId(request);
     }
 
     @DeleteMapping("/recentsearches/delete/{id}") // 해당 사용자의 최근검색어 삭제

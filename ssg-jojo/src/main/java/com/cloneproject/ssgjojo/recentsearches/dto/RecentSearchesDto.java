@@ -12,6 +12,4 @@ import lombok.NoArgsConstructor;
 public class RecentSearchesDto {
     private Long id;
     private String histories; // 최근검색어
-
-    private Long user;
 }

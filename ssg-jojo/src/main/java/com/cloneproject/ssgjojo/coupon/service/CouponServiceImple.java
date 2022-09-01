@@ -5,12 +5,14 @@ import com.cloneproject.ssgjojo.coupon.dto.CouponAddDto;
 import com.cloneproject.ssgjojo.coupon.dto.CouponUseGetIdDto;
 import com.cloneproject.ssgjojo.coupon.repository.ICouponRepository;
 import com.cloneproject.ssgjojo.exceptionoutput.CouponException;
+import com.cloneproject.ssgjojo.jwt.JwtTokenProvider;
 import com.cloneproject.ssgjojo.user.domain.User;
 import com.cloneproject.ssgjojo.user.repository.IUserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,10 +25,12 @@ public class CouponServiceImple implements ICouponService {
 
     private final ICouponRepository iCouponRepository;
     private final IUserRepository iUserRepository;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Override
-    public CouponAddDto addCoupon(CouponAddDto couponAddDto) {
-        Optional<User> user = Optional.ofNullable(iUserRepository.findById(couponAddDto.getUser()).orElseThrow(CouponException::new));
+    public CouponAddDto addCoupon(CouponAddDto couponAddDto, HttpServletRequest request) {
+        Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
+        Optional<User> user = Optional.ofNullable(iUserRepository.findById(userId).orElseThrow(CouponException::new));
 //        Optional<User> user = iUserRepository.findById(couponAddDto.getUser());
         if (user.isPresent()) {
 
@@ -63,8 +67,9 @@ public class CouponServiceImple implements ICouponService {
     }
 
     @Override
-    public List<CouponUseGetIdDto> getCouponByUserId(Long id) {
-        Optional<User> userOptional = Optional.ofNullable(iUserRepository.findById(id).orElseThrow(CouponException::new));
+    public List<CouponUseGetIdDto> getCouponByUserId(HttpServletRequest request) {
+        Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
+        Optional<User> userOptional = Optional.ofNullable(iUserRepository.findById(userId).orElseThrow(CouponException::new));
 
         if(userOptional.isPresent()) {
             List<Coupon> couponList = iCouponRepository.findAllByUser(userOptional.get());
@@ -82,7 +87,6 @@ public class CouponServiceImple implements ICouponService {
                                 .bargainPercent(user.getBargainPercent())
                                 .useOverPrice(user.getUseOverPrice())
                                 .maxUsePrice(user.getMaxUsePrice())
-                                .user(user.getUser().getId())
                                 .build());
             });
 
