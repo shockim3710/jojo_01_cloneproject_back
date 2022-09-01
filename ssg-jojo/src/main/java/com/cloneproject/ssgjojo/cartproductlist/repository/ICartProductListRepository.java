@@ -4,6 +4,7 @@ import com.cloneproject.ssgjojo.cart.domain.Cart;
 import com.cloneproject.ssgjojo.cartproductlist.domain.CartProductList;
 import com.cloneproject.ssgjojo.orders.domain.Orders;
 import com.cloneproject.ssgjojo.product.domain.Product;
+import com.cloneproject.ssgjojo.user.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -14,7 +15,8 @@ import java.util.Optional;
 public interface ICartProductListRepository extends JpaRepository<CartProductList, Long> {
 
     List<CartProductList> findAllByCart(Cart cart);
-    Optional<CartProductList> findByCartId(Long cartId);
+    List<CartProductList> findByCartId(Long cartId);
+
 
 
 //    @Query("select ct.product from CategoryProductList ct " +

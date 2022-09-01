@@ -258,7 +258,7 @@ public class CartServiceImple implements ICartService {
         if(cartProductList.isPresent()) {
             iCartProductListRepository.deleteById(id);
 
-            Optional<CartProductList> cartProductListOptional = iCartProductListRepository.findByCartId(cartProductList.get().getCart().getId());
+            List<CartProductList> cartProductListOptional = iCartProductListRepository.findByCartId(cartProductList.get().getCart().getId());
 
             if(cartProductListOptional.isEmpty()) {
                 iCartRepository.deleteById(cartProductList.get().getCart().getId());
