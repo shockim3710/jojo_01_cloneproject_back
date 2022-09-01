@@ -54,7 +54,7 @@ public class CartController {
 
     @DeleteMapping("/cart/deleteall/{id}")
     public void deleteCartAll(@PathVariable Long id) {
-        iCartService.deleteCart(id);
+        iCartService.deleteCartAll(id);
     }
 
 }

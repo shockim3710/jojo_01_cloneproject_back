@@ -4,12 +4,14 @@ import com.cloneproject.ssgjojo.deliveryaddress.domain.DeliveryAddress;
 import com.cloneproject.ssgjojo.deliveryaddress.dto.DeliveryAddressAddDto;
 import com.cloneproject.ssgjojo.deliveryaddress.dto.DeliveryAddressEditGetIdDto;
 import com.cloneproject.ssgjojo.deliveryaddress.repository.IDeliveryAddressRepository;
+import com.cloneproject.ssgjojo.jwt.JwtTokenProvider;
 import com.cloneproject.ssgjojo.user.domain.User;
 import com.cloneproject.ssgjojo.user.repository.IUserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -21,10 +23,13 @@ public class DeliveryAddressServiceImple implements IDeliveryAddressService {
 
     private final IDeliveryAddressRepository iDeliveryAddressRepository;
     private final IUserRepository iUserRepository;
+    private final JwtTokenProvider jwtTokenProvider;
+
 
     @Override
-    public DeliveryAddressAddDto addDeliveryAddress(DeliveryAddressAddDto deliveryAddressAddDto) { // 배송지 추가
-        Optional<User> user = iUserRepository.findById(deliveryAddressAddDto.getUser());
+    public DeliveryAddressAddDto addDeliveryAddress(DeliveryAddressAddDto deliveryAddressAddDto, HttpServletRequest request) { // 배송지 추가
+        Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
+        Optional<User> user = iUserRepository.findById(userId);
 
         if (user.isPresent()) {
 
@@ -33,7 +38,7 @@ public class DeliveryAddressServiceImple implements IDeliveryAddressService {
                     .whetherDefaultAddress(deliveryAddressAddDto.isWhetherDefaultAddress())
                     .whetherOnlyThisTime(deliveryAddressAddDto.isWhetherOnlyThisTime())
                     .receiveName(deliveryAddressAddDto.getReceiveName())
-                    .address(deliveryAddressAddDto.getAddressName())
+                    .addressName(deliveryAddressAddDto.getAddressName())
                     .zipCode(deliveryAddressAddDto.getZipCode())
                     .user(user.get())
                     .build());
@@ -53,8 +58,10 @@ public class DeliveryAddressServiceImple implements IDeliveryAddressService {
     }
 
     @Override
-    public List<DeliveryAddressEditGetIdDto> getDeliveryAddressByUserId(Long id) { // 해당 사용자의 배송지 조회
-        Optional<User> userOptional = iUserRepository.findById(id);
+    public List<DeliveryAddressEditGetIdDto> getDeliveryAddressByUserId(HttpServletRequest request) { // 해당 사용자의 배송지 조회
+        Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
+
+        Optional<User> userOptional = iUserRepository.findById(userId);
 
         if(userOptional.isPresent()) {
             List<DeliveryAddress> deliveryAddressList = iDeliveryAddressRepository.findAllByUser(userOptional.get());
@@ -81,9 +88,11 @@ public class DeliveryAddressServiceImple implements IDeliveryAddressService {
     }
 
     @Override
-    public DeliveryAddressEditGetIdDto editDeliveryAddress(DeliveryAddressEditGetIdDto deliveryAddressEditGetIdDto) { // 배송지 수정
+    public DeliveryAddressEditGetIdDto editDeliveryAddress(DeliveryAddressEditGetIdDto deliveryAddressEditGetIdDto, HttpServletRequest request) { // 배송지 수정
+        Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
+
         Optional<DeliveryAddress> deliveryAddress = iDeliveryAddressRepository.findById(deliveryAddressEditGetIdDto.getId());
-        Optional<User> user = iUserRepository.findById(deliveryAddressEditGetIdDto.getId());
+        Optional<User> user = iUserRepository.findById(userId);
 
         if(deliveryAddress.isPresent() && user.isPresent()) {
             DeliveryAddress temp = iDeliveryAddressRepository.save(DeliveryAddress.builder()
@@ -94,7 +103,7 @@ public class DeliveryAddressServiceImple implements IDeliveryAddressService {
                     .addressName(deliveryAddressEditGetIdDto.getAddressName())
                     .receiveName(deliveryAddressEditGetIdDto.getReceiveName())
                     .zipCode(deliveryAddressEditGetIdDto.getZipCode())
-                    .user(iUserRepository.findById(deliveryAddressEditGetIdDto.getUser()).get())
+                    .user(user.get())
                     .build());
 
             return DeliveryAddressEditGetIdDto.builder()

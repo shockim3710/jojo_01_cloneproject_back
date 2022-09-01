@@ -62,12 +62,11 @@ public class CartServiceImple implements ICartService {
 
             if(!tempCart.isPresent()) {
                 cart = iCartRepository.save(Cart.builder()
-                                .user(user.get())
+                        .user(user.get())
                         .build());
-            }
-            else
+            } else {
                 cart = tempCart.get();
-
+            }
 
             List<CartProductListAddDto> listAddDto = new ArrayList<>();
             for(CartProductListAddDto cartProductListAddDto : cartAddDto.getCartProductListAddDtoList()) {

@@ -19,6 +19,5 @@ public class DeliveryAddressAddDto {
     private String receiveName; // 받는분
     private String zipCode; // 우편번호
 
-
     private Long user;
 }

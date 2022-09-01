@@ -6,6 +6,7 @@ import com.cloneproject.ssgjojo.deliveryaddress.service.IDeliveryAddressService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
@@ -17,19 +18,19 @@ public class DeliveryAddressController {
     private final IDeliveryAddressService iDeliveryAddressService;
 
     @PostMapping("/deliveryaddress/add") // 배송지 추가
-    public DeliveryAddressAddDto addDeliveryAddress(@RequestBody DeliveryAddressAddDto deliveryAddressAddDto) {
-        return iDeliveryAddressService.addDeliveryAddress(deliveryAddressAddDto);
+    public DeliveryAddressAddDto addDeliveryAddress(@RequestBody DeliveryAddressAddDto deliveryAddressAddDto, HttpServletRequest request) {
+        return iDeliveryAddressService.addDeliveryAddress(deliveryAddressAddDto, request);
     }
 
 
-    @GetMapping("/deliveryaddress/get/{id}") // 해당 사용자의 배송지 조회
-    public List<DeliveryAddressEditGetIdDto> getDeliveryAddress(@PathVariable Long id) {
-        return iDeliveryAddressService.getDeliveryAddressByUserId(id);
+    @GetMapping("/deliveryaddress/get") // 해당 사용자의 배송지 조회
+    public List<DeliveryAddressEditGetIdDto> getDeliveryAddress(HttpServletRequest request) {
+        return iDeliveryAddressService.getDeliveryAddressByUserId(request);
     }
 
     @PutMapping("/deliveryaddress/edit") // 배송지 수정
-    public DeliveryAddressEditGetIdDto editDeliveryAddress(@RequestBody DeliveryAddressEditGetIdDto deliveryAddressEditGetIdDto) {
-        return iDeliveryAddressService.editDeliveryAddress(deliveryAddressEditGetIdDto);
+    public DeliveryAddressEditGetIdDto editDeliveryAddress(@RequestBody DeliveryAddressEditGetIdDto deliveryAddressEditGetIdDto, HttpServletRequest request) {
+        return iDeliveryAddressService.editDeliveryAddress(deliveryAddressEditGetIdDto, request);
     }
 
     @DeleteMapping("/deliveryaddress/delete/{id}") // 해당 사용자의 배송지 삭제
