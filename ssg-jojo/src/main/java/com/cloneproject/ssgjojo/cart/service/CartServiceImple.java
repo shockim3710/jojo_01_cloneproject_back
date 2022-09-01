@@ -46,38 +46,41 @@ public class CartServiceImple implements ICartService {
     private final IUserRepository iUserRepository;
     private final IProductRepository iProductRepository;
     private final IProductOptionRepository iProductOptionRepository;
-    private final IDeliveryAddressRepository iDeliveryAddressRepository;
-
     private final ICartProductListRepository iCartProductListRepository;
     private final JwtTokenProvider jwtTokenProvider;
 
-
-
     @Override
     @Transactional
-    public CartAddDto addCart(CartAddDto cartAddDto, HttpServletRequest request) {
-        String userId = jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request));
+    public List<CartProductListAddDto> addCart(CartAddDto cartAddDto, HttpServletRequest request) {
+        Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
 
         Optional<User> user = iUserRepository.findById(Long.valueOf(userId));
 
         if(user.isPresent()) {
+            Optional<Cart> tempCart = iCartRepository.findByUserId(userId);
+            Cart cart = new Cart();
 
-            Cart cart = iCartRepository.save(Cart.builder()
-                            .user(user.get())
-                            .build());
+            if(!tempCart.isPresent()) {
+                cart = iCartRepository.save(Cart.builder()
+                                .user(user.get())
+                        .build());
+            }
+            else
+                cart = tempCart.get();
+
 
             List<CartProductListAddDto> listAddDto = new ArrayList<>();
             for(CartProductListAddDto cartProductListAddDto : cartAddDto.getCartProductListAddDtoList()) {
                 Optional<Product> product = iProductRepository.findById(cartProductListAddDto.getProduct());
                 Optional<ProductOption> productOption = iProductOptionRepository.findById(cartProductListAddDto.getProductOption());
 
-                List<CartProductList> tmp = iCartProductListRepository.findTest(productOption.get().getId(), user.get().getId());
+                List<CartProductList> tmp = iCartProductListRepository.findProductOptionIdAndCartId(productOption.get().getId(), cart.getId());
 
                 if(tmp.size() == 0) {
                     CartProductList temp = iCartProductListRepository.save(CartProductList.builder()
                             .cartCount(cartProductListAddDto.getCartCount())
-                            .cart(cart)
                             .product(product.get())
+                            .cart(cart)
                             .productOption(productOption.get())
                             .build());
 
@@ -103,9 +106,7 @@ public class CartServiceImple implements ICartService {
                 }
             }
 
-            return CartAddDto.builder()
-                    .cartProductListAddDtoList(listAddDto)
-                    .build();
+            return listAddDto;
         }
 
         return null;

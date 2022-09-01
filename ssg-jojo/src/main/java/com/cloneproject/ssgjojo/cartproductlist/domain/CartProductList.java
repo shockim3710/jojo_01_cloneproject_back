@@ -1,7 +1,6 @@
 package com.cloneproject.ssgjojo.cartproductlist.domain;
 
 import com.cloneproject.ssgjojo.cart.domain.Cart;
-import com.cloneproject.ssgjojo.orders.domain.Orders;
 import com.cloneproject.ssgjojo.product.domain.Product;
 import com.cloneproject.ssgjojo.productoption.domain.ProductOption;
 import lombok.AllArgsConstructor;

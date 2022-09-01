@@ -5,6 +5,7 @@ import com.cloneproject.ssgjojo.cart.dto.CartAddDto;
 import com.cloneproject.ssgjojo.cart.dto.CartEditGetIdDto;
 import com.cloneproject.ssgjojo.cart.service.ICartService;
 import com.cloneproject.ssgjojo.cartproductlist.domain.CartProductList;
+import com.cloneproject.ssgjojo.cartproductlist.dto.CartProductListAddDto;
 import com.cloneproject.ssgjojo.cartproductlist.dto.CartProductListGetIdEditDto;
 import com.cloneproject.ssgjojo.coupon.domain.Coupon;
 import com.cloneproject.ssgjojo.orders.domain.Orders;
@@ -27,7 +28,7 @@ public class CartController {
     private final ICartService iCartService;
 
     @PostMapping("/cart/add")
-    public CartAddDto addCart(@RequestBody CartAddDto cartAddDto, HttpServletRequest request) {
+    public List<CartProductListAddDto> addCart(@RequestBody CartAddDto cartAddDto, HttpServletRequest request) {
         return iCartService.addCart(cartAddDto, request);
     }
 
