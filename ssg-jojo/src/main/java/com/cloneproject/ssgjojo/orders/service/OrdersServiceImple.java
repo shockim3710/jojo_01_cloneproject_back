@@ -2,6 +2,7 @@ package com.cloneproject.ssgjojo.orders.service;
 
 import com.cloneproject.ssgjojo.deliveryaddress.domain.DeliveryAddress;
 import com.cloneproject.ssgjojo.deliveryaddress.repository.IDeliveryAddressRepository;
+import com.cloneproject.ssgjojo.jwt.JwtTokenProvider;
 import com.cloneproject.ssgjojo.orders.domain.Orders;
 import com.cloneproject.ssgjojo.orders.dto.OrdersAddDto;
 import com.cloneproject.ssgjojo.orders.dto.OrdersEditGetAllDto;
@@ -22,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -38,11 +40,13 @@ public class OrdersServiceImple implements IOrdersService{
     private final IDeliveryAddressRepository iDeliveryAddressRepository;
 
     private final IOrdersProductListRepository iOrdersProductListRepository;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Override
     @Transactional
-    public OrdersAddDto addOrders(OrdersAddDto ordersAddDto) {
-        Optional<User> user = iUserRepository.findById(ordersAddDto.getUser());
+    public OrdersAddDto addOrders(OrdersAddDto ordersAddDto, HttpServletRequest request) {
+        Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
+        Optional<User> user = iUserRepository.findById(userId);
         Optional<DeliveryAddress> deliveryAddress = iDeliveryAddressRepository.findById(ordersAddDto.getDeliveryAddress());
 
         if (user.isPresent() && deliveryAddress.isPresent()) {
@@ -103,11 +107,11 @@ public class OrdersServiceImple implements IOrdersService{
                     .deliveryDate(orders.getDeliveryDate())
                     .deliveryRequest(orders.getDeliveryRequest())
                     .user(user.get().getId())
-                    .name(user.get().getName())
-                    .phone(user.get().getPhone())
-                    .email(user.get().getEmail())
                     .deliveryAddress(deliveryAddress.get().getId())
                     .address(deliveryAddress.get().getAddress())
+                    .addressName(deliveryAddress.get().getAddressName())
+                    .receiveName(deliveryAddress.get().getReceiveName())
+                    .zipCode(deliveryAddress.get().getZipCode())
                     .ordersProductListAddDtoList(listAddDto)
                     .build();
         }
@@ -116,9 +120,9 @@ public class OrdersServiceImple implements IOrdersService{
     }
 
     @Override
-    public List<OrdersGetIdDto> getOrdersByUserId(Long id) {
-
-        Optional<User> userOptional = iUserRepository.findById(id);
+    public List<OrdersGetIdDto> getOrdersByUserId(HttpServletRequest request) {
+        Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
+        Optional<User> userOptional = iUserRepository.findById(userId);
 
         if (userOptional.isPresent()) {
 
@@ -164,6 +168,9 @@ public class OrdersServiceImple implements IOrdersService{
                         .user(user.getUser().getId())
                         .deliveryAddress(user.getDeliveryAddress().getId())
                         .address(user.getDeliveryAddress().getAddress())
+                        .addressName(user.getDeliveryAddress().getAddressName())
+                        .receiveName(user.getDeliveryAddress().getReceiveName())
+                        .zipCode(user.getDeliveryAddress().getZipCode())
                         .ordersProductListGetIdDtoListEdit(listGetIdDto)
                         .build());
 
@@ -176,10 +183,11 @@ public class OrdersServiceImple implements IOrdersService{
     }
 
     @Override
-    public OrdersEditGetAllDto editOrders(OrdersEditGetAllDto ordersEditGetAllDto) {
+    public OrdersEditGetAllDto editOrders(OrdersEditGetAllDto ordersEditGetAllDto, HttpServletRequest request) {
+        Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
 
         Optional<Orders> orders = iOrdersRepository.findById(ordersEditGetAllDto.getId());
-        Optional<User> user = iUserRepository.findById(ordersEditGetAllDto.getUser());
+        Optional<User> user = iUserRepository.findById(userId);
         Optional<DeliveryAddress> deliveryAddress = iDeliveryAddressRepository.findById(ordersEditGetAllDto.getDeliveryAddress());
 
         if(orders.isPresent() && user.isPresent() && deliveryAddress.isPresent()) {
@@ -237,11 +245,11 @@ public class OrdersServiceImple implements IOrdersService{
                     .deliveryDate(temp.getDeliveryDate())
                     .deliveryRequest(temp.getDeliveryRequest())
                     .user(user.get().getId())
-                    .name(user.get().getName())
-                    .phone(user.get().getPhone())
-                    .email(user.get().getEmail())
                     .deliveryAddress(deliveryAddress.get().getId())
                     .address(deliveryAddress.get().getAddress())
+                    .addressName(deliveryAddress.get().getAddressName())
+                    .receiveName(deliveryAddress.get().getReceiveName())
+                    .zipCode(deliveryAddress.get().getZipCode())
                     .ordersProductListGetIdDtoListEdit(listEditDto)
                     .build();
         }
