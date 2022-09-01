@@ -17,7 +17,7 @@ public class CartProductListGetIdEditDto {
     private String productName; // 상품 이름
     private String manufactureCompany; // 상품 제조사
     private String thumbnail; // 썸네일
-    private Long price; // 가격
+//    private Long price; // 가격
     private Long oldPrice;
     private Long newPrice;
     private int discountRate; // 할인율

@@ -20,7 +20,7 @@ public interface ICartService {
     List<CartProductListGetIdEditDto> getCartByUserId(HttpServletRequest request);
 //    CartEditGetIdDto editCart(CartEditGetIdDto cartEditGetIdDto);
 
-    CartProductList editCart(CartProductListGetIdEditDto cartProductListGetIdEditDto);
+    String editCart(CartProductListGetIdEditDto cartProductListGetIdEditDto);
 
 
     void deleteCart(Long id);

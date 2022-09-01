@@ -38,7 +38,7 @@ public class CartController {
     }
 
     @PutMapping("/cart/edit")
-    public CartProductList editCart(@RequestBody CartProductListGetIdEditDto cartProductListGetIdEditDto) {
+    public String editCart(@RequestBody CartProductListGetIdEditDto cartProductListGetIdEditDto) {
         return iCartService.editCart(cartProductListGetIdEditDto);
     }
 

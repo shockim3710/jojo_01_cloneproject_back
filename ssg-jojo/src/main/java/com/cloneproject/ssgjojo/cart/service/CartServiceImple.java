@@ -130,11 +130,10 @@ public class CartServiceImple implements ICartService {
                 cartProductLists.forEach(cart -> {
                     Product product = cart.getProduct();
                     Long newPrice = 0L;
-                    Long oldPrice = 0L;
+                    Long oldPrice = product.getPrice();
                     int discountRate = product.getDiscountRate();
 
                     if(discountRate != 0) {
-                        oldPrice = product.getPrice();
                         newPrice = (long) ((float) oldPrice * (1 - ((float) discountRate /100 )));
                     }
                     else
@@ -168,7 +167,7 @@ public class CartServiceImple implements ICartService {
 
     @Override
     @Transactional
-    public CartProductList editCart(CartProductListGetIdEditDto cartProductListGetIdEditDto) {
+    public String editCart(CartProductListGetIdEditDto cartProductListGetIdEditDto) {
 
         Optional<CartProductList> cartProductListOptional = iCartProductListRepository.findById(cartProductListGetIdEditDto.getId());
 
@@ -178,7 +177,7 @@ public class CartServiceImple implements ICartService {
             cartProductListOptional.get().setCartCount(cartProductListOptional.get().getCartCount() - 1);
         }
 
-        return cartProductListOptional.get();
+        return "변경되었습니다.";
     }
 
 //    @Override
