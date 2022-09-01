@@ -14,5 +14,4 @@ public class PayingCreditCardOutputDto {
     private Long id;
     private String creditCardName;
     private String creditCardCompany;
-    private Long userId;
 }

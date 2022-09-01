@@ -9,8 +9,9 @@ import com.cloneproject.ssgjojo.categorylv3.domain.CategoryLv3;
 import com.cloneproject.ssgjojo.categorylv3.repository.ICategoryLv3Repository;
 import com.cloneproject.ssgjojo.categorylv4.domain.CategoryLv4;
 import com.cloneproject.ssgjojo.categorylv4.repository.ICategoryLv4Repository;
-import com.cloneproject.ssgjojo.categoryproductlist.domain.CategoryProductList;
-import com.cloneproject.ssgjojo.categoryproductlist.repository.ICategoryProductListRepository;
+
+import com.cloneproject.ssgjojo.categoryProductList.domain.CategoryProductList;
+import com.cloneproject.ssgjojo.categoryProductList.repository.ICategoryProductListRepository;
 import com.cloneproject.ssgjojo.jwt.JwtTokenProvider;
 import com.cloneproject.ssgjojo.product.domain.Product;
 import com.cloneproject.ssgjojo.product.dto.*;
@@ -28,8 +29,13 @@ import com.cloneproject.ssgjojo.productphoto.repository.IProductPhotoRepository;
 import com.cloneproject.ssgjojo.qna.domain.QnA;
 import com.cloneproject.ssgjojo.qna.dto.QnAOutputDto;
 import com.cloneproject.ssgjojo.qna.repository.IQnARepository;
+
 import com.cloneproject.ssgjojo.recentlyproduct.domain.RecentlyProduct;
 import com.cloneproject.ssgjojo.recentlyproduct.repository.IRecentlyProductRepository;
+
+import com.cloneproject.ssgjojo.recentsearches.domain.RecentSearches;
+import com.cloneproject.ssgjojo.recentsearches.repository.IRecentSearchesRepository;
+
 import com.cloneproject.ssgjojo.review.domain.Review;
 import com.cloneproject.ssgjojo.review.dto.ReviewOutputDto;
 import com.cloneproject.ssgjojo.review.repository.IReviewRepository;
@@ -79,6 +85,7 @@ public class ProductServiceImple implements IProductService {
     private final AwsS3ResourceStorage awsS3ResourceStorage;
     private final JwtTokenProvider jwtTokenProvider;
 
+    private final IRecentSearchesRepository iRecentSearchesRepository;
 
 
 
@@ -623,7 +630,6 @@ public class ProductServiceImple implements IProductService {
                     .answerMain(qnA.getAnswerMain())
                     .answerDate(qnA.getAnswerDate())
                     .lockCase(qnA.isLockCase())
-                    .userId(qnA.getUser().getId())
                     .userAccount(qnA.getUser().getUserId().substring(3)+"******")
                     .productId(qnA.getProduct().getId())
                     .build());
@@ -700,7 +706,21 @@ public class ProductServiceImple implements IProductService {
 
     // 상품 검색
     @Override
-    public List<ProductListDto> productSearch(String keyword) {
+    public List<ProductListDto> productSearch(String keyword, HttpServletRequest request) {
+
+        // Request 헤더에서 Authorization에 대한 설정이 있을 경우
+        // 최근 본 상품에 등록
+        if(request.getHeader("Authorization") != null) {
+            Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
+            Optional<User> user = iUserRepository.findById(userId);
+
+            if(user.isPresent())
+                iRecentSearchesRepository.save(RecentSearches.builder()
+                        .histories(keyword)
+                        .user(user.get())
+                        .build());
+
+        }
 
         List<Product> productList = iProductRepository.findByProductNameContaining(keyword);
         List<ProductListDto> productListDtoList = new ArrayList<>();

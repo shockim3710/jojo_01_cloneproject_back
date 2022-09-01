@@ -23,13 +23,18 @@ public class RecentSearchesController {
     }
 
     @GetMapping("/recentsearches/get") // 해당 사용자의 최근검색어 조회
-    public List<RecentSearchesDto> getRecentSearches(HttpServletRequest request) {
+    public List<String> getRecentSearches(HttpServletRequest request) {
         return iRecentSearchesService.getRecentSearchesByUserId(request);
     }
 
     @DeleteMapping("/recentsearches/delete/{id}") // 해당 사용자의 최근검색어 삭제
-    public void deleteRecentSearches(@PathVariable Long id) {
-        iRecentSearchesService.deleteRecentSearches(id);
+    public void deleteRecentSearches(@PathVariable Long id, HttpServletRequest request) {
+        iRecentSearchesService.deleteRecentSearches(id, request);
+    }
+
+    @DeleteMapping("/recentsearches/delete/userId")
+    public void deleteAllByUser(HttpServletRequest request) {
+        iRecentSearchesService.deleteAllByUser(request);
     }
 
 }

@@ -19,6 +19,5 @@ public class QnAEditDto {
     private Timestamp questionDate;
     private boolean lockCase;
 
-    private Long userId;
     private Long productId;
 }

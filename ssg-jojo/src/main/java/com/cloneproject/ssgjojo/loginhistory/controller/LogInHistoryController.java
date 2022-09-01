@@ -1,7 +1,5 @@
 package com.cloneproject.ssgjojo.loginhistory.controller;
 
-import com.cloneproject.ssgjojo.loginhistory.domain.LogInHistory;
-import com.cloneproject.ssgjojo.loginhistory.dto.LogInHistoryDto;
 import com.cloneproject.ssgjojo.loginhistory.dto.LogInHistoryOutputDto;
 import com.cloneproject.ssgjojo.loginhistory.service.ILogInHistoryService;
 import com.cloneproject.ssgjojo.user.repository.IUserRepository;

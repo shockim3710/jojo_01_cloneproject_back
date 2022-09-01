@@ -2,7 +2,6 @@ package com.cloneproject.ssgjojo.loginhistory.service;
 
 import com.cloneproject.ssgjojo.jwt.JwtTokenProvider;
 import com.cloneproject.ssgjojo.loginhistory.domain.LogInHistory;
-import com.cloneproject.ssgjojo.loginhistory.dto.LogInHistoryDto;
 import com.cloneproject.ssgjojo.loginhistory.dto.LogInHistoryOutputDto;
 import com.cloneproject.ssgjojo.loginhistory.repository.ILogInHistoryRepository;
 import com.cloneproject.ssgjojo.user.domain.User;
@@ -12,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
-import java.sql.Timestamp;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;

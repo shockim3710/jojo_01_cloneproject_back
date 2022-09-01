@@ -8,6 +8,7 @@ import com.cloneproject.ssgjojo.accountpayment.service.IAccountPaymentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
@@ -20,20 +21,20 @@ public class AccountPaymentController {
 
     // 결제 계좌 등록
     @PostMapping("/accountpayment/add")
-    public AccountPaymentOutputDto addAccountPayment(@RequestBody AccountPaymentDto accountPaymentDto) {
-        return iAccountPaymentService.addAccountPayment(accountPaymentDto);
+    public AccountPaymentOutputDto addAccountPayment(@RequestBody AccountPaymentDto accountPaymentDto, HttpServletRequest request) {
+        return iAccountPaymentService.addAccountPayment(accountPaymentDto, request);
     }
 
     // 해당 유저의 결제 계좌 조회
-    @GetMapping("/accountpayment/{id}")
-    public List<AccountPaymentOutputDto> getAccountPaymentByUserId(@PathVariable Long id) {
-        return iAccountPaymentService.getAccountPaymentByUserId(id);
+    @GetMapping("/accountpayment/getAll")
+    public List<AccountPaymentOutputDto> getAccountPaymentByUserId(HttpServletRequest request) {
+        return iAccountPaymentService.getAccountPaymentByUserId(request);
     }
 
     // 결제 계좌 삭제
     @DeleteMapping("/accountpayment/delete")
-    void deleteAccountPayment(@RequestBody AccountPaymentDeleteDto accountPaymentDeleteDto) {
-        iAccountPaymentService.deleteAccountPayment(accountPaymentDeleteDto);
+    void deleteAccountPayment(@RequestBody AccountPaymentDeleteDto accountPaymentDeleteDto, HttpServletRequest request) {
+        iAccountPaymentService.deleteAccountPayment(accountPaymentDeleteDto, request);
     }
 
 }

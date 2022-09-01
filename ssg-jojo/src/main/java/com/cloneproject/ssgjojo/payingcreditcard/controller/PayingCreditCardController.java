@@ -8,6 +8,7 @@ import com.cloneproject.ssgjojo.payingcreditcard.service.IPayingCreditCardServic
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
@@ -18,19 +19,22 @@ public class PayingCreditCardController {
 
     private final IPayingCreditCardService iPayingCreditCardService;
 
+    // 결제 카드 등록
     @PostMapping("/payingcreditcard/add")
-    public PayingCreditCardOutputDto addPayingCreditCard(@RequestBody PayingCreditCardInputDto payingCreditCardInputDto) {
-        return iPayingCreditCardService.addPayingCreditCard(payingCreditCardInputDto);
+    public PayingCreditCardOutputDto addPayingCreditCard(@RequestBody PayingCreditCardInputDto payingCreditCardInputDto, HttpServletRequest request) {
+        return iPayingCreditCardService.addPayingCreditCard(payingCreditCardInputDto, request);
     }
 
-    @GetMapping("/payingcreditcard/{id}")
-    public List<PayingCreditCardOutputDto> getPayingCreditCardByUserId(@PathVariable Long id) {
-        return iPayingCreditCardService.getPayingCreditCardByUserId(id);
+    // 해당 유저의 결제 카드 조회
+    @GetMapping("/payingcreditcard")
+    public List<PayingCreditCardOutputDto> getPayingCreditCardByUserId(HttpServletRequest request) {
+        return iPayingCreditCardService.getPayingCreditCardByUserId(request);
     }
 
+    // 결제 카드 삭제
     @DeleteMapping("/payingcreditcard/delete")
-    void deletePayingCreditCard(@RequestBody PayingCreditCardDeleteDto payingCreditCardDeleteDto) {
-        iPayingCreditCardService.deletePayingCreditCard(payingCreditCardDeleteDto);
+    boolean deletePayingCreditCard(@RequestBody PayingCreditCardDeleteDto payingCreditCardDeleteDto, HttpServletRequest request) {
+        return iPayingCreditCardService.deletePayingCreditCard(payingCreditCardDeleteDto, request);
     }
 
 

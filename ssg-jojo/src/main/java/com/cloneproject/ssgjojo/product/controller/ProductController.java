@@ -73,7 +73,7 @@ public class ProductController {
 
     // 상품 검색
     @GetMapping("/product/search")
-    public List<ProductListDto> searchProduct(@RequestParam String keyword) {
-        return iProductService.productSearch(keyword);
+    public List<ProductListDto> searchProduct(@RequestParam String keyword, HttpServletRequest request) {
+        return iProductService.productSearch(keyword, request);
     }
 }

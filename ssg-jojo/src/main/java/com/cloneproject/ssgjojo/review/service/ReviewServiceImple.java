@@ -1,5 +1,6 @@
 package com.cloneproject.ssgjojo.review.service;
 
+import com.cloneproject.ssgjojo.jwt.JwtTokenProvider;
 import com.cloneproject.ssgjojo.orders.domain.Orders;
 import com.cloneproject.ssgjojo.orders.repository.IOrdersRepository;
 import com.cloneproject.ssgjojo.ordersproductlist.domain.OrdersProductList;
@@ -19,14 +20,11 @@ import com.cloneproject.ssgjojo.util.s3.AwsS3ResourceStorage;
 import com.cloneproject.ssgjojo.util.s3.FileInfoDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.criterion.Order;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.swing.text.html.Option;
-import java.sql.Timestamp;
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -43,11 +41,13 @@ public class ReviewServiceImple implements IReviewService {
     private final IOrdersRepository iOrdersRepository;
     private final IOrdersProductListRepository iOrdersProductListRepository;
     private final AwsS3ResourceStorage awsS3ResourceStorage;
+    private final JwtTokenProvider jwtTokenProvider;
 
     // 리뷰 작성
     @Override
-    public ReviewOutputDto addReview(ReviewDto reviewDto) {
+    public ReviewOutputDto addReview(ReviewDto reviewDto, HttpServletRequest request) {
 
+        Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
         Optional<User> user = iUserRepository.findById(reviewDto.getUserId());
         Optional<Product> product = iProductRepository.findById(reviewDto.getProductId());
         Optional<Orders> orders = iOrdersRepository.findById(reviewDto.getOrdersId());
@@ -78,9 +78,10 @@ public class ReviewServiceImple implements IReviewService {
 
     // 리뷰 작성 시 이미지 첨부
     @Override
-    public boolean addReviewWithImg(ReviewDto reviewDto, List<MultipartFile> reviewPhoto) {
+    public boolean addReviewWithImg(ReviewDto reviewDto, List<MultipartFile> reviewPhoto, HttpServletRequest request) {
 
-        Optional<User> user = iUserRepository.findById(reviewDto.getUserId());
+        Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
+        Optional<User> user = iUserRepository.findById(userId);
         Optional<Product> product = iProductRepository.findById(reviewDto.getProductId());
         Optional<Orders> orders = iOrdersRepository.findById(reviewDto.getOrdersId());
 
@@ -113,8 +114,9 @@ public class ReviewServiceImple implements IReviewService {
 
     // 작성한 리뷰 수정
     @Override
-    public ReviewEditDto editReview(ReviewEditDto reviewEditDto) {
+    public ReviewEditDto editReview(ReviewEditDto reviewEditDto, HttpServletRequest request) {
 
+        Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
         Optional<User> user = iUserRepository.findById(reviewEditDto.getUserId());
         Optional<Product> product = iProductRepository.findById(reviewEditDto.getProductId());
         Optional<Review> review = iReviewRepository.findById(reviewEditDto.getId());
@@ -144,41 +146,6 @@ public class ReviewServiceImple implements IReviewService {
         return null;
     }
 
-
-    // 리뷰 정렬 (별점 높은 순, 별점 낮은 순, 최신순)
-    @Override
-    public List<ReviewOutputDto> sortedGetReviewByProductId(Long id, int sort) {
-        Optional<Product> product = iProductRepository.findById(id);
-        List<ReviewOutputDto> returnDto = new ArrayList<>();
-        List<Review> temp = new ArrayList<>();
-
-        if(product.isPresent()) {
-            if(sort == 1)
-                temp = iReviewRepository.findAllByProductOrderByScoreAsc(product.get());
-            else if(sort == 2)
-                temp = iReviewRepository.findAllByProductOrderByScoreDesc(product.get());
-            else if(sort == 3)
-                temp = iReviewRepository.findAllByProductOrderByCreatedDateDesc(product.get());
-            else
-                temp = iReviewRepository.findAllByProduct(product.get());
-
-            for(Review review : temp) {
-                returnDto.add(ReviewOutputDto.builder()
-                        .id(review.getId())
-                        .title(review.getTitle())
-                        .mainText(review.getMainText())
-                        .score(review.getScore())
-                        .userId(review.getUser().getUserId())
-                        .productId(review.getProduct().getId())
-                        .createdTime(review.getCreatedDate())
-                        .build());
-            }
-
-            return returnDto;
-        }
-
-        return null;
-    }
 
     // 해당 상품의 리뷰 목록 조회
     @Override
@@ -224,8 +191,9 @@ public class ReviewServiceImple implements IReviewService {
 
     // 해당 유저가 작성한 리뷰 조회
     @Override
-    public List<ReviewOutputDto> findAllByUser(Long userId) {
+    public List<ReviewOutputDto> findAllByUser(HttpServletRequest request) {
 
+        Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
         Optional<User> user = iUserRepository.findById(userId);
         List<ReviewOutputDto> returnDtoList = new ArrayList<>();
 
@@ -270,7 +238,9 @@ public class ReviewServiceImple implements IReviewService {
 
     // 해당 유저가 작성 가능한 리뷰 조회
     @Override
-    public List<ReviewPossibleWriteDto> findPossibleWrite(Long userId) {
+    public List<ReviewPossibleWriteDto> findPossibleWrite(HttpServletRequest request) {
+
+        Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
         Optional<User> user = iUserRepository.findById(userId);
 
         if(user.isPresent()) {
@@ -304,8 +274,9 @@ public class ReviewServiceImple implements IReviewService {
 
     // 리뷰 삭제
     @Override
-    public void deleteReview(ReviewDeleteDto reviewDeleteDto) {
+    public void deleteReview(ReviewDeleteDto reviewDeleteDto, HttpServletRequest request) {
 
+        Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
         Optional<User> user = iUserRepository.findById(reviewDeleteDto.getUserId());
         Optional<Review> review = iReviewRepository.findById(reviewDeleteDto.getId());
 
@@ -318,14 +289,47 @@ public class ReviewServiceImple implements IReviewService {
 
     // review 페이징
     @Override
-    public Page<Review> pageList(Pageable pageable, Long productId) {
+    public List<ReviewOutputDto> pageList(Pageable pageable, Long productId) {
 
         Optional<Product> product = iProductRepository.findById(productId);
+        List<ReviewOutputDto> reviewOutputDtoList = new ArrayList<>();
+
+
         if(product.isPresent()) {
-            Page<Review> reviewPage = iReviewRepository.findByProductOrderByCreatedDateAsc(product.get(), pageable);
-            Long test=1L;
+            List<Review> temp = iReviewRepository.findAllByProduct(product.get(), pageable);
+
+            List<Review> reviewList = iReviewRepository.findAllByProduct(product.get(), pageable);
+            for(Review review : reviewList) {
+
+                List<ReviewPhoto> reviewPhotoList = iReviewPhotoRepository.findAllByReview(review);
+                List<ReviewPhotoDto> reviewPhotoDtoList = new ArrayList<>();
+
+                if(!reviewPhotoList.isEmpty()) {
+                    for(ReviewPhoto reviewPhoto : reviewPhotoList) {
+                        reviewPhotoDtoList.add(ReviewPhotoDto.builder()
+                                .id(reviewPhoto.getId())
+                                .reviewPhotoPath(reviewPhoto.getReviewPhotoPath())
+                                .reviewId(reviewPhoto.getId())
+                                .build());
+                    }
+                }
+
+                reviewOutputDtoList.add(ReviewOutputDto.builder()
+                        .id(review.getId())
+                        .reviewPhotoDtoList(reviewPhotoDtoList)
+                        .title(review.getTitle())
+                        .mainText(review.getMainText())
+                        .score(review.getScore())
+                        .userId(review.getUser().getUserId())
+                        .productId(review.getProduct().getId())
+                        .createdTime(review.getCreatedDate())
+                        .build());
+            }
+
+            return reviewOutputDtoList;
         }
 
         return null;
     }
+
 }
