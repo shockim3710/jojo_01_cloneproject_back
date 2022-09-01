@@ -34,6 +34,9 @@ public class DeliveryAddress {
     @Column(nullable = false)
     private String receiveName; // 받는분
 
+    @Column(nullable = false)
+    private String zipCode; // 우편번호
+
     @ManyToOne
     private User user;
 

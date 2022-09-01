@@ -662,6 +662,7 @@ public class ProductServiceImple implements IProductService {
             findResult = iCategoryProductListRepository.findByCategoryLv3id(id, pr);
         else if (lv == 4)
             findResult = iCategoryProductListRepository.findByCategoryLv4id(id, pr);
+
         else
             return null;
 

@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -70,6 +71,7 @@ public class UserServiceImple implements IUserService{
                         .whetherDefaultAddress(userSignupDto.isWhetherDefaultAddress())
                         .whetherOnlyThisTime(userSignupDto.isWhetherOnlyThisTime())
                         .receiveName(userSignupDto.getName())
+                        .zipCode(userSignupDto.getZipCode())
                         .addressName(userSignupDto.getAddressName())
                         .build());
 
@@ -86,13 +88,14 @@ public class UserServiceImple implements IUserService{
     @Override
     public String getUserSignUpId(UserSignupDto userSignupDto) { // 아이디 중복확인
 
-        Optional<User> user = iUserRepository.findByUserId(userSignupDto.getUserId());
+        List<User> userList = iUserRepository.findAllByUserId(userSignupDto.getUserId());
 
-        if(user.isPresent()) {
-            return "이미 가입한 아이디입니다.";
+        if(userList.size() == 0) {
+            return "가입 가능";
         }
 
-        return "true";
+
+        return "가입 불가능";
     }
 
 //    @Override

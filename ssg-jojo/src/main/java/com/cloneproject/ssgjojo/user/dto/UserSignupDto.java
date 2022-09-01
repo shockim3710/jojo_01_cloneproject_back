@@ -29,6 +29,7 @@ public class UserSignupDto {
     private boolean whetherOnlyThisTime; // 이번만배송지 여부
     private String addressName; // 주소별칭
     private String receiveName; // 받는분
+    private String zipCode; // 우편번호
 
     private String folderName;
 }

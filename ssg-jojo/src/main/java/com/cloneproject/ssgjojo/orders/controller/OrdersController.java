@@ -8,6 +8,7 @@ import com.cloneproject.ssgjojo.orders.service.IOrdersService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
@@ -19,18 +20,18 @@ public class OrdersController {
     private final IOrdersService iOrdersService;
 
     @PostMapping("/orders/add")
-    public OrdersAddDto addOrders(@RequestBody OrdersAddDto ordersAddDto) {
-        return iOrdersService.addOrders(ordersAddDto);
+    public OrdersAddDto addOrders(@RequestBody OrdersAddDto ordersAddDto, HttpServletRequest request) {
+        return iOrdersService.addOrders(ordersAddDto, request);
     }
 
-    @GetMapping("/orders/get/{id}")
-    public List<OrdersGetIdDto> getOrders(@PathVariable Long id) {
-        return iOrdersService.getOrdersByUserId(id);
+    @GetMapping("/orders/get")
+    public List<OrdersGetIdDto> getOrders(HttpServletRequest request) {
+        return iOrdersService.getOrdersByUserId(request);
     }
 
     @PutMapping("/orders/edit")
-    public OrdersEditGetAllDto editOrders(@RequestBody OrdersEditGetAllDto ordersEditGetAllDto) {
-        return iOrdersService.editOrders(ordersEditGetAllDto);
+    public OrdersEditGetAllDto editOrders(@RequestBody OrdersEditGetAllDto ordersEditGetAllDto, HttpServletRequest request) {
+        return iOrdersService.editOrders(ordersEditGetAllDto, request);
     }
 
     @GetMapping("/orders/get/getAll")

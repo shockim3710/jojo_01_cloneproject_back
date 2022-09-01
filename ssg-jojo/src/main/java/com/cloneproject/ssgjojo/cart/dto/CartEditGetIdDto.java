@@ -14,12 +14,5 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CartEditGetIdDto {
-    private Long id;
-
-    private Long user;
-
-    private Long deliveryAddress;
-    private String address; // 배송지
-
     private List<CartProductListGetIdEditDto> cartProductListGetIdEditDtoList;
 }

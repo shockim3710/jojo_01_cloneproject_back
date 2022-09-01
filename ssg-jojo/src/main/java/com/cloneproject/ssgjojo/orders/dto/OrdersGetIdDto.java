@@ -26,6 +26,8 @@ public class OrdersGetIdDto {
 
     private Long deliveryAddress;
     private String address; // 배송지
-
+    private String addressName; // 주소별칭
+    private String receiveName; // 받는분
+    private String zipCode; // 우편번호
     private List<OrdersProductListGetIdEditDto> ordersProductListGetIdDtoListEdit;
 }
