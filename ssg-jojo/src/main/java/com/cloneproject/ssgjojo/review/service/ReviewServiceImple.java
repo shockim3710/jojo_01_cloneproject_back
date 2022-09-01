@@ -147,41 +147,6 @@ public class ReviewServiceImple implements IReviewService {
     }
 
 
-    // 리뷰 정렬 (별점 높은 순, 별점 낮은 순, 최신순)
-    @Override
-    public List<ReviewOutputDto> sortedGetReviewByProductId(Long id, int sort) {
-        Optional<Product> product = iProductRepository.findById(id);
-        List<ReviewOutputDto> returnDto = new ArrayList<>();
-        List<Review> temp = new ArrayList<>();
-
-        if(product.isPresent()) {
-            if(sort == 1)
-                temp = iReviewRepository.findAllByProductOrderByScoreAsc(product.get());
-            else if(sort == 2)
-                temp = iReviewRepository.findAllByProductOrderByScoreDesc(product.get());
-            else if(sort == 3)
-                temp = iReviewRepository.findAllByProductOrderByCreatedDateDesc(product.get());
-            else
-                temp = iReviewRepository.findAllByProduct(product.get());
-
-            for(Review review : temp) {
-                returnDto.add(ReviewOutputDto.builder()
-                        .id(review.getId())
-                        .title(review.getTitle())
-                        .mainText(review.getMainText())
-                        .score(review.getScore())
-                        .userId(review.getUser().getUserId())
-                        .productId(review.getProduct().getId())
-                        .createdTime(review.getCreatedDate())
-                        .build());
-            }
-
-            return returnDto;
-        }
-
-        return null;
-    }
-
     // 해당 상품의 리뷰 목록 조회
     @Override
     public List<ReviewOutputDto> findAllByProduct(Long productId) {
@@ -324,15 +289,46 @@ public class ReviewServiceImple implements IReviewService {
 
     // review 페이징
     @Override
-    public List<Review> pageList(Pageable pageable, Long productId) {
+    public List<ReviewOutputDto> pageList(Pageable pageable, Long productId) {
 
         Optional<Product> product = iProductRepository.findById(productId);
-        if(product.isPresent()) {
-            List<Review> reviewList = iReviewRepository.findAllByProductOrderByCreatedDateAsc(product.get(), pageable);
-            Long test=1L;
+        List<ReviewOutputDto> reviewOutputDtoList = new ArrayList<>();
 
-            return reviewList;
+
+        if(product.isPresent()) {
+            List<Review> temp = iReviewRepository.findAllByProduct(product.get(), pageable);
+
+            List<Review> reviewList = iReviewRepository.findAllByProduct(product.get(), pageable);
+            for(Review review : reviewList) {
+
+                List<ReviewPhoto> reviewPhotoList = iReviewPhotoRepository.findAllByReview(review);
+                List<ReviewPhotoDto> reviewPhotoDtoList = new ArrayList<>();
+
+                if(!reviewPhotoList.isEmpty()) {
+                    for(ReviewPhoto reviewPhoto : reviewPhotoList) {
+                        reviewPhotoDtoList.add(ReviewPhotoDto.builder()
+                                .id(reviewPhoto.getId())
+                                .reviewPhotoPath(reviewPhoto.getReviewPhotoPath())
+                                .reviewId(reviewPhoto.getId())
+                                .build());
+                    }
+                }
+
+                reviewOutputDtoList.add(ReviewOutputDto.builder()
+                        .id(review.getId())
+                        .reviewPhotoDtoList(reviewPhotoDtoList)
+                        .title(review.getTitle())
+                        .mainText(review.getMainText())
+                        .score(review.getScore())
+                        .userId(review.getUser().getUserId())
+                        .productId(review.getProduct().getId())
+                        .createdTime(review.getCreatedDate())
+                        .build());
+            }
+
+            return reviewOutputDtoList;
         }
+
         return null;
     }
 

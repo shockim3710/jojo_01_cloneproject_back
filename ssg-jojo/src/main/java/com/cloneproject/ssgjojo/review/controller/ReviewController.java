@@ -51,12 +51,6 @@ public class ReviewController {
         return iReviewService.findAllByProduct(productId);
     }
 
-    // 별점 높은 순, 별점 낮은 순, 최신 순으로 리뷰 정렬
-    @GetMapping("/review/getAll/sort")
-    public List<ReviewOutputDto> getByProductSort(@RequestParam Long productId, @RequestParam int sort) {
-        return iReviewService.sortedGetReviewByProductId(productId, sort);
-    }
-
     // 해당 유저가 작성한 리뷰 조회
     @GetMapping("/review/findAllByUser")
     public List<ReviewOutputDto> findAllByUser(HttpServletRequest request) {
@@ -82,14 +76,22 @@ public class ReviewController {
     }
 
     @GetMapping("/review/paging/{productId}")
-    public ResponseEntity<List<Review>> reviewPage(@RequestParam int page, @RequestParam int size, @PathVariable Long productId) {
-        Pageable pr = PageRequest.of(page, size);
+    public ResponseEntity<List<ReviewOutputDto>> reviewPage(@RequestParam(name = "page", defaultValue = "1") int page,
+                                                            @RequestParam(name = "size", defaultValue = "10") int size,
+                                                            @RequestParam(name = "sort", defaultValue = "3") int sort,
+                                                            @PathVariable Long productId) {
+
+
+        Pageable pr = PageRequest.of(page - 1, size, Sort.by("id").descending());
+        if(sort == 1)
+            pr = PageRequest.of(page - 1, size, Sort.by("score").ascending().and(Sort.by("id").descending()));
+        else if(sort == 2)
+            pr = PageRequest.of(page - 1, size, Sort.by("score").descending().and(Sort.by("id").descending()));
 
         log.info("page = {} , size = {}", page, size);
 
-        List<Review> reviewList = iReviewService.pageList(pr, productId);
+        List<ReviewOutputDto> reviewList = iReviewService.pageList(pr, productId);
 
         return new ResponseEntity<>(reviewList, HttpStatus.OK);
-
     }
 }

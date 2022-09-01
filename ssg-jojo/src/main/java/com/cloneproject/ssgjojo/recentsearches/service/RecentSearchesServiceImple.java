@@ -3,7 +3,6 @@ package com.cloneproject.ssgjojo.recentsearches.service;
 import com.cloneproject.ssgjojo.jwt.JwtTokenProvider;
 import com.cloneproject.ssgjojo.recentsearches.domain.RecentSearches;
 import com.cloneproject.ssgjojo.recentsearches.dto.RecentSearchesAddDto;
-import com.cloneproject.ssgjojo.recentsearches.dto.RecentSearchesDto;
 import com.cloneproject.ssgjojo.recentsearches.repository.IRecentSearchesRepository;
 import com.cloneproject.ssgjojo.user.domain.User;
 import com.cloneproject.ssgjojo.user.repository.IUserRepository;
@@ -53,11 +52,12 @@ public class RecentSearchesServiceImple implements IRecentSearchesService {
 
         Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
         Optional<User> user = iUserRepository.findById(userId);
+        List<String> recentSearchesList = new ArrayList<>();
 
         if(user.isPresent()) {
-            Pageable pr = PageRequest.of(0, 10, Sort.by("id").descending());
-            List<String> recentSearchesList = iRecentSearchesRepository.findTop10(userId, pr);
 
+            Pageable pr = PageRequest.of(0, 10, Sort.by("id").descending());
+            recentSearchesList = iRecentSearchesRepository.findTop10ById(userId, pr);
 
             return recentSearchesList;
         }

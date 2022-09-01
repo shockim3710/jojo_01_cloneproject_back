@@ -15,14 +15,10 @@ public interface IReviewService {
     ReviewOutputDto addReview(ReviewDto reviewDto, HttpServletRequest request);
     boolean addReviewWithImg(ReviewDto reviewDto, List<MultipartFile> reviewPhoto, HttpServletRequest request);
     ReviewEditDto editReview(ReviewEditDto reviewEditDto, HttpServletRequest request);
-    List<ReviewOutputDto> sortedGetReviewByProductId(Long id, int sort);
     List<ReviewOutputDto> findAllByProduct(Long productId);
-    void deleteReview(ReviewDeleteDto reviewDeleteDto, HttpServletRequest request);
-
     List<ReviewOutputDto> findAllByUser(HttpServletRequest request);
-
     List<ReviewPossibleWriteDto> findPossibleWrite(HttpServletRequest request);
-
-    public List<Review> pageList(Pageable pageable, Long productId);
+    void deleteReview(ReviewDeleteDto reviewDeleteDto, HttpServletRequest request);
+    List<ReviewOutputDto> pageList(Pageable pageable, Long productId);
 
 }
