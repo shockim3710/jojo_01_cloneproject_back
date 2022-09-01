@@ -10,8 +10,8 @@ import com.cloneproject.ssgjojo.categorylv3.repository.ICategoryLv3Repository;
 import com.cloneproject.ssgjojo.categorylv4.domain.CategoryLv4;
 import com.cloneproject.ssgjojo.categorylv4.repository.ICategoryLv4Repository;
 
-import com.cloneproject.ssgjojo.categoryProductList.domain.CategoryProductList;
-import com.cloneproject.ssgjojo.categoryProductList.repository.ICategoryProductListRepository;
+import com.cloneproject.ssgjojo.categoryproductlist.domain.CategoryProductList;
+import com.cloneproject.ssgjojo.categoryproductlist.repository.ICategoryProductListRepository;
 import com.cloneproject.ssgjojo.jwt.JwtTokenProvider;
 import com.cloneproject.ssgjojo.product.domain.Product;
 import com.cloneproject.ssgjojo.product.dto.*;

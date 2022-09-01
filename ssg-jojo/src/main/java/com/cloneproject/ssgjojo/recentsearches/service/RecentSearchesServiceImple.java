@@ -35,9 +35,9 @@ public class RecentSearchesServiceImple implements IRecentSearchesService {
 
         if(user.isPresent()) {
             RecentSearches temp = iRecentSearchesRepository.save(RecentSearches.builder()
-                            .histories(recentSearchesAddDto.getHistories())
-                            .user(user.get())
-                            .build());
+                    .histories(recentSearchesAddDto.getHistories())
+                    .user(user.get())
+                    .build());
 
             return RecentSearchesAddDto.builder()
                     .histories(temp.getHistories())

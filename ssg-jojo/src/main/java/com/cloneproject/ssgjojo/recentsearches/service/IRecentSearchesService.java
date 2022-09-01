@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public interface IRecentSearchesService {
-    RecentSearchesAddDto addRecentSearches(RecentSearchesAddDto recentSearchesAddDto);
+    RecentSearchesAddDto addRecentSearches(RecentSearchesAddDto recentSearchesAddDto, HttpServletRequest request);
     List<String> getRecentSearchesByUserId(HttpServletRequest request);
     void deleteRecentSearches(Long id, HttpServletRequest request);
     void deleteAllByUser(HttpServletRequest request);
