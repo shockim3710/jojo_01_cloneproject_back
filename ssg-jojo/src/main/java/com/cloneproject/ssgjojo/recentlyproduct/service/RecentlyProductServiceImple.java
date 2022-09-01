@@ -1,8 +1,9 @@
 package com.cloneproject.ssgjojo.recentlyproduct.service;
 
+import com.cloneproject.ssgjojo.jwt.JwtTokenProvider;
 import com.cloneproject.ssgjojo.product.domain.Product;
 import com.cloneproject.ssgjojo.product.repository.IProductRepository;
-import com.cloneproject.ssgjojo.productnewservice.domain.RecentlyProduct;
+import com.cloneproject.ssgjojo.recentlyproduct.domain.RecentlyProduct;
 import com.cloneproject.ssgjojo.recentlyproduct.dto.RecentlyProductAddDto;
 import com.cloneproject.ssgjojo.recentlyproduct.dto.RecentlyProductDeleteDto;
 import com.cloneproject.ssgjojo.recentlyproduct.dto.RecentlyProductOutputDto;
@@ -12,6 +13,7 @@ import com.cloneproject.ssgjojo.user.repository.IUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,23 +25,12 @@ public class RecentlyProductServiceImple implements IRecentlyProductService{
     private final IUserRepository iUserRepository;
     private final IRecentlyProductRepository iRecentlyProductRepository;
     private final IProductRepository iProductRepository;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Override
-    public void addRecentlyProduct(RecentlyProductAddDto recentlyProductAddDto) {
-        Optional<User> user = iUserRepository.findById(recentlyProductAddDto.getUserId());
-        Optional<Product> product = iProductRepository.findById(recentlyProductAddDto.getProductId());
+    public List<RecentlyProductOutputDto> findAllByUser(HttpServletRequest request) {
 
-        if(user.isPresent() && product.isPresent()) {
-            iRecentlyProductRepository.save(RecentlyProduct.builder()
-                    .user(user.get())
-                    .product(product.get())
-                    .build()
-            );
-        }
-    }
-
-    @Override
-    public List<RecentlyProductOutputDto> findAllByUser(Long userId) {
+        Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
         Optional<User> user = iUserRepository.findById(userId);
 
         if(user.isPresent()) {
@@ -76,27 +67,43 @@ public class RecentlyProductServiceImple implements IRecentlyProductService{
 
     @Override
     @Transactional
-    public void deleteByRecentlyId(List<RecentlyProductDeleteDto> recentlyProductDeleteDto) {
+    public String deleteByRecentlyId(List<RecentlyProductDeleteDto> recentlyProductDeleteDto, HttpServletRequest request) {
+        Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
+        Optional<User> user = iUserRepository.findById(userId);
+
+        if(!user.isPresent())
+            return "False";
+
         for(RecentlyProductDeleteDto deleteDto : recentlyProductDeleteDto) {
-            Optional<User> user = iUserRepository.findById(deleteDto.getUserId());
-            
             // 유저가 존재하지 않을 경우
             // 요청한 유저랑 유저 번호가 다르면 어떡하지?
-            if(!user.isPresent())
+            Optional<RecentlyProduct> recentlyProduct = iRecentlyProductRepository.findById(deleteDto.getId());
+
+            // 없는 고유키로 요청할 경우
+            if(!recentlyProduct.isPresent())
                 continue;
             
+            // 타인의 최근 본내역을 삭제하려고 할 경우
+            if(user.get().getId() != recentlyProduct.get().getUser().getId())
+                continue;
+
             iRecentlyProductRepository.deleteById(deleteDto.getId());
         }
+
+        return "True";
     }
 
     @Override
     @Transactional
-    public void deleteAllByUserId(Long userId) {
+    public String deleteAllByUserId(HttpServletRequest request) {
+        Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
         Optional<User> user = iUserRepository.findById(userId);
 
         if(!user.isPresent())
-            return;
+            return "False";
 
         iRecentlyProductRepository.deleteAllByUser(user.get());
+
+        return "True";
     }
 }

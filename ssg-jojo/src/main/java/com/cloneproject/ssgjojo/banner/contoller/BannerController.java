@@ -42,8 +42,4 @@ public class BannerController {
     public void deleteBanner(@PathVariable Long id) {
         iBannerService.deleteBanner(id);
     }
-
-
-
-
 }

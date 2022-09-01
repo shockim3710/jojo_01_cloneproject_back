@@ -8,6 +8,7 @@ import com.cloneproject.ssgjojo.user.repository.IUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
@@ -19,15 +20,10 @@ public class LogInHistoryController {
     private final ILogInHistoryService iLogInHistoryService;
     private final IUserRepository iUserRepository;
 
-//    @PostMapping("/loginhistory/add")
-//    public LogInHistoryOutputDto addLogInHistory(@RequestBody LogInHistoryDto logInHistoryDto) {
-//        return iLogInHistoryService.addLogInHistory(logInHistoryDto);
-//    }
-
     // 해당 유저의 로그인 기록 조회
-    @GetMapping("/loginhistory/{id}")
-    public List<LogInHistoryOutputDto> getHistoryByUserId(@PathVariable Long id) {
-        return iLogInHistoryService.getHistoryByUserId(id);
+    @GetMapping("/loginhistory")
+    public List<LogInHistoryOutputDto> getHistoryByUserId(HttpServletRequest request) {
+        return iLogInHistoryService.getHistoryByUserId(request);
     }
 
 }

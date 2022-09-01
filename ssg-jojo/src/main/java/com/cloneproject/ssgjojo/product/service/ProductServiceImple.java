@@ -11,6 +11,7 @@ import com.cloneproject.ssgjojo.categorylv4.domain.CategoryLv4;
 import com.cloneproject.ssgjojo.categorylv4.repository.ICategoryLv4Repository;
 import com.cloneproject.ssgjojo.categoryproductlist.domain.CategoryProductList;
 import com.cloneproject.ssgjojo.categoryproductlist.repository.ICategoryProductListRepository;
+import com.cloneproject.ssgjojo.jwt.JwtTokenProvider;
 import com.cloneproject.ssgjojo.product.domain.Product;
 import com.cloneproject.ssgjojo.product.dto.*;
 import com.cloneproject.ssgjojo.product.repository.IProductRepository;
@@ -27,21 +28,28 @@ import com.cloneproject.ssgjojo.productphoto.repository.IProductPhotoRepository;
 import com.cloneproject.ssgjojo.qna.domain.QnA;
 import com.cloneproject.ssgjojo.qna.dto.QnAOutputDto;
 import com.cloneproject.ssgjojo.qna.repository.IQnARepository;
+import com.cloneproject.ssgjojo.recentlyproduct.domain.RecentlyProduct;
+import com.cloneproject.ssgjojo.recentlyproduct.repository.IRecentlyProductRepository;
 import com.cloneproject.ssgjojo.review.domain.Review;
 import com.cloneproject.ssgjojo.review.dto.ReviewOutputDto;
 import com.cloneproject.ssgjojo.review.repository.IReviewRepository;
 import com.cloneproject.ssgjojo.reviewphoto.domain.ReviewPhoto;
 import com.cloneproject.ssgjojo.reviewphoto.dto.ReviewPhotoDto;
 import com.cloneproject.ssgjojo.reviewphoto.repository.IReviewPhotoRepository;
+import com.cloneproject.ssgjojo.user.domain.User;
+import com.cloneproject.ssgjojo.user.repository.IUserRepository;
 import com.cloneproject.ssgjojo.util.MultipartUtil;
 import com.cloneproject.ssgjojo.util.s3.AwsS3ResourceStorage;
 import com.cloneproject.ssgjojo.util.s3.FileInfoDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -57,16 +65,23 @@ public class ProductServiceImple implements IProductService {
     private final ICategoryLv1Repository iCategoryLv1Repository;
     private final ICategoryProductListRepository iCategoryProductListRepository;
 
+    private final IUserRepository iUserRepository;
+
     private final IProductOptionRepository iProductOptionRepository;
     private final IProductPhotoRepository iProductPhotoRepository;
     private final IProductDetailPhotoRepository iProductDetailPhotoRepository;
+
+    private final IRecentlyProductRepository iRecentlyProductRepository;
+
     private final IReviewRepository iReviewRepository;
     private final IReviewPhotoRepository iReviewPhotoRepository;
     private final IQnARepository iQnARepository;
     private final AwsS3ResourceStorage awsS3ResourceStorage;
+    private final JwtTokenProvider jwtTokenProvider;
 
 
-    
+
+
     // 상품 추가
     @Override
     @Transactional
@@ -513,9 +528,22 @@ public class ProductServiceImple implements IProductService {
     }
 
     @Override
-    public ProductDetailDto getProductDetail(Long productId) {
-
+    public ProductDetailDto getProductDetail(Long productId, HttpServletRequest request) {
         Optional<Product> product = iProductRepository.findById(productId);
+
+        // Request 헤더에서 Authorization에 대한 설정이 있을 경우
+        // 최근 본 상품에 등록
+        if(request.getHeader("Authorization") != null) {
+            Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
+            Optional<User> user = iUserRepository.findById(userId);
+
+            if(user.isPresent())
+                iRecentlyProductRepository.save(RecentlyProduct.builder()
+                                .product(product.get())
+                                .user(user.get())
+                        .build());
+
+        }
 
         Long newPrice = 0L;
         Long oldPrice = 0L;
@@ -620,34 +648,35 @@ public class ProductServiceImple implements IProductService {
 
 
     @Override
-    public List<ProductListDto> findProductByCategoryLv(Long lv, Long id) {
+    public List<ProductListDto> findProductByCategoryLv(Long lv, Long id, int page) {
         List<Product> findResult = new ArrayList<>();
         List<ProductListDto> returnList = new ArrayList<>();
 
-        if(lv == 1)
-            findResult = iCategoryProductListRepository.findByCategoryLv1id(id);
-        else if(lv == 2)
-            findResult = iCategoryProductListRepository.findByCategoryLv2id(id);
-        else if(lv == 3)
-            findResult = iCategoryProductListRepository.findByCategoryLv3id(id);
-        else if(lv == 4)
-            findResult = iCategoryProductListRepository.findByCategoryLv4id(id);
+        Pageable pr = PageRequest.of(page-1, 20);
+
+        if (lv == 1)
+            findResult = iCategoryProductListRepository.findByCategoryLv1id(id, pr);
+        else if (lv == 2)
+            findResult = iCategoryProductListRepository.findByCategoryLv2id(id, pr);
+        else if (lv == 3)
+            findResult = iCategoryProductListRepository.findByCategoryLv3id(id, pr);
+        else if (lv == 4)
+            findResult = iCategoryProductListRepository.findByCategoryLv4id(id, pr);
         else
             return null;
 
-        for(Product product : findResult) {
+        for (Product product : findResult) {
             Long newPrice = 0L;
             Long oldPrice = 0L;
             Float reviewScore = iReviewRepository.getReviewAvgScore(product.getId());
             int reviewNum = iReviewRepository.getReviewCountByProduct(product.getId());
 
             int discountRate = product.getDiscountRate();
-            if(discountRate != 0) {
+            if (discountRate != 0) {
                 oldPrice = product.getPrice();
-                newPrice = (long) ((float) oldPrice * (1 - ((float) discountRate /100 )));
-            }
-            else
-                newPrice= product.getPrice();
+                newPrice = (long) ((float) oldPrice * (1 - ((float) discountRate / 100)));
+            } else
+                newPrice = product.getPrice();
 
             returnList.add(ProductListDto.builder()
                     .id(product.getId())
@@ -666,6 +695,7 @@ public class ProductServiceImple implements IProductService {
         }
 
         return returnList;
+    }
 
     // 상품 검색
     @Override
@@ -707,10 +737,7 @@ public class ProductServiceImple implements IProductService {
                         .fee(product.getFee())
                         .adultCase(product.isAdultCase())
                         .build());
-
             }
-
-
         }
 
         return productListDtoList;

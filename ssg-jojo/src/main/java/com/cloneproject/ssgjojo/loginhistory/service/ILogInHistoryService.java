@@ -4,10 +4,10 @@ import com.cloneproject.ssgjojo.loginhistory.domain.LogInHistory;
 import com.cloneproject.ssgjojo.loginhistory.dto.LogInHistoryDto;
 import com.cloneproject.ssgjojo.loginhistory.dto.LogInHistoryOutputDto;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public interface ILogInHistoryService {
 
-//    LogInHistoryOutputDto addLogInHistory(LogInHistoryDto logInHistoryDto);
-    List<LogInHistoryOutputDto> getHistoryByUserId(Long id);
+    List<LogInHistoryOutputDto> getHistoryByUserId(HttpServletRequest request);
 }

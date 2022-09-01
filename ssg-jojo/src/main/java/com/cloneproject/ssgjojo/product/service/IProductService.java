@@ -4,6 +4,7 @@ import com.cloneproject.ssgjojo.product.domain.Product;
 import com.cloneproject.ssgjojo.product.dto.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public interface IProductService {
@@ -14,7 +15,7 @@ public interface IProductService {
     void deleteProduct(Long id);
     Product editProduct(ProductUpdateDto productUpdateDto);
     List<ProductListDto> getAllProductList();
-    ProductDetailDto getProductDetail(Long productId);
-    List<ProductListDto> findProductByCategoryLv(Long lv, Long id);
+    ProductDetailDto getProductDetail(Long productId, HttpServletRequest request);
+    List<ProductListDto> findProductByCategoryLv(Long lv, Long id, int page);
     List<ProductListDto> productSearch(String keyword);
 }

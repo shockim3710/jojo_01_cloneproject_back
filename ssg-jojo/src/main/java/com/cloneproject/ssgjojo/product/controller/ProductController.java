@@ -8,6 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
@@ -41,9 +42,9 @@ public class ProductController {
         return iProductService.getProductById(id);
     }
 
-    @GetMapping("/product/detail/{id}")
-    public ProductDetailDto getProductDetail(@PathVariable Long id) {
-        return iProductService.getProductDetail(id);
+    @GetMapping("/product/detail/{productId}")
+    public ProductDetailDto getProductDetail(@PathVariable Long productId, HttpServletRequest request) {
+        return iProductService.getProductDetail(productId, request);
     }
 
     @GetMapping("/product/getlist")
@@ -61,10 +62,13 @@ public class ProductController {
         return iProductService.editProduct(productUpdateDto);
     }
 
-    @GetMapping("/findbycategory")
-    public List<ProductListDto> findByCategory(@RequestParam(name = "lv", defaultValue = "1") Long lv,
-                                               @RequestParam(name = "id") Long id){
-        return iProductService.findProductByCategoryLv(lv, id);
+    // 카테고리별 상품 조회
+    @GetMapping("/product/findbycategory")
+    public List<ProductListDto> findByCategory(@RequestParam(name = "page", defaultValue = "1") int page,
+                                               @RequestParam(name = "lv", defaultValue = "4") Long lv,
+                                               @RequestParam(name = "id") Long id) {
+        return iProductService.findProductByCategoryLv(lv, id, page);
+    }
 
     // 상품 검색
     @GetMapping("/product/search")

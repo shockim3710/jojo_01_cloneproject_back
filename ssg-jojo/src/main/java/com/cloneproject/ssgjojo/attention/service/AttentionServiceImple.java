@@ -5,6 +5,7 @@ import com.cloneproject.ssgjojo.attention.dto.*;
 import com.cloneproject.ssgjojo.attention.repository.IAttentionRepository;
 import com.cloneproject.ssgjojo.attentionfolder.domain.AttentionFolder;
 import com.cloneproject.ssgjojo.attentionfolder.repository.IAttentionFolderRepository;
+import com.cloneproject.ssgjojo.jwt.JwtTokenProvider;
 import com.cloneproject.ssgjojo.product.domain.Product;
 import com.cloneproject.ssgjojo.product.repository.IProductRepository;
 import com.cloneproject.ssgjojo.user.domain.User;
@@ -12,6 +13,7 @@ import com.cloneproject.ssgjojo.user.repository.IUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,16 +26,20 @@ public class AttentionServiceImple implements IAttentionService{
     private final IAttentionFolderRepository iAttentionFolderRepository;
     private final IProductRepository iProductRepository;
     private final IUserRepository iUserRepository;
+    private final JwtTokenProvider jwtTokenProvider;
 
     // 좋아요 항목 추가
     @Override
-    public void AttentionAdd(AttentionAddDto addDto) {
-        Optional<User> user = iUserRepository.findById(addDto.getUserId());
+    public void AttentionAdd(AttentionAddDto addDto, HttpServletRequest request) {
+
+        Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
+        User user = iUserRepository.findById(userId).orElseThrow(()
+                -> new IllegalStateException("없는 사용자입니다."));
         Optional<Product> product = iProductRepository.findById(addDto.getProductId());
 
-        if(user.isPresent() && product.isPresent()) {
-            List<Attention> attention = iAttentionRepository.findByUserAndProduct(user.get(), product.get());
-            List<AttentionFolder> folderList = iAttentionFolderRepository.findAllByUserOrderByNo(user.get());
+        if(product.isPresent()) {
+            List<Attention> attention = iAttentionRepository.findByUserAndProduct(user, product.get());
+            List<AttentionFolder> folderList = iAttentionFolderRepository.findAllByUserOrderByNo(user);
 
             // 이미 추가된 상품 확인
             if(attention.size() != 0)
@@ -44,7 +50,7 @@ public class AttentionServiceImple implements IAttentionService{
 
             iAttentionRepository.save(Attention.builder()
                             .product(product.get())
-                            .user(user.get())
+                            .user(user)
                             .attentionFolder(folder)
                     .build());
         }

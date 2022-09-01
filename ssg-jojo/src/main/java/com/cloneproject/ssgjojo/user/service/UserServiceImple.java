@@ -92,7 +92,7 @@ public class UserServiceImple implements IUserService{
             return "이미 가입한 아이디입니다.";
         }
 
-        return null;
+        return "true";
     }
 
 //    @Override

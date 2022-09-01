@@ -9,5 +9,4 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class RecentlyProductDeleteDto {
     private Long id;
-    private Long userId;
 }

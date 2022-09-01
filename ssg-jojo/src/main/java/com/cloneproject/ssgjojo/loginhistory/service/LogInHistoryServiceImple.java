@@ -1,5 +1,6 @@
 package com.cloneproject.ssgjojo.loginhistory.service;
 
+import com.cloneproject.ssgjojo.jwt.JwtTokenProvider;
 import com.cloneproject.ssgjojo.loginhistory.domain.LogInHistory;
 import com.cloneproject.ssgjojo.loginhistory.dto.LogInHistoryDto;
 import com.cloneproject.ssgjojo.loginhistory.dto.LogInHistoryOutputDto;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,36 +24,14 @@ public class LogInHistoryServiceImple implements ILogInHistoryService {
 
     private final ILogInHistoryRepository iLogInHistoryRepository;
     private final IUserRepository iUserRepository;
-
-//    @Override
-//    public LogInHistoryOutputDto addLogInHistory(LogInHistoryDto logInHistoryDto) {
-//
-//        Optional<User> user = iUserRepository.findById(logInHistoryDto.getUserId());
-//
-//        if(user.isPresent()) {
-//            LogInHistory logInHistory = iLogInHistoryRepository.save(LogInHistory.builder()
-//                    .logInTime(new Timestamp(System.currentTimeMillis()))
-//                    .logInIp(logInHistoryDto.getLogInIp())
-//                    .user(user.get())
-//                    .build());
-//
-//            return LogInHistoryOutputDto.builder()
-//                    .id(logInHistory.getId())
-//                    .logInIp(logInHistory.getLogInIp())
-//                    .userId(logInHistory.getUser().getId())
-//                    .logInTime(logInHistory.getLogInTime())
-//                    .build();
-//
-//        }
-//
-//        return null;
-//    }
+    private final JwtTokenProvider jwtTokenProvider;
 
     // 해당 유저의 로그인 기록 조회
     @Override
-    public List<LogInHistoryOutputDto> getHistoryByUserId(Long id) {
+    public List<LogInHistoryOutputDto> getHistoryByUserId(HttpServletRequest request) {
 
-        Optional<User> user = iUserRepository.findById(id);
+        Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
+        Optional<User> user = iUserRepository.findById(userId);
 
         if(user.isPresent()) {
 
