@@ -441,7 +441,9 @@ public class ProductServiceImple implements IProductService {
 
     @Override
     public List<ProductListDto> getAllProductList() {
-        List<Product> productList = iProductRepository.findAll();
+        Pageable pr = PageRequest.of(0, 20);
+
+        List<Product> productList = iProductRepository.getProduct(pr);
         List<ProductListDto> allList = new ArrayList<>();
 
 
