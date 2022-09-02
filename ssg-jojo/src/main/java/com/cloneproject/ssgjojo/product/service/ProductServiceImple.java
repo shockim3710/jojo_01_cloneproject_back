@@ -21,7 +21,6 @@ import com.cloneproject.ssgjojo.productdetailphoto.dto.ProductDetailPhotoDto;
 import com.cloneproject.ssgjojo.productdetailphoto.repository.IProductDetailPhotoRepository;
 import com.cloneproject.ssgjojo.productoption.domain.ProductOption;
 import com.cloneproject.ssgjojo.productoption.dto.ProductOptionDto;
-import com.cloneproject.ssgjojo.productoption.dto.ProductOptionOutputDto;
 import com.cloneproject.ssgjojo.productoption.repository.IProductOptionRepository;
 import com.cloneproject.ssgjojo.productphoto.domain.ProductPhoto;
 import com.cloneproject.ssgjojo.productphoto.dto.ProductPhotoDto;
@@ -57,9 +56,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -531,6 +528,62 @@ public class ProductServiceImple implements IProductService {
                     .build());
         }
 
+        List<ProductOption> productOption = iProductOptionRepository.findAllByProduct(product.get());
+        List<Object> optionList = new ArrayList<Object>();
+        HashMap<String, Object> map = new HashMap<>();
+
+        if(productOption.size() != 0) {
+            HashMap<String, Object> opt1Map = new HashMap<>();
+            HashMap<String, Object> opt2Map = new HashMap<>();
+            List<Object> opt1List = new ArrayList<>();
+            List<Object> opt2List = new ArrayList<>();
+
+            if(productOption.get(0).getProductOption1Name().equals("")) {
+                map.put("productOption1Name", null);
+                map.put("productOption2Name", null);
+
+                opt2Map.put("productOption2Contents", null);
+                opt2Map.put("optionId", productOption.get(0).getId());
+                opt2Map.put("stock", productOption.get(0).getStock());
+
+                opt2List.add(opt2Map);
+
+                opt1Map.put("productOption1Contents", null);
+                opt1Map.put("option2", opt2Map);
+
+                opt1List.add(opt1Map);
+
+                map.put("options", opt1List);
+            } else {
+                String option1Name = productOption.get(0).getProductOption1Name();
+                String option2Name = productOption.get(0).getProductOption2Name();
+
+                map.put("productOption1Name", option1Name);
+                map.put("productOption2Name", option2Name);
+
+                List<String> opt1ContentsList = iProductOptionRepository.getOpt1(productId);
+
+                for(String opt1Contents : opt1ContentsList) {
+                    List<ProductOption> productOptionList = iProductOptionRepository.findAllByProductAndProductOption1Contents(product.get(), opt1Contents);
+
+                    opt1Map = new HashMap<>();
+                    opt2List = new ArrayList<>();
+                    for(ProductOption option : productOptionList) {
+                        opt2Map = new HashMap<>();
+                        opt2Map.put("productOption2Contents", option.getProductOption2Contents());
+                        opt2Map.put("optionId", option.getId());
+                        opt2Map.put("stock", option.getStock());
+
+                        opt2List.add(opt2Map);
+                    }
+                    opt1Map.put("productOption1Contents", opt1Contents);
+                    opt1Map.put("option2", opt2List);
+                    opt1List.add(opt1Map);
+                }
+                map.put("options", opt1List);
+            }
+        }
+
         List<ProductDetailPhoto> productDetailPhotoList = iProductDetailPhotoRepository.findAllByProduct(product.get());
         List<ProductDetailPhotoDto> detailPhotoDtoList = new ArrayList<>();
 
@@ -602,6 +655,7 @@ public class ProductServiceImple implements IProductService {
                 .productPhotoList(productPhotoDtoList)
                 .productDetailPhotoList(detailPhotoDtoList)
                 .reviewList(reviewOutputDtoList)
+                .productOptions(map)
                 .QnaList(qnAOutputDtoList)
                 .build();
     }

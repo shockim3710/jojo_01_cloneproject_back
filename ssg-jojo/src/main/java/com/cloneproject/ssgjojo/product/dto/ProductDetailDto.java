@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Map;
 
 @Data
 @Builder
@@ -27,6 +28,7 @@ public class ProductDetailDto {
     private Float reviewScore;
     private int reviewNum;
 
+    private Map<String, Object> productOptions;
     private List<ProductPhotoDto> productPhotoList;
     private List<ProductDetailPhotoDto> productDetailPhotoList;
     private List<ReviewOutputDto> reviewList;
