@@ -14,4 +14,6 @@ public class RecentlyProductOutputDto {
     private Long productId;
     private Long price;
     private String productInfo;
+    private String thumbnailUri;
+    private String mallName;
 }

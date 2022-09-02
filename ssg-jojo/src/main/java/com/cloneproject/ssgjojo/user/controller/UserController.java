@@ -7,6 +7,7 @@ import com.cloneproject.ssgjojo.user.repository.IUserRepository;
 import com.cloneproject.ssgjojo.user.service.IUserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -43,9 +44,16 @@ public class UserController {
     }
 
     @PostMapping("/user/login")
-    public String getUserLogin(@RequestBody UserLoginDto userLoginDto) {
+    public ResponseEntity<String> getUserLogin(@RequestBody UserLoginDto userLoginDto) {
 
-        return iUserService.getUserLogin(userLoginDto);
+        String token = iUserService.getUserLogin(userLoginDto);
+
+        if(token  == null) {
+            return ResponseEntity.status(401).body("Invalid Password");
+        }
+
+        return ResponseEntity.ok(token);
+
     }
 
 

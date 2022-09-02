@@ -4,7 +4,6 @@ import com.cloneproject.ssgjojo.jwt.JwtTokenProvider;
 import com.cloneproject.ssgjojo.product.domain.Product;
 import com.cloneproject.ssgjojo.product.repository.IProductRepository;
 import com.cloneproject.ssgjojo.recentlyproduct.domain.RecentlyProduct;
-import com.cloneproject.ssgjojo.recentlyproduct.dto.RecentlyProductAddDto;
 import com.cloneproject.ssgjojo.recentlyproduct.dto.RecentlyProductDeleteDto;
 import com.cloneproject.ssgjojo.recentlyproduct.dto.RecentlyProductOutputDto;
 import com.cloneproject.ssgjojo.recentlyproduct.repository.IRecentlyProductRepository;
@@ -34,7 +33,7 @@ public class RecentlyProductServiceImple implements IRecentlyProductService{
         Optional<User> user = iUserRepository.findById(userId);
 
         if(user.isPresent()) {
-            List<RecentlyProduct> userViewList = iRecentlyProductRepository.findAllByUser(user.get());
+            List<RecentlyProduct> userViewList = iRecentlyProductRepository.findAllByUserOrderByViewTimeDesc(user.get());
             List<RecentlyProductOutputDto> returnDto = new ArrayList<>();
 
             for(RecentlyProduct item : userViewList) {
@@ -57,6 +56,8 @@ public class RecentlyProductServiceImple implements IRecentlyProductService{
                                 .productId(item.getProduct().getId())
                                 .productInfo(productInfo)
                                 .price(productPrice)
+                                .thumbnailUri(item.getProduct().getThumbnail())
+                                .mallName("신세계몰")
                         .build());
             }
 

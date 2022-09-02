@@ -27,6 +27,7 @@ public class RecentlyProductController {
         return iRecentlyProductService.deleteByRecentlyId(deleteDtoList, request);
     }
 
+
     @DeleteMapping("/recently/delete/all")
     public String deleteAllByUserId(HttpServletRequest request) {
         return iRecentlyProductService.deleteAllByUserId(request);

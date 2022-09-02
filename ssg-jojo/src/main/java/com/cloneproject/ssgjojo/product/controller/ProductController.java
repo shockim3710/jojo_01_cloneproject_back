@@ -19,27 +19,12 @@ import java.util.List;
 public class ProductController {
     private final IProductService iProductService;
 
-    @PostMapping("/product/add")
-    public Product addProduct(@RequestBody ProductAddDto productAddDto) {
-        return iProductService.addProduct(productAddDto);
-    }
-
-    @PostMapping(value = "/product/addImage", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PostMapping(value = "/product/add", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public Product addProductWithImage(@RequestParam("thumbnail") MultipartFile thumb,
                                        @RequestParam("productPhoto") List<MultipartFile> productPhoto,
                                        @RequestParam("productDetail") List<MultipartFile> productDetail,
                                        @RequestPart ProductAddDto productAddDto) {
-        return iProductService.addProductWithPhoto(productAddDto, thumb, productPhoto, productDetail);
-    }
-
-    @GetMapping("/product/getAll")
-    public List<ProductInfoDto> getAllProduct() {
-        return iProductService.getAllProduct();
-    }
-
-    @GetMapping("/product/{id}")
-    public ProductInfoDto getProduct(@PathVariable Long id) {
-        return iProductService.getProductById(id);
+        return iProductService.addProduct(productAddDto, thumb, productPhoto, productDetail);
     }
 
     @GetMapping("/product/detail/{productId}")

@@ -56,6 +56,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -88,68 +89,9 @@ public class ProductServiceImple implements IProductService {
     private final IRecentSearchesRepository iRecentSearchesRepository;
 
 
-
     // 상품 추가
     @Override
-    @Transactional
-    public Product addProduct(ProductAddDto productAddDto) {
-        Optional<CategoryLv1> categoryLv1 = iCategoryLv1Repository.findById(productAddDto.getCategoryLv1());
-        Optional<CategoryLv2> categoryLv2 = iCategoryLv2Repository.findById(productAddDto.getCategoryLv2());
-        Optional<CategoryLv3> categoryLv3 = iCategoryLv3Repository.findById(productAddDto.getCategoryLv3());
-        Optional<CategoryLv4> categoryLv4 = iCategoryLv4Repository.findById(productAddDto.getCategoryLv4());
-        
-        // 카테고리 유효성 검증
-        if(categoryLv1.isPresent() && categoryLv2.isPresent() && categoryLv3.isPresent() && categoryLv4.isPresent()) {
-            // 상품 저장
-            Product product = iProductRepository.save(Product.builder()
-                    .productName(productAddDto.getProductName())
-                    .price(productAddDto.getPrice())
-                    .discountRate(productAddDto.getDiscountRate())
-                    .description(productAddDto.getDescription())
-                    .manufactureCompany(productAddDto.getManufactureCompany())
-                    .adultCase(productAddDto.isAdultCase())
-                    .fee(productAddDto.getFee())
-                    .adultCase(productAddDto.isAdultCase())
-                    .build()
-            );
-
-            iCategoryProductListRepository.save(CategoryProductList.builder()
-                    .categoryLv1(categoryLv1.get())
-                    .categoryLv2(categoryLv2.get())
-                    .categoryLv3(categoryLv3.get())
-                    .categoryLv4(categoryLv4.get())
-                    .product(product)
-                    .build());
-            // 상품 - 카테고리 중칸테이블 저장
-            iCategoryProductListRepository.save(CategoryProductList.builder()
-                    .categoryLv1(categoryLv1.get())
-                    .categoryLv2(categoryLv2.get())
-                    .categoryLv3(categoryLv3.get())
-                    .categoryLv4(categoryLv4.get())
-                    .product(product)
-                    .build());
-
-            // 상품 옵션 저장
-            // 상품 등록할 때 옵션을 여러가지 등록할 수 있으므로 foreach로 하나씩 저장
-            for(ProductOptionDto productOptionDto : productAddDto.getProductOptionDtoList()) {
-                iProductOptionRepository.save(ProductOption.builder()
-                    .product(product)
-                    .productOption1Name(productOptionDto.getProductOption1Name())
-                    .productOption1Contents(productOptionDto.getProductOption1Contents())
-                    .productOption2Name(productOptionDto.getProductOption2Name())
-                    .productOption2Contents(productOptionDto.getProductOption2Contents())
-                    .stock(productOptionDto.getStock())
-                    .build());
-            }
-
-            return product;
-        }
-
-        return null;
-    }
-
-    @Override
-    public Product addProductWithPhoto(ProductAddDto productAddDto, MultipartFile thumbnail, List<MultipartFile> productPhoto, List<MultipartFile> productDetail) {
+    public Product addProduct(ProductAddDto productAddDto, MultipartFile thumbnail, List<MultipartFile> productPhoto, List<MultipartFile> productDetail) {
         Optional<CategoryLv1> categoryLv1 = iCategoryLv1Repository.findById(productAddDto.getCategoryLv1());
         Optional<CategoryLv2> categoryLv2 = iCategoryLv2Repository.findById(productAddDto.getCategoryLv2());
         Optional<CategoryLv3> categoryLv3 = iCategoryLv3Repository.findById(productAddDto.getCategoryLv3());
@@ -244,7 +186,7 @@ public class ProductServiceImple implements IProductService {
     }
 
     // 상품 아이디를 통한 조회
-    @Override
+/*    @Override
     public ProductInfoDto getProductById(Long id) {
         Optional<Product> product = iProductRepository.findById(id);
 
@@ -252,16 +194,16 @@ public class ProductServiceImple implements IProductService {
         if(product.isPresent()) {
             // 상품 - 카테고리 중간 테이블에 데이터 있는지 확인
             Optional<CategoryProductList> categoryProductList = iCategoryProductListRepository.findByProduct(product.get());
-            // 옵션 테이블에 해당 상품에 대한 데이터 있는 
+            // 옵션 테이블에 해당 상품에 대한 데이터 있는
             List<ProductOption> productOptionList = iProductOptionRepository.findAllByProduct(product.get());
             List<ProductPhoto> productPhotoList = iProductPhotoRepository.findAllByProduct(product.get());
             List<ProductDetailPhoto> productDetailPhotoList = iProductDetailPhotoRepository.findAllByProduct(product.get());
-            
+
             // 중간 테이블 및 옵션 리스트 유효성 검증
             if(categoryProductList.isPresent() && !productOptionList.isEmpty() && !productPhotoList.isEmpty() && !productDetailPhotoList.isEmpty()) {
                 List<ProductOptionOutputDto> optionOutDtoList = new ArrayList<>();
 
-                // 하나의 상품에 여러개의 옵션이 있을 수 있으므로 
+                // 하나의 상품에 여러개의 옵션이 있을 수 있으므로
                 // 옵션 테이블의 데이터를 내가 보내주고 싶은 필드만
                 // DTO로 만들고 build 한 뒤, optionOutDtoList에 추가해준다.
                 for(ProductOption tmp : productOptionList) {
@@ -323,8 +265,9 @@ public class ProductServiceImple implements IProductService {
             }
         }
         return null;
-    }
+    }*/
 
+/*
     @Override
     public List<ProductInfoDto> getAllProduct() {
         List<Product> productList = iProductRepository.findAll();
@@ -402,6 +345,7 @@ public class ProductServiceImple implements IProductService {
 
         return productInfoDtoList;
     }
+*/
 
     // 상품 삭제
     @Override
@@ -535,6 +479,7 @@ public class ProductServiceImple implements IProductService {
     }
 
     @Override
+    @Transactional
     public ProductDetailDto getProductDetail(Long productId, HttpServletRequest request) {
         Optional<Product> product = iProductRepository.findById(productId);
 
@@ -544,12 +489,19 @@ public class ProductServiceImple implements IProductService {
             Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
             Optional<User> user = iUserRepository.findById(userId);
 
-            if(user.isPresent())
-                iRecentlyProductRepository.save(RecentlyProduct.builder()
-                                .product(product.get())
-                                .user(user.get())
-                        .build());
+            if(user.isPresent()) {
+                Optional<RecentlyProduct> recentlyProduct = iRecentlyProductRepository.findByUserAndProduct(user.get(), product.get());
 
+                if(recentlyProduct.isPresent())
+                    recentlyProduct.get().setViewTime(new Timestamp(System.currentTimeMillis()));
+
+                else
+                    iRecentlyProductRepository.save(RecentlyProduct.builder()
+                            .product(product.get())
+                            .user(user.get())
+                            .viewTime(new Timestamp(System.currentTimeMillis()))
+                            .build());
+            }
         }
 
         Long newPrice = 0L;
@@ -672,7 +624,7 @@ public class ProductServiceImple implements IProductService {
         else
             return null;
 
-        for (Product product : findResult) {
+        for(Product product : findResult) {
             Long newPrice = 0L;
             Long oldPrice = 0L;
             Float reviewScore = iReviewRepository.getReviewAvgScore(product.getId());
