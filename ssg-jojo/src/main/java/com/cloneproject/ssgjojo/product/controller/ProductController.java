@@ -19,48 +19,24 @@ import java.util.List;
 public class ProductController {
     private final IProductService iProductService;
 
-    @PostMapping("/product/add")
-    public Product addProduct(@RequestBody ProductAddDto productAddDto) {
-        return iProductService.addProduct(productAddDto);
-    }
-
+    // 상품 추가
     @PostMapping(value = "/product/addImage", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public Product addProductWithImage(@RequestParam("thumbnail") MultipartFile thumb,
                                        @RequestParam("productPhoto") List<MultipartFile> productPhoto,
                                        @RequestParam("productDetail") List<MultipartFile> productDetail,
                                        @RequestPart ProductAddDto productAddDto) {
-        return iProductService.addProductWithPhoto(productAddDto, thumb, productPhoto, productDetail);
+        return iProductService.addProduct(productAddDto, thumb, productPhoto, productDetail);
     }
 
-    @GetMapping("/product/getAll")
-    public List<ProductInfoDto> getAllProduct() {
-        return iProductService.getAllProduct();
-    }
+//    @GetMapping("/product/getAll")
+//    public List<ProductInfoDto> getAllProduct() {
+//        return iProductService.getAllProduct();
+//    }
 
-    @GetMapping("/product/{id}")
-    public ProductInfoDto getProduct(@PathVariable Long id) {
-        return iProductService.getProductById(id);
-    }
-
-    @GetMapping("/product/detail/{productId}")
-    public ProductDetailDto getProductDetail(@PathVariable Long productId, HttpServletRequest request) {
-        return iProductService.getProductDetail(productId, request);
-    }
-
-    @GetMapping("/product/getlist")
-    public List<ProductListDto> getProductAllList() {
-        return iProductService.getAllProductList();
-    }
-
-    @DeleteMapping("/product/{id}")
-    public void deleteProduct(@PathVariable Long id) {
-        iProductService.deleteProduct(id);
-    }
-
-    @PutMapping("/product")
-    public Product editProduct(@RequestBody ProductUpdateDto productUpdateDto) {
-        return iProductService.editProduct(productUpdateDto);
-    }
+//    @GetMapping("/product/{id}")
+//    public ProductInfoDto getProduct(@PathVariable Long id) {
+//        return iProductService.getProductById(id);
+//    }
 
     // 카테고리별 상품 조회
     @GetMapping("/product/findbycategory")
@@ -68,7 +44,6 @@ public class ProductController {
                                                @RequestParam(name = "lv", defaultValue = "4") Long lv,
                                                @RequestParam(name = "id") Long id) {
         return iProductService.findProductByCategoryLv(lv, id, page);
-
     }
 
     // 상품 검색
@@ -76,4 +51,29 @@ public class ProductController {
     public List<ProductListDto> searchProduct(@RequestParam String keyword, HttpServletRequest request) {
         return iProductService.productSearch(keyword, request);
     }
+
+    // 상품 상세
+    @GetMapping("/product/detail/{productId}")
+    public ProductDetailDto getProductDetail(@PathVariable Long productId, HttpServletRequest request) {
+        return iProductService.getProductDetail(productId, request);
+    }
+
+    // 상품 리스트 조회
+    @GetMapping("/product/getlist")
+    public List<ProductListDto> getProductAllList() {
+        return iProductService.getAllProductList();
+    }
+
+    // 상품 편집
+    @PutMapping("/product")
+    public Product editProduct(@RequestBody ProductUpdateDto productUpdateDto) {
+        return iProductService.editProduct(productUpdateDto);
+    }
+
+    // 상품 삭제
+    @DeleteMapping("/product/{id}")
+    public void deleteProduct(@PathVariable Long id) {
+        iProductService.deleteProduct(id);
+    }
+
 }

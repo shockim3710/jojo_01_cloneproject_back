@@ -14,6 +14,5 @@ public class QuestionInputDto {
     private String title;
     private String questionMain;
     private boolean lockCase;
-
     private Long productId;
 }

@@ -15,6 +15,7 @@ import java.util.List;
 public class ProductOptionController {
     private final IProductOptionService iProductOptionService;
 
+    // 상품 옵션 추가
     @PostMapping("/productoption/add")
     public ProductOption addProductOption(@RequestBody ProductOptionAddDto productOptionAddDto) {
         return iProductOptionService.addProductOption(productOptionAddDto);

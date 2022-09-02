@@ -20,5 +20,4 @@ public interface IReviewService {
     List<ReviewPossibleWriteDto> findPossibleWrite(HttpServletRequest request);
     void deleteReview(ReviewDeleteDto reviewDeleteDto, HttpServletRequest request);
     List<ReviewOutputDto> pageList(Pageable pageable, Long productId);
-
 }

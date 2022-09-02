@@ -27,6 +27,7 @@ public class PayingCreditCardServiceImple implements IPayingCreditCardService {
     private final JwtTokenProvider jwtTokenProvider;
 
 
+
     // 결제 카드 등록
     @Override
     public PayingCreditCardOutputDto addPayingCreditCard(PayingCreditCardInputDto payingCreditCardInputDto, HttpServletRequest request) {
@@ -50,7 +51,8 @@ public class PayingCreditCardServiceImple implements IPayingCreditCardService {
         return null;
     }
 
-    // 해당 유저의 결제 카드 조회
+
+    // 유저별 결제 카드 조회
     @Override
     public List<PayingCreditCardOutputDto> getPayingCreditCardByUserId(HttpServletRequest request) {
 
@@ -78,6 +80,7 @@ public class PayingCreditCardServiceImple implements IPayingCreditCardService {
 
         return null;
     }
+
 
     // 결제 카드 삭제
     @Override

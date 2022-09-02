@@ -17,16 +17,20 @@ import java.util.List;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class RecentlyProductController {
     private final IRecentlyProductService iRecentlyProductService;
+
+    // 유저별 최근 본 상품 조회
     @GetMapping("/recently/list")
     public List<RecentlyProductOutputDto> findRecentlyByUser(HttpServletRequest request) {
         return iRecentlyProductService.findAllByUser(request);
     }
 
+    // 최근 본 상품 각각 삭제
     @DeleteMapping("/recently/delete")
     public String deleteByRecentlyId(@RequestBody List<RecentlyProductDeleteDto> deleteDtoList, HttpServletRequest request) {
         return iRecentlyProductService.deleteByRecentlyId(deleteDtoList, request);
     }
 
+    // 최근 본 상품 전체 삭제
     @DeleteMapping("/recently/delete/all")
     public String deleteAllByUserId(HttpServletRequest request) {
         return iRecentlyProductService.deleteAllByUserId(request);

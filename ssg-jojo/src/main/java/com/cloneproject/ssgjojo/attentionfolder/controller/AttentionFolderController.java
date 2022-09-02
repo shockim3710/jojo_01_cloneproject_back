@@ -9,6 +9,7 @@ import com.cloneproject.ssgjojo.attentionfolder.service.IAttentionFolderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
@@ -18,23 +19,27 @@ import java.util.List;
 public class AttentionFolderController {
     private final IAttentionFolderService iAttentionFolderService;
 
+    // 좋아요 폴더 추가
     @PostMapping("/attentionfolder/add")
-    public AttentionFolderOutputDto addFolder(@RequestBody AttentionFolderAddDto addDto) {
-        return iAttentionFolderService.addFolder(addDto);
+    public AttentionFolderOutputDto addFolder(@RequestBody AttentionFolderAddDto addDto, HttpServletRequest request) {
+        return iAttentionFolderService.addFolder(addDto, request);
     }
 
-    @GetMapping("/attentionfolder/get/{id}")
-    public List<AttentionFolderOutputDto> getFolderByUser(@PathVariable Long id) {
-        return iAttentionFolderService.findAllByUser(id);
+    // 유저별 좋아요 폴더 조회
+    @GetMapping("/attentionfolder/get")
+    public List<AttentionFolderOutputDto> getFolderByUser(HttpServletRequest request) {
+        return iAttentionFolderService.findAllByUser(request);
     }
 
+    // 좋아요 폴더 수정
     @PutMapping("/attentionfolder/edit")
-    public AttentionFolderOutputDto editFolder(@RequestBody AttentionFolderEditDto editDto) {
-        return iAttentionFolderService.editFolder(editDto);
+    public AttentionFolderOutputDto editFolder(@RequestBody AttentionFolderEditDto editDto, HttpServletRequest request) {
+        return iAttentionFolderService.editFolder(editDto, request);
     }
 
+    // 좋아요 폴더 삭제
     @DeleteMapping("/attentionfolder/delete")
-    public void deleteFolder(@RequestBody AttentionFolderDeleteDto deleteDto) {
-        iAttentionFolderService.deleteFolderById(deleteDto);
+    public void deleteFolder(@RequestBody AttentionFolderDeleteDto deleteDto, HttpServletRequest request) {
+        iAttentionFolderService.deleteFolderById(deleteDto, request);
     }
 }

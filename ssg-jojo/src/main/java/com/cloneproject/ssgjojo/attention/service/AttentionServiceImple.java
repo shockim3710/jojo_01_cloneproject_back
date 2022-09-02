@@ -28,6 +28,8 @@ public class AttentionServiceImple implements IAttentionService{
     private final IUserRepository iUserRepository;
     private final JwtTokenProvider jwtTokenProvider;
 
+
+
     // 좋아요 항목 추가
     @Override
     public void AttentionAdd(AttentionAddDto addDto, HttpServletRequest request) {
@@ -56,10 +58,13 @@ public class AttentionServiceImple implements IAttentionService{
         }
     }
 
+
     // 좋아요 항목 폴더에 추가
     @Override
-    public void AttentionAddFolder(AttentionInputFolderDto addFolderDto) {
-        Optional<User> user = iUserRepository.findById(addFolderDto.getUserId());
+    public void AttentionAddFolder(AttentionInputFolderDto addFolderDto, HttpServletRequest request) {
+
+        Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
+        Optional<User> user = iUserRepository.findById(userId);
 
         if (user.isPresent()) {
             for (Long attentionId : addFolderDto.getAttentionIdList()) {
@@ -91,11 +96,14 @@ public class AttentionServiceImple implements IAttentionService{
         }
     }
 
-    // 좋아요 항목 볼더 변경
+
+    // 좋아요 항목 폴더 변경
     @Override
     @Transactional
-    public List<AttentionOutputDto> AttentionEditFolder(AttentionEditFolderDto attentionEditFolderDto) {
-        Optional<User> user = iUserRepository.findById(attentionEditFolderDto.getUserId());
+    public List<AttentionOutputDto> AttentionEditFolder(AttentionEditFolderDto attentionEditFolderDto, HttpServletRequest request) {
+
+        Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
+        Optional<User> user = iUserRepository.findById(userId);
 
         if(user.isPresent()) {
             // 변경하여 저장 할 폴더 리스트
@@ -159,8 +167,11 @@ public class AttentionServiceImple implements IAttentionService{
         return null;
     }
 
+
+    // 특정 폴더에 있는 좋아요 항목 조회
     @Override
     public List<AttentionOutputDto> findAllByAttentionFolder(Long folderId) {
+
         Optional<AttentionFolder> attentionFolder = iAttentionFolderRepository.findById(folderId);
 
         if(attentionFolder.isPresent()) {
@@ -189,11 +200,14 @@ public class AttentionServiceImple implements IAttentionService{
         return null;
     }
 
+
     // 전체 폴더에서 삭제
     @Override
     @Transactional
-    public boolean deleteAttention(AttentionDeleteDto deleteDto) {
-        Optional<User> user = iUserRepository.findById(deleteDto.getUserId());
+    public boolean deleteAttention(AttentionDeleteDto deleteDto, HttpServletRequest request) {
+
+        Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
+        Optional<User> user = iUserRepository.findById(userId);
 
         if(user.isPresent()) {
             for (Long productId : deleteDto.getProductId()) {
@@ -211,8 +225,10 @@ public class AttentionServiceImple implements IAttentionService{
 
     // 특정 폴더에서 삭제
     @Override
-    public boolean deleteAttentionInFolder(AttentionDeleteFolderDto deleteDto) {
-        Optional<User> user = iUserRepository.findById(deleteDto.getUserId());
+    public boolean deleteAttentionInFolder(AttentionDeleteFolderDto deleteDto, HttpServletRequest request) {
+
+        Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
+        Optional<User> user = iUserRepository.findById(userId);
 
         if(user.isPresent()) {
             for(Long attentionId : deleteDto.getAttentionId()) {
