@@ -96,6 +96,21 @@ public class DeliveryAddressServiceImple implements IDeliveryAddressService {
         Optional<User> user = iUserRepository.findById(userId);
 
         if(deliveryAddress.isPresent() && user.isPresent()) {
+
+            if(deliveryAddressEditGetIdDto.isWhetherDefaultAddress() == true) {
+                Optional<DeliveryAddress> deliveryAddressOptional = iDeliveryAddressRepository.findByWhetherDefaultAddressAndUserId(true, userId);
+                if(deliveryAddressOptional.isPresent()) {
+                    deliveryAddressOptional.get().setWhetherDefaultAddress(false);
+                }
+
+            } else if (deliveryAddressEditGetIdDto.isWhetherOnlyThisTime() == true) {
+                Optional<DeliveryAddress> deliveryAddressOptional = iDeliveryAddressRepository.findByWhetherOnlyThisTimeAndUserId(true, userId);
+                if(deliveryAddressOptional.isPresent()) {
+                    deliveryAddressOptional.get().setWhetherOnlyThisTime(false);
+                }
+            }
+
+
             DeliveryAddress temp = iDeliveryAddressRepository.save(DeliveryAddress.builder()
                     .id(deliveryAddressEditGetIdDto.getId())
                     .address(deliveryAddressEditGetIdDto.getAddress())
