@@ -64,8 +64,9 @@ public class DeliveryAddressServiceImple implements IDeliveryAddressService {
         Optional<User> userOptional = iUserRepository.findById(userId);
 
         if(userOptional.isPresent()) {
-            List<DeliveryAddress> deliveryAddressList = iDeliveryAddressRepository.findAllByUser(userOptional.get());
             List<DeliveryAddressEditGetIdDto> deliveryAddressEditGetIdDtoList = new ArrayList<>();
+
+            List<DeliveryAddress> deliveryAddressList = iDeliveryAddressRepository.findAllByUserOrderByWhetherDefaultAddressDesc(userOptional.get());
 
             deliveryAddressList.forEach(user -> {
                 deliveryAddressEditGetIdDtoList.add(DeliveryAddressEditGetIdDto.builder()
