@@ -117,6 +117,9 @@ public class CartServiceImple implements ICartService {
         String userId = jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request));
         Optional<User> userOptional = iUserRepository.findById(Long.valueOf(userId));
 
+        List<CartProductListGetIdEditDto> listGetIdDto = new ArrayList<>();
+
+
         if(userOptional.isPresent()) {
 
             Optional<Cart> cartOptional = iCartRepository.findByUserId(userOptional.get().getId());
@@ -124,7 +127,7 @@ public class CartServiceImple implements ICartService {
             if(cartOptional.isPresent()) {
 
                 List<CartProductList> cartProductLists = iCartProductListRepository.findAllByCart(cartOptional.get());
-                List<CartProductListGetIdEditDto> listGetIdDto = new ArrayList<>();
+
 
                 cartProductLists.forEach(cart -> {
                     Product product = cart.getProduct();
@@ -161,7 +164,7 @@ public class CartServiceImple implements ICartService {
             }
         }
 
-        return null;
+        return listGetIdDto;
     }
 
     @Override

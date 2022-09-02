@@ -43,18 +43,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user/**").authenticated()
                 .antMatchers("/**").permitAll()
 
-//                .logout().logoutUrl("/logout").and()
-                .and()
-                .logout()
-                .logoutUrl("/logout") //logout url 설정
-                .logoutSuccessUrl("/login") //logout 시 이동할 url만 설정
-                .addLogoutHandler(new LogoutHandler() { //logout이 성공했을 때 처리할 내용
-                    @Override
-                    public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
-                        HttpSession session = request.getSession();
-                        session.invalidate();
-                    }
-                })
 
 
                 .and()
