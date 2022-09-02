@@ -49,6 +49,7 @@ public class OrdersServiceImple implements IOrdersService{
         Optional<User> user = iUserRepository.findById(userId);
         Optional<DeliveryAddress> deliveryAddress = iDeliveryAddressRepository.findById(ordersAddDto.getDeliveryAddress());
 
+        user.get().getName();
         if (user.isPresent() && deliveryAddress.isPresent()) {
 
             ordersAddDto.setWhetherExchange(false);

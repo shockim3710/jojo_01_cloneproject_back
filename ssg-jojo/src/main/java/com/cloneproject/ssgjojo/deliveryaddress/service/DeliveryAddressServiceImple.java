@@ -95,18 +95,29 @@ public class DeliveryAddressServiceImple implements IDeliveryAddressService {
         Optional<DeliveryAddress> deliveryAddress = iDeliveryAddressRepository.findById(deliveryAddressEditGetIdDto.getId());
         Optional<User> user = iUserRepository.findById(userId);
 
+        Optional<DeliveryAddress> deliveryAddressWhetherDefaultAddress = iDeliveryAddressRepository.findByWhetherDefaultAddressAndUserId(true, userId);
+        Optional<DeliveryAddress> deliveryAddressWhetherOnlyThisTime = iDeliveryAddressRepository.findByWhetherOnlyThisTimeAndUserId(true, userId);
+        Optional<DeliveryAddress> deliveryAddressOptional = iDeliveryAddressRepository.findByWhetherDefaultAddressAndWhetherOnlyThisTimeAndUserId(true, true, userId);
+
         if(deliveryAddress.isPresent() && user.isPresent()) {
 
-            if(deliveryAddressEditGetIdDto.isWhetherDefaultAddress() == true) {
-                Optional<DeliveryAddress> deliveryAddressOptional = iDeliveryAddressRepository.findByWhetherDefaultAddressAndUserId(true, userId);
-                if(deliveryAddressOptional.isPresent()) {
-                    deliveryAddressOptional.get().setWhetherDefaultAddress(false);
+
+            if(deliveryAddressEditGetIdDto.isWhetherDefaultAddress() == true && deliveryAddressEditGetIdDto.isWhetherOnlyThisTime() == true) {
+
+                if(deliveryAddress.get().isWhetherDefaultAddress() == false) {
+                    deliveryAddressWhetherDefaultAddress.get().setWhetherDefaultAddress(false);
+                } else if(deliveryAddress.get().isWhetherOnlyThisTime() == false) {
+                    deliveryAddressWhetherOnlyThisTime.get().setWhetherOnlyThisTime(false);
+                }
+
+            } else if(deliveryAddressEditGetIdDto.isWhetherDefaultAddress() == true) {
+                if(deliveryAddressWhetherDefaultAddress.isPresent()) {
+                    deliveryAddressWhetherDefaultAddress.get().setWhetherDefaultAddress(false);
                 }
 
             } else if (deliveryAddressEditGetIdDto.isWhetherOnlyThisTime() == true) {
-                Optional<DeliveryAddress> deliveryAddressOptional = iDeliveryAddressRepository.findByWhetherOnlyThisTimeAndUserId(true, userId);
-                if(deliveryAddressOptional.isPresent()) {
-                    deliveryAddressOptional.get().setWhetherOnlyThisTime(false);
+                if(deliveryAddressWhetherOnlyThisTime.isPresent()) {
+                    deliveryAddressWhetherOnlyThisTime.get().setWhetherOnlyThisTime(false);
                 }
             }
 
