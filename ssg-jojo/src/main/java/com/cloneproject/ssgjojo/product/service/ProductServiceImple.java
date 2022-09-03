@@ -490,7 +490,7 @@ public class ProductServiceImple implements IProductService {
 
         // Request 헤더에서 Authorization에 대한 설정이 있을 경우
         // 최근 본 상품에 등록
-        if(request.getHeader("Authorization") != null) {
+        if(!request.getHeader("Authorization").equals("null")) {
             Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
             Optional<User> user = iUserRepository.findById(userId);
 
@@ -544,7 +544,7 @@ public class ProductServiceImple implements IProductService {
             List<Object> opt1List = new ArrayList<>();
             List<Object> opt2List = new ArrayList<>();
 
-            if(productOption.get(0).getProductOption1Name().equals("")) {
+            if(productOption.get(0).getProductOption1Name() == null) {
                 map.put("productOption1Name", null);
                 map.put("productOption2Name", null);
 
