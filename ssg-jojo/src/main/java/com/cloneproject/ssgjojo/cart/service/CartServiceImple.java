@@ -251,12 +251,6 @@ public class CartServiceImple implements ICartService {
 
         if(cartProductList.isPresent()) {
             iCartProductListRepository.deleteById(id);
-
-            List<CartProductList> cartProductListOptional = iCartProductListRepository.findByCartId(cartProductList.get().getCart().getId());
-
-            if(cartProductListOptional.isEmpty()) {
-                iCartRepository.deleteById(cartProductList.get().getCart().getId());
-            }
         }
     }
 
@@ -271,8 +265,6 @@ public class CartServiceImple implements ICartService {
             for (CartProductList temp : cartProductLists) {
                 iCartProductListRepository.deleteById(temp.getId());
             }
-
-            iCartRepository.deleteById(id);
         }
 
     }

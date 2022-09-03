@@ -99,6 +99,8 @@ public class OrdersServiceImple implements IOrdersService{
                 productOption.get().setStock(productOption.get().getStock() - temp.getCount());
             }
 
+            deliveryAddress.get().setWhetherOnlyThisTime(false);
+
             return OrdersAddDto.builder()
                     .ordersPrice(orders.getOrdersPrice())
                     .whetherExchange(orders.isWhetherExchange())
