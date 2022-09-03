@@ -2,12 +2,16 @@ package com.cloneproject.ssgjojo.product.service;
 
 
 import com.cloneproject.ssgjojo.categorylv1.domain.CategoryLv1;
+import com.cloneproject.ssgjojo.categorylv1.dto.CategoryDto;
 import com.cloneproject.ssgjojo.categorylv1.repository.ICategoryLv1Repository;
 import com.cloneproject.ssgjojo.categorylv2.domain.CategoryLv2;
+import com.cloneproject.ssgjojo.categorylv2.dto.CategoryLv2Dto;
 import com.cloneproject.ssgjojo.categorylv2.repository.ICategoryLv2Repository;
 import com.cloneproject.ssgjojo.categorylv3.domain.CategoryLv3;
+import com.cloneproject.ssgjojo.categorylv3.dto.CategoryLv3Dto;
 import com.cloneproject.ssgjojo.categorylv3.repository.ICategoryLv3Repository;
 import com.cloneproject.ssgjojo.categorylv4.domain.CategoryLv4;
+import com.cloneproject.ssgjojo.categorylv4.dto.CategoryLv4Dto;
 import com.cloneproject.ssgjojo.categorylv4.repository.ICategoryLv4Repository;
 
 import com.cloneproject.ssgjojo.categoryproductlist.domain.CategoryProductList;
@@ -50,6 +54,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -436,6 +441,7 @@ public class ProductServiceImple implements IProductService {
 
     }
 
+    // 전체 상품 목록 반환
     @Override
     public List<ProductListDto> getAllProductList() {
         Pageable pr = PageRequest.of(0, 20);
@@ -662,23 +668,34 @@ public class ProductServiceImple implements IProductService {
 
 
     @Override
-    public List<ProductListDto> findProductByCategoryLv(Long lv, Long id, int page) {
+    public ProductInfoCategoryDto findProductByCategoryLv(Long lv, Long id, int page) {
         List<Product> findResult = new ArrayList<>();
         List<ProductListDto> returnList = new ArrayList<>();
 
-        Pageable pr = PageRequest.of(page-1, 20);
+        Pageable pr = PageRequest.of(page - 1, 20, Sort.by("id").descending());
 
-        if (lv == 1)
+        List<CategoryDto> sameLevelCategory = new ArrayList<CategoryDto>();;
+        List<CategoryDto> childLevelCategory = new ArrayList<CategoryDto>();;
+
+        if (lv == 1) {
             findResult = iCategoryProductListRepository.findByCategoryLv1id(id, pr);
-        else if (lv == 2)
-            findResult = iCategoryProductListRepository.findByCategoryLv2id(id, pr);
-        else if (lv == 3)
-            findResult = iCategoryProductListRepository.findByCategoryLv3id(id, pr);
-        else if (lv == 4)
-            findResult = iCategoryProductListRepository.findByCategoryLv4id(id, pr);
+            sameLevelCategory = iCategoryLv1Repository.getCategoryLv1(id);
+            childLevelCategory = iCategoryLv2Repository.findAllByCategoryLv1_Id(id);
 
-        else
+        } else if (lv == 2) {
+            findResult = iCategoryProductListRepository.findByCategoryLv2id(id, pr);
+            sameLevelCategory = iCategoryLv2Repository.getCategoryLv2(id);
+            childLevelCategory = iCategoryLv3Repository.findAllByCategoryLv2_Id(id);
+        } else if (lv == 3) {
+            findResult = iCategoryProductListRepository.findByCategoryLv3id(id, pr);
+            sameLevelCategory = iCategoryLv3Repository.getCategoryLv3(id);
+            childLevelCategory = iCategoryLv4Repository.findAllByCategoryLv3_Id(id);
+        } else if (lv == 4) {
+            findResult = iCategoryProductListRepository.findByCategoryLv4id(id, pr);
+            sameLevelCategory = iCategoryLv4Repository.getCategoryLv4(id);
+        } else {
             return null;
+        }
 
         for(Product product : findResult) {
             Long newPrice = 0L;
@@ -709,7 +726,11 @@ public class ProductServiceImple implements IProductService {
                     .build());
         }
 
-        return returnList;
+        return ProductInfoCategoryDto.builder()
+                .productList(returnList)
+                .childLevelCategory(childLevelCategory)
+                .sameLevelCategory(sameLevelCategory)
+                .build();
     }
 
     // 상품 검색

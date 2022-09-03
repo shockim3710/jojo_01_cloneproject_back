@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 @Builder
 public class CategoryLv3Dto {
 
+    private Long id;
+
     private Long categoryLv2;
     private String lv3name;
 }

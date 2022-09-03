@@ -49,7 +49,7 @@ public class ProductController {
 
     // 카테고리별 상품 조회
     @GetMapping("/product/findbycategory")
-    public List<ProductListDto> findByCategory(@RequestParam(name = "page", defaultValue = "1") int page,
+    public ProductInfoCategoryDto findByCategory(@RequestParam(name = "page", defaultValue = "1") int page,
                                                @RequestParam(name = "lv", defaultValue = "4") Long lv,
                                                @RequestParam(name = "id") Long id) {
         return iProductService.findProductByCategoryLv(lv, id, page);

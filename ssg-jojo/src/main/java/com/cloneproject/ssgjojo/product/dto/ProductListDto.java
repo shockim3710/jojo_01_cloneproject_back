@@ -23,6 +23,7 @@ public class ProductListDto {
      * reviewNum : 상품 리뷰 개수
      * fee : 배송비
      * adultCase : 성인 판매 여부
+     * attention : 좋아요 여부
      */
     private Long id;
     private String thumbnailUri;
@@ -36,5 +37,5 @@ public class ProductListDto {
     private int reviewNum;
     private int fee;
     private boolean adultCase;
-
+    private boolean attention;
 }
