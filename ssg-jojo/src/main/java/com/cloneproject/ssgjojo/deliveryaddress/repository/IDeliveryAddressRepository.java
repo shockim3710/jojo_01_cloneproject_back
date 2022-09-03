@@ -12,8 +12,6 @@ import java.util.Optional;
 
 public interface IDeliveryAddressRepository extends JpaRepository<DeliveryAddress, Long> {
     List<DeliveryAddress> findAllByUserOrderByWhetherDefaultAddressDesc(User user);
-
-    Optional<DeliveryAddress> findByWhetherDefaultAddressAndWhetherOnlyThisTimeAndUserId(boolean whetherDefaultAddress, boolean whetherOnlyThisTime, Long userId);
     Optional<DeliveryAddress> findByWhetherDefaultAddressAndUserId(boolean whetherDefaultAddress, Long userId);
     Optional<DeliveryAddress> findByWhetherOnlyThisTimeAndUserId(boolean whetherOnlyThisTime, Long userId);
 

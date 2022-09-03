@@ -58,15 +58,7 @@ public class CartServiceImple implements ICartService {
 
         if(user.isPresent()) {
             Optional<Cart> tempCart = iCartRepository.findByUserId(userId);
-            Cart cart = new Cart();
-
-            if(!tempCart.isPresent()) {
-                cart = iCartRepository.save(Cart.builder()
-                        .user(user.get())
-                        .build());
-            } else {
-                cart = tempCart.get();
-            }
+            Cart cart = tempCart.get();
 
             List<CartProductListAddDto> listAddDto = new ArrayList<>();
             for(CartProductListAddDto cartProductListAddDto : cartAddDto.getCartProductListAddDtoList()) {

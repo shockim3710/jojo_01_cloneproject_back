@@ -2,6 +2,8 @@ package com.cloneproject.ssgjojo.user.service;
 
 import com.cloneproject.ssgjojo.attentionfolder.domain.AttentionFolder;
 import com.cloneproject.ssgjojo.attentionfolder.repository.IAttentionFolderRepository;
+import com.cloneproject.ssgjojo.cart.domain.Cart;
+import com.cloneproject.ssgjojo.cart.repository.ICartRepository;
 import com.cloneproject.ssgjojo.deliveryaddress.domain.DeliveryAddress;
 import com.cloneproject.ssgjojo.deliveryaddress.repository.IDeliveryAddressRepository;
 import com.cloneproject.ssgjojo.jwt.JwtTokenProvider;
@@ -32,6 +34,8 @@ public class UserServiceImple implements IUserService{
     private final IAttentionFolderRepository iAttentionFolderRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final ILogInHistoryRepository iLogInHistoryRepository;
+    private final ICartRepository iCartRepository;
+
 
     @Override
     public String addUser(UserSignupDto userSignupDto) { // 회원가입
@@ -82,7 +86,20 @@ public class UserServiceImple implements IUserService{
                         .folderName(userSignupDto.getFolderName())
                         .build());
 
+        iCartRepository.save(Cart.builder()
+                .user(user)
+                .build());
+
         return "환영합니다.";
+
+
+
+
+
+
+
+
+
     }
 
     @Override

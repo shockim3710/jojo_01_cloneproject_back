@@ -97,16 +97,15 @@ public class DeliveryAddressServiceImple implements IDeliveryAddressService {
 
         Optional<DeliveryAddress> deliveryAddressWhetherDefaultAddress = iDeliveryAddressRepository.findByWhetherDefaultAddressAndUserId(true, userId);
         Optional<DeliveryAddress> deliveryAddressWhetherOnlyThisTime = iDeliveryAddressRepository.findByWhetherOnlyThisTimeAndUserId(true, userId);
-        Optional<DeliveryAddress> deliveryAddressOptional = iDeliveryAddressRepository.findByWhetherDefaultAddressAndWhetherOnlyThisTimeAndUserId(true, true, userId);
 
         if(deliveryAddress.isPresent() && user.isPresent()) {
 
 
             if(deliveryAddressEditGetIdDto.isWhetherDefaultAddress() == true && deliveryAddressEditGetIdDto.isWhetherOnlyThisTime() == true) {
 
-                if(deliveryAddress.get().isWhetherDefaultAddress() == false) {
+                if(deliveryAddress.get().isWhetherDefaultAddress() == false && deliveryAddressWhetherDefaultAddress.isPresent()) {
                     deliveryAddressWhetherDefaultAddress.get().setWhetherDefaultAddress(false);
-                } else if(deliveryAddress.get().isWhetherOnlyThisTime() == false) {
+                } else if(deliveryAddress.get().isWhetherOnlyThisTime() == false && deliveryAddressWhetherOnlyThisTime.isPresent()) {
                     deliveryAddressWhetherOnlyThisTime.get().setWhetherOnlyThisTime(false);
                 }
 
