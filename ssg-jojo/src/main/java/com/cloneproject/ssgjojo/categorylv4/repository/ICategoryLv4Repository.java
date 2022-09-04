@@ -16,8 +16,7 @@ public interface ICategoryLv4Repository extends JpaRepository<CategoryLv4, Long>
     List<CategoryLv4> findAllByCategoryLv3(CategoryLv3 categoryLv3);
 
     @Query(value = "select new com.cloneproject.ssgjojo.categorylv1.dto.CategoryDto(c4.id, 4, c4.lv4name) " +
-            "from CategoryLv4 c4 where c4.id <> :id " +
-            "and c4.categoryLv3.id = (select tmp.categoryLv3.id from CategoryLv4 tmp where tmp.id = :id) ")
+            "from CategoryLv4 c4 where c4.categoryLv3.id = (select tmp.categoryLv3.id from CategoryLv4 tmp where tmp.id = :id) ")
     List<CategoryDto> getCategoryLv4(@Param("id") Long id);
 
 //    @Query(value = "select c4.id, c4.categoryLv3.id, c4.lv4name from CategoryLv4 c4 where c4.id <> :id " +

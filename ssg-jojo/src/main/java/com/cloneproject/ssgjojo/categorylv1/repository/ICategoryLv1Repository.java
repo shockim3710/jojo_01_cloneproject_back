@@ -11,6 +11,6 @@ import java.util.List;
 public interface ICategoryLv1Repository extends JpaRepository<CategoryLv1,Long> {
 
     @Query(value = "select new com.cloneproject.ssgjojo.categorylv1.dto.CategoryDto(c1.id, 1, c1.lv1name)" +
-            " from CategoryLv1 c1 where c1.id <> :id ")
+            " from CategoryLv1 c1 ")
     List<CategoryDto> getCategoryLv1(@Param("id") Long id);
 }
