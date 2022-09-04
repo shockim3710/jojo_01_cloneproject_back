@@ -487,66 +487,60 @@ public class ProductServiceImple implements IProductService {
 
 
     @Override
-    public ProductInfoCategoryDto findProductByCategoryLv(Long lv, Long id, int page) {
-        List<Product> findResult = new ArrayList<>();
-        List<ProductListDto> returnList = new ArrayList<>();
+    public ProductInfoCategoryDto findProductByCategoryLv(Long lv, Long id, int page, HttpServletRequest request) {
+        List<ProductListAttentionDto> findResult = new ArrayList<>();
 
         Pageable pr = PageRequest.of(page - 1, 20, Sort.by("id").descending());
 
-        List<CategoryDto> sameLevelCategory = new ArrayList<CategoryDto>();;
-        List<CategoryDto> childLevelCategory = new ArrayList<CategoryDto>();;
+        List<CategoryDto> sameLevelCategory = new ArrayList<CategoryDto>();
+        List<CategoryDto> childLevelCategory = new ArrayList<CategoryDto>();
+
+        Long userId = -1L;
+
+        if(request.getHeader("Authorization") != null) {
+            userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
+            User user = iUserRepository.findById(userId).orElseThrow(()
+                    -> new IllegalStateException("없는 사용자입니다."));
+        }
 
         if (lv == 1) {
-            findResult = iCategoryProductListRepository.findByCategoryLv1id(id, pr);
+            if(userId != -1L)
+                findResult = iCategoryProductListRepository.findByCategoryLv1idWithUser(id, userId, pr);
+            else
+                findResult = iCategoryProductListRepository.findByCategoryLv1id(id, pr);
+
             sameLevelCategory = iCategoryLv1Repository.getCategoryLv1(id);
             childLevelCategory = iCategoryLv2Repository.findAllByCategoryLv1_Id(id);
 
         } else if (lv == 2) {
-            findResult = iCategoryProductListRepository.findByCategoryLv2id(id, pr);
+            if(userId != -1L)
+                findResult = iCategoryProductListRepository.findByCategoryLv2idWithUser(id, userId, pr);
+            else
+                findResult = iCategoryProductListRepository.findByCategoryLv2id(id, pr);
+
             sameLevelCategory = iCategoryLv2Repository.getCategoryLv2(id);
             childLevelCategory = iCategoryLv3Repository.findAllByCategoryLv2_Id(id);
         } else if (lv == 3) {
-            findResult = iCategoryProductListRepository.findByCategoryLv3id(id, pr);
+            if(userId != -1L)
+                findResult = iCategoryProductListRepository.findByCategoryLv3idWithUser(id, userId, pr);
+            else
+                findResult = iCategoryProductListRepository.findByCategoryLv3id(id, pr);
+
             sameLevelCategory = iCategoryLv3Repository.getCategoryLv3(id);
             childLevelCategory = iCategoryLv4Repository.findAllByCategoryLv3_Id(id);
         } else if (lv == 4) {
-            findResult = iCategoryProductListRepository.findByCategoryLv4id(id, pr);
+            if(userId != -1L)
+                findResult = iCategoryProductListRepository.findByCategoryLv4idWithUser(id, userId, pr);
+            else
+                findResult = iCategoryProductListRepository.findByCategoryLv4id(id, pr);
+
             sameLevelCategory = iCategoryLv4Repository.getCategoryLv4(id);
         } else {
             return null;
         }
 
-        for(Product product : findResult) {
-            Long newPrice = 0L;
-            Long oldPrice = 0L;
-            Float reviewScore = iReviewRepository.getReviewAvgScore(product.getId());
-            int reviewNum = iReviewRepository.getReviewCountByProduct(product.getId());
-
-            int discountRate = product.getDiscountRate();
-            if (discountRate != 0) {
-                oldPrice = product.getPrice();
-                newPrice = (long) ((float) oldPrice * (1 - ((float) discountRate / 100)));
-            } else
-                newPrice = product.getPrice();
-
-            returnList.add(ProductListDto.builder()
-                    .id(product.getId())
-                    .thumbnailUri(product.getThumbnail())
-                    .mallName("신세계몰")
-                    .productName(product.getProductName())
-                    .manufactureCompany(product.getManufactureCompany())
-                    .discountRate(product.getDiscountRate())
-                    .oldPrice(oldPrice)
-                    .newPrice(newPrice)
-                    .reviewScore(reviewScore == null ? 0 : reviewScore)
-                    .reviewNum(reviewNum)
-                    .fee(product.getFee())
-                    .adultCase(product.isAdultCase())
-                    .build());
-        }
-
         return ProductInfoCategoryDto.builder()
-                .productList(returnList)
+                .productList(findResult)
                 .childLevelCategory(childLevelCategory)
                 .sameLevelCategory(sameLevelCategory)
                 .build();
