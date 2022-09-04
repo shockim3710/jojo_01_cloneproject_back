@@ -305,7 +305,7 @@ public class ProductServiceImple implements IProductService {
 
         // Request 헤더에서 Authorization에 대한 설정이 있을 경우
         // 최근 본 상품에 등록
-        if(!request.getHeader("Authorization").equals("null")) {
+        if(request.getHeader("Authorization") != null) {
             Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
             Optional<User> user = iUserRepository.findById(userId);
 
