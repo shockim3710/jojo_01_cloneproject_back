@@ -13,7 +13,9 @@ import java.util.Optional;
 
 public interface ICategoryProductListRepository extends JpaRepository<CategoryProductList, Long> {
     void deleteByProduct(Product product);
+    void deleteAllByProduct(Product product);
     Optional<CategoryProductList> findByProduct(Product product);
+    List<CategoryProductList> findAllByProduct(Product product);
 
     @Query(value = " select count(ct) from CategoryProductList ct " +
             " where ct.categoryLv1.id = :id ")

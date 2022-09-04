@@ -13,5 +13,5 @@ public interface IAttentionFolderService {
     AttentionFolderOutputDto addFolder(AttentionFolderAddDto addDto, HttpServletRequest request);
     List<AttentionFolderOutputDto> findAllByUser(HttpServletRequest request);
     AttentionFolderOutputDto editFolder(AttentionFolderEditDto editDto, HttpServletRequest request);
-    void deleteFolderById(AttentionFolderDeleteDto deleteDto, HttpServletRequest request);
+    boolean deleteFolderById(AttentionFolderDeleteDto deleteDto, HttpServletRequest request);
 }

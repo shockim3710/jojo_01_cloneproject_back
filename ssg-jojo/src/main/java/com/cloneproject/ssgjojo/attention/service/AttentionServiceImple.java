@@ -59,10 +59,12 @@ public class AttentionServiceImple implements IAttentionService{
 
     // 좋아요 항목 폴더에 추가
     @Override
-    public void AttentionAddFolder(AttentionInputFolderDto addFolderDto, HttpServletRequest request) {
+    public boolean AttentionAddFolder(AttentionInputFolderDto addFolderDto, HttpServletRequest request) {
 
         Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
         Optional<User> user = iUserRepository.findById(userId);
+
+        user.orElseThrow(() -> new IllegalStateException("없는 사용자입니다."));
 
         if (user.isPresent()) {
             for (Long attentionId : addFolderDto.getAttentionIdList()) {
@@ -89,16 +91,23 @@ public class AttentionServiceImple implements IAttentionService{
                                     .attentionFolder(folder.get())
                             .build());
                 }
-
             }
+
+            return true;
         }
+        return false;
     }
 
     // 좋아요 항목 볼더 변경
     @Override
     @Transactional
-    public List<AttentionOutputDto> AttentionEditFolder(AttentionEditFolderDto attentionEditFolderDto, HttpServletRequest request) {
+    public boolean AttentionEditFolder(AttentionEditFolderDto attentionEditFolderDto, HttpServletRequest request) {
+        // 토큰 없을 경우 return
+        if(request.getHeader("Authorization") == null)
+            return false;
+
         Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
+
         Optional<User> user = iUserRepository.findById(userId);
 
         if(user.isPresent()) {
@@ -138,29 +147,11 @@ public class AttentionServiceImple implements IAttentionService{
 
                 iAttentionRepository.delete(attention.get());
             }
-            AttentionFolder originFolder = iAttentionFolderRepository.findById(attentionEditFolderDto.getOriginFolderId()).get();
-            List<Attention> originAttentionList = iAttentionRepository.findAllByAttentionFolder(originFolder);
 
-            List<AttentionOutputDto> outputDtoList = new ArrayList<>();
-
-            for(Attention attention : originAttentionList) {
-                Product temp = iProductRepository.findById(attention.getProduct().getId()).get();
-
-                String productInfo =  temp.getManufactureCompany() + temp.getProductName();
-                Long productPrice = temp.getPrice();
-                Long productId = temp.getId();
-
-                outputDtoList.add(AttentionOutputDto.builder()
-                        .productId(productId)
-                        .productInfo(productInfo)
-                        .productPrice(productPrice)
-                        .build());
-            }
-
-            return outputDtoList;
+            return true;
 
         }
-        return null;
+        return false;
     }
 
     // 특정 폴더에 있는 좋아요 항목 조회

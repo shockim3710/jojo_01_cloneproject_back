@@ -62,7 +62,7 @@ public class ProductTimeDealServiceImple implements IProductTimeDealService{
         List<ProductTimeDeal> timeDealList = iProductTimeDealRepository.findProductTimeDealList();
         List<ProductTimeDealOutputDto> returnDto = new ArrayList<>();
         if(!timeDealList.isEmpty()) {
-            for (ProductTimeDeal timeDeal : timeDealList) {
+            for(ProductTimeDeal timeDeal : timeDealList) {
                 Optional<Product> product = iProductRepository.findById(timeDeal.getProduct().getId());
 
                 if(!product.isPresent())

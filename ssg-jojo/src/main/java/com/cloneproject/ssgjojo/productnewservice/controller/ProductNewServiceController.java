@@ -5,6 +5,7 @@ import com.cloneproject.ssgjojo.productnewservice.domain.ProductNewService;
 import com.cloneproject.ssgjojo.productnewservice.dto.ProductNewServiceAddDto;
 import com.cloneproject.ssgjojo.productnewservice.service.IProductNewServiceService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,14 +20,14 @@ public class ProductNewServiceController {
 
     // 뉴 서비스 등록
     @PostMapping("/newservice/add")
-    public ProductNewService addNewService(@RequestParam("newServicePhoto")MultipartFile newServicePhoto,
-                                           @RequestPart ProductNewServiceAddDto productNewServiceAddDto) {
-        return iProductNewServiceService.addProductNewService(productNewServiceAddDto, newServicePhoto);
+    public ResponseEntity<?> addNewService(@RequestParam("newServicePhoto")MultipartFile newServicePhoto,
+                                        @RequestPart ProductNewServiceAddDto productNewServiceAddDto) {
+        return ResponseEntity.status(200).body(iProductNewServiceService.addProductNewService(productNewServiceAddDto, newServicePhoto));
     }
 
     // 뉴 서비스 조회
     @GetMapping("/newservice/getAll")
-    public List<ProductNewService> getAllNewService() {
-        return iProductNewServiceService.getAllProductNewService();
+    public ResponseEntity<?> getAllNewService() {
+        return ResponseEntity.status(200).body(iProductNewServiceService.getAllProductNewService());
     }
 }

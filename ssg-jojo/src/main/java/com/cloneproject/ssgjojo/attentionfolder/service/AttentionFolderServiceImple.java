@@ -111,7 +111,7 @@ public class AttentionFolderServiceImple implements IAttentionFolderService{
     // 좋아요 폴더 삭제
     @Override
     @Transactional
-    public void deleteFolderById(AttentionFolderDeleteDto deleteDto, HttpServletRequest request) {
+    public boolean deleteFolderById(AttentionFolderDeleteDto deleteDto, HttpServletRequest request) {
 
         Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
         Optional<AttentionFolder> folder = iAttentionFolderRepository.findById(deleteDto.getFolderId());
@@ -119,11 +119,15 @@ public class AttentionFolderServiceImple implements IAttentionFolderService{
 
         // 0번은 기본 폴더로 삭제 불가능.
         if (folder.get().getNo() == 0)
-            return;
+            return false;
 
         if(folder.isPresent() && user.isPresent()) {
             iAttentionFolderRepository.deleteById(folder.get().getId());
+
+            return true;
         }
+
+        return false;
     }
 
 

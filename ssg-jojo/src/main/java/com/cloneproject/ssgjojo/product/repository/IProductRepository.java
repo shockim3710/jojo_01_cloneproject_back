@@ -29,12 +29,10 @@ public interface IProductRepository extends JpaRepository<Product, Long> {
             " coalesce((select avg(rev2.score) from Review rev2 where rev2.product.id = p.id), 0), " +
             " false " +
             " )" +
-            " from Product p " +
-            " left join Attention a " +
-            " on p.id = a.product.id ")
+            " from Product p ")
     List<ProductListDto> getProductList(Pageable pr);
 
-    @Query(value = "select new com.cloneproject.ssgjojo.product.dto.ProductListDto( " +
+    @Query(value = "select distinct new com.cloneproject.ssgjojo.product.dto.ProductListDto( " +
             " p.id, p.thumbnail, '신세계몰', p.productName, " +
             " p.manufactureCompany, p.discountRate, " +
             " p.price, " +

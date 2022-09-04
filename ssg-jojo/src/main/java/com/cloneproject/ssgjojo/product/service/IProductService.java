@@ -12,10 +12,10 @@ public interface IProductService {
     Product addProduct(ProductAddDto productAddDto, MultipartFile thumbnail, List<MultipartFile> productPhoto, List<MultipartFile> productDetail);
 //    ProductInfoDto getProductById(Long id);
 //    List<ProductInfoDto> getAllProduct();
-    void deleteProduct(Long id);
     Product editProduct(ProductUpdateDto productUpdateDto);
     List<ProductListDto> getAllProductList(HttpServletRequest request);
     ProductInfoCategoryDto findProductByCategoryLv(Long lv, Long id, int page, HttpServletRequest request);
     ProductDetailDto getProductDetail(Long productId, HttpServletRequest request);
     List<ProductListDto> productSearch(String keyword, int page, HttpServletRequest request);
+    boolean deleteProduct(Long id);
 }

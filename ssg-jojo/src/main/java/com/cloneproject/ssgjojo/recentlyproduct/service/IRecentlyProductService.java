@@ -9,6 +9,6 @@ import java.util.List;
 
 public interface IRecentlyProductService {
     List<RecentlyProductOutputDto> findAllByUser(HttpServletRequest request);
-    String deleteByRecentlyId(List<RecentlyProductDeleteDto> recentlyProductDeleteDto, HttpServletRequest request);
-    String deleteAllByUserId(HttpServletRequest request);
+    boolean deleteByRecentlyId(RecentlyProductDeleteDto recentlyProductDeleteDto, HttpServletRequest request);
+    boolean deleteAllByUserId(HttpServletRequest request);
 }

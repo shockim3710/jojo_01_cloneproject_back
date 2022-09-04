@@ -9,6 +9,14 @@ import lombok.*;
 
 import javax.persistence.*;
 
+/**
+ * id: 상품 카테고리의 PK
+ * categoryLv1: 상품의 카테고리 Lv1 PK
+ * categoryLv2: 상품의 카테고리 Lv2 PK
+ * categoryLv3: 상품의 카테고리 Lv3 PK
+ * categoryLv4: 상품의 카테고리 Lv4 PK
+ * product: 상품의 PK
+ */
 @Entity
 @Builder
 @AllArgsConstructor

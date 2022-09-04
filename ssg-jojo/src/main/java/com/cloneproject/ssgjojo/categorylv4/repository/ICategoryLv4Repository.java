@@ -1,11 +1,8 @@
 package com.cloneproject.ssgjojo.categorylv4.repository;
 
-import com.cloneproject.ssgjojo.categorylv1.domain.CategoryLv1;
 import com.cloneproject.ssgjojo.categorylv1.dto.CategoryDto;
-import com.cloneproject.ssgjojo.categorylv2.domain.CategoryLv2;
 import com.cloneproject.ssgjojo.categorylv3.domain.CategoryLv3;
 import com.cloneproject.ssgjojo.categorylv4.domain.CategoryLv4;
-import com.cloneproject.ssgjojo.categorylv4.dto.CategoryLv4Dto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

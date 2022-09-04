@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface IProductPhotoRepository extends JpaRepository<ProductPhoto, Long> {
-    public List<ProductPhoto> findAllByProduct(Product product);
+    List<ProductPhoto> findAllByProduct(Product product);
+    void deleteAllByProduct(Product product);
 
 }

@@ -9,6 +9,6 @@ import java.util.List;
 public interface IBannerService {
     Banner addBanner(MultipartFile bannerPhoto, BannerAddDto bannerAddDto);
     List<Banner> getAllBanner();
-    void deleteBanner(Long id);
+    boolean deleteBanner(Long id);
     Banner editBanner(Banner banner);
 }

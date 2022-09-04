@@ -190,28 +190,20 @@ public class ProductServiceImple implements IProductService {
     // 상품 삭제
     @Override
     @Transactional
-    public void deleteProduct(Long id) {
+    public boolean deleteProduct(Long id) {
         Optional<Product> product = iProductRepository.findById(id);
         if(product.isPresent()) {
-            Optional<CategoryProductList> categoryProductList = iCategoryProductListRepository.findByProduct(product.get());
-            List<ProductOption> productOptions = iProductOptionRepository.findAllByProduct(product.get());
-            List<ProductPhoto> productPhotoList = iProductPhotoRepository.findAllByProduct(product.get());
-            List<ProductDetailPhoto> productDetailPhotoList = iProductDetailPhotoRepository.findAllByProduct(product.get());
 
-            if(categoryProductList.isPresent() && !productOptions.isEmpty()) {
-                iCategoryProductListRepository.deleteByProduct(product.get());
+            iCategoryProductListRepository.deleteAllByProduct(product.get());
+            iProductOptionRepository.deleteByProduct(product.get());
+            iProductPhotoRepository.deleteAllByProduct(product.get());
+            iProductDetailPhotoRepository.deleteAllByProduct(product.get());
 
-                for(ProductOption temp : productOptions)
-                    iProductOptionRepository.deleteById(temp.getId());
-
-                for(ProductPhoto temp : productPhotoList)
-                    iProductPhotoRepository.deleteById(temp.getId());
-
-                for(ProductDetailPhoto temp : productDetailPhotoList)
-                    iProductDetailPhotoRepository.deleteById(temp.getId());
-            }
             iProductRepository.deleteById(id);
+
+            return true;
         }
+        return false;
     }
 
     @Override
@@ -283,7 +275,7 @@ public class ProductServiceImple implements IProductService {
     @Override
     public List<ProductListDto> getAllProductList(HttpServletRequest request) {
         List<ProductListDto> productList = new ArrayList<>();
-        Pageable pr = PageRequest.of(0, 20);
+        Pageable pr = PageRequest.of(0, 20, Sort.by("id").ascending());
 
         if(request.getHeader("Authorization") != null) {
             Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
@@ -327,6 +319,8 @@ public class ProductServiceImple implements IProductService {
             }
         }
 
+        if(!product.isPresent())
+            return null;
 
         // 리뷰 평점, 리뷰 개수 조회
         Float reviewScore = iReviewRepository.getReviewAvgScore(product.get().getId());

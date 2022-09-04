@@ -73,17 +73,17 @@ public class RecentlyProductServiceImple implements IRecentlyProductService{
     // 최근 본 상품 각각 삭제
     @Override
     @Transactional
-    public String deleteByRecentlyId(List<RecentlyProductDeleteDto> recentlyProductDeleteDto, HttpServletRequest request) {
+    public boolean deleteByRecentlyId(RecentlyProductDeleteDto recentlyProductDeleteDto, HttpServletRequest request) {
         Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
         Optional<User> user = iUserRepository.findById(userId);
 
         if(!user.isPresent())
-            return "False";
+            return false;
 
-        for(RecentlyProductDeleteDto deleteDto : recentlyProductDeleteDto) {
+        for(Long deleteId : recentlyProductDeleteDto.getId()) {
             // 유저가 존재하지 않을 경우
             // 요청한 유저랑 유저 번호가 다르면 어떡하지?
-            Optional<RecentlyProduct> recentlyProduct = iRecentlyProductRepository.findById(deleteDto.getId());
+            Optional<RecentlyProduct> recentlyProduct = iRecentlyProductRepository.findById(deleteId);
 
             // 없는 고유키로 요청할 경우
             if(!recentlyProduct.isPresent())
@@ -93,25 +93,25 @@ public class RecentlyProductServiceImple implements IRecentlyProductService{
             if(user.get().getId() != recentlyProduct.get().getUser().getId())
                 continue;
 
-            iRecentlyProductRepository.deleteById(deleteDto.getId());
+            iRecentlyProductRepository.deleteById(deleteId);
         }
 
-        return "True";
+        return true;
     }
 
 
     // 최근 본 상품 전체 삭제
     @Override
     @Transactional
-    public String deleteAllByUserId(HttpServletRequest request) {
+    public boolean deleteAllByUserId(HttpServletRequest request) {
         Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
         Optional<User> user = iUserRepository.findById(userId);
 
         if(!user.isPresent())
-            return "False";
+            return false;
 
         iRecentlyProductRepository.deleteAllByUser(user.get());
 
-        return "True";
+        return true;
     }
 }

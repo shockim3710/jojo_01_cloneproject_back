@@ -12,5 +12,4 @@ import lombok.NoArgsConstructor;
 public class AttentionFolderEditDto {
     private Long folderId;
     private String folderName;
-    private Long userId;
 }

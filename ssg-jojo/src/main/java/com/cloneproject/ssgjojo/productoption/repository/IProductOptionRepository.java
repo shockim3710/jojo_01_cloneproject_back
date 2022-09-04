@@ -12,6 +12,7 @@ import java.util.List;
 public interface IProductOptionRepository extends JpaRepository<ProductOption, Long> {
     List<ProductOption> findAllByProduct(Product product);
     void deleteByProduct(Product product);
+    void deleteAllByProduct(Product product);
 
     List<ProductOption> findAllByProductAndProductOption1Contents(Product product, String option1);
 
