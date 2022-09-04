@@ -445,7 +445,7 @@ public class ProductServiceImple implements IProductService {
                     .title(review.getTitle())
                     .mainText(review.getMainText())
                     .score(review.getScore())
-                    .userId(review.getUser().getUserId().substring(3)+"******")
+                    .userAccount(review.getUser().getUserId().substring(3)+"******")
                     .productId(review.getProduct().getId())
                     .createdTime(review.getCreatedDate())
                     .reviewPhotoDtoList(reviewPhotoDtoList)
@@ -496,7 +496,7 @@ public class ProductServiceImple implements IProductService {
 
         Pageable pr = PageRequest.of(page - 1, 20, Sort.by("id").descending());
 
-        CategoryDto parentLevelCategory = new CategoryDto();
+        List<CategoryDto> parentLevelCategory = new ArrayList<CategoryDto>();
         List<CategoryDto> sameLevelCategory = new ArrayList<CategoryDto>();
         List<CategoryDto> childLevelCategory = new ArrayList<CategoryDto>();
         Long totalCnt = 0L;
@@ -525,7 +525,7 @@ public class ProductServiceImple implements IProductService {
             else
                 findResult = iCategoryProductListRepository.findByCategoryLv2id(id, pr);
 
-            parentLevelCategory = iCategoryLv2Repository.getParentCategoryLv2(id);
+            parentLevelCategory = iCategoryLv2Repository.getParentCategoryLv2();
             sameLevelCategory = iCategoryLv2Repository.getCategoryLv2(id);
             childLevelCategory = iCategoryLv3Repository.findAllByCategoryLv2_Id(id);
 

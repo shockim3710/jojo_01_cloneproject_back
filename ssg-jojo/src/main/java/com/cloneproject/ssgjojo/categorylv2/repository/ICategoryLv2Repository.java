@@ -15,10 +15,9 @@ import java.util.Objects;
 public interface ICategoryLv2Repository extends JpaRepository<CategoryLv2, Long> {
     List<CategoryLv2> findAllByCategoryLv1(CategoryLv1 categoryLv1);
 
-    @Query(value = "select new com.cloneproject.ssgjojo.categorylv1.dto.CategoryDto(c2.categoryLv1.id, 1, c2.categoryLv1.lv1name) " +
-            " from CategoryLv2 c2 " +
-            " where c2.id = :id ")
-    CategoryDto getParentCategoryLv2(@Param("id") Long id);
+    @Query(value = "select new com.cloneproject.ssgjojo.categorylv1.dto.CategoryDto(c1.id, 1, c1.lv1name) " +
+            " from CategoryLv1 c1 ")
+    List<CategoryDto> getParentCategoryLv2();
 
     @Query(value = "select new com.cloneproject.ssgjojo.categorylv1.dto.CategoryDto(c2.id, 2, c2.lv2name) " +
             " from CategoryLv2 c2 " +

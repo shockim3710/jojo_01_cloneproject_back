@@ -13,7 +13,7 @@ public interface IRecentSearchesRepository extends JpaRepository<RecentSearches,
 
     List<RecentSearches> findAllByUser(User user);
 
-    @Query(value = "select distinct(rs.histories) from RecentSearches rs where rs.user.id=:id")
+    @Query(value = "select rs.histories from RecentSearches rs where rs.user.id=:id ")
     List<String> findTop10ById(@Param("id") Long id, Pageable pageable);
 
     void deleteByIdAndUser(Long id, User user);

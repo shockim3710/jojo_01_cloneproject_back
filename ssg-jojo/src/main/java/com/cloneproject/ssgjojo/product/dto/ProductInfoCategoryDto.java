@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 public class ProductInfoCategoryDto {
     Long totalCnt;
-    CategoryDto parentCategory;
+    List<CategoryDto> parentCategory;
     List<CategoryDto> sameLevelCategory;
     List<CategoryDto> childLevelCategory;
     List<ProductListDto> productList;

@@ -30,7 +30,7 @@ public class AttentionServiceImple implements IAttentionService{
 
     // 좋아요 항목 추가
     @Override
-    public void AttentionAdd(AttentionAddDto addDto, HttpServletRequest request) {
+    public boolean AttentionAdd(AttentionAddDto addDto, HttpServletRequest request) {
 
         Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
         User user = iUserRepository.findById(userId).orElseThrow(()
@@ -43,7 +43,7 @@ public class AttentionServiceImple implements IAttentionService{
 
             // 이미 추가된 상품 확인
             if(attention.size() != 0)
-                return;
+                return false;
 
             // 사용자의 0번 폴더에 항목을 추가한다.
             AttentionFolder folder = folderList.get(0);
@@ -54,6 +54,7 @@ public class AttentionServiceImple implements IAttentionService{
                             .attentionFolder(folder)
                     .build());
         }
+        return true;
     }
 
     // 좋아요 항목 폴더에 추가

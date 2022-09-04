@@ -19,10 +19,14 @@ public interface ICategoryLv4Repository extends JpaRepository<CategoryLv4, Long>
             "from CategoryLv4 c4 where c4.categoryLv3.id = (select tmp.categoryLv3.id from CategoryLv4 tmp where tmp.id = :id) ")
     List<CategoryDto> getCategoryLv4(@Param("id") Long id);
 
-    @Query(value = "select new com.cloneproject.ssgjojo.categorylv1.dto.CategoryDto(c4.categoryLv3.id, 3, c4.categoryLv3.lv3name) " +
-            " from CategoryLv4 c4 " +
-            " where c4.id = :id ")
-    CategoryDto getParentCategoryLv4(@Param("id") Long id);
+    @Query(value = "select new com.cloneproject.ssgjojo.categorylv1.dto.CategoryDto(c3.id, 3, c3.lv3name) " +
+            " from CategoryLv3 c3 " +
+            " where c3.categoryLv2.id = ( " +
+            " select cl3.categoryLv2.id from CategoryLv3 cl3, CategoryLv4 cl4" +
+            " where cl3.id = cl4.categoryLv3.id" +
+            " and cl4.id = :id " +
+            " ) ")
+    List<CategoryDto> getParentCategoryLv4(@Param("id") Long id);
 
     @Query(value = "select new com.cloneproject.ssgjojo.categorylv1.dto.CategoryDto(c4.id, 4, c4.lv4name) " +
             "from CategoryLv4 c4 where c4.categoryLv3.id = :id ")

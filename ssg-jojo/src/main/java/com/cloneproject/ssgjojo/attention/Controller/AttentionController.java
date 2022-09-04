@@ -3,6 +3,7 @@ package com.cloneproject.ssgjojo.attention.Controller;
 import com.cloneproject.ssgjojo.attention.dto.*;
 import com.cloneproject.ssgjojo.attention.service.IAttentionService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,8 +18,13 @@ public class AttentionController {
 
     // 좋아요 항목 추가
     @PostMapping("/attention/add")
-    public void attentionAdd(@RequestBody AttentionAddDto attentionAddDto, HttpServletRequest request){
-        iAttentionService.AttentionAdd(attentionAddDto, request);
+    public ResponseEntity<?> attentionAdd(@RequestBody AttentionAddDto attentionAddDto, HttpServletRequest request){
+        boolean result = iAttentionService.AttentionAdd(attentionAddDto, request);
+
+        if(result)
+            return ResponseEntity.status(200).body("추가 완료");
+        else
+            return ResponseEntity.status(400).body("error page");
     }
 
     // 좋아요 항목 폴더에 추가

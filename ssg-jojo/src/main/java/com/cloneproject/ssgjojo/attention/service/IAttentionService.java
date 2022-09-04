@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public interface IAttentionService {
-    void AttentionAdd(AttentionAddDto addDto, HttpServletRequest request);
+    boolean AttentionAdd(AttentionAddDto addDto, HttpServletRequest request);
     void AttentionAddFolder(AttentionInputFolderDto addFolderDto, HttpServletRequest request);
     List<AttentionOutputDto> AttentionEditFolder(AttentionEditFolderDto attentionInputFolderDto, HttpServletRequest request);
     List<AttentionOutputDto> findAllByAttentionFolder(Long folderId);
