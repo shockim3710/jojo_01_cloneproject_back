@@ -73,7 +73,7 @@ public class RecentSearchesServiceImple implements IRecentSearchesService {
 
         Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
         Optional<User> user = iUserRepository.findById(userId);
-        Optional<RecentSearches> recentSearches = iRecentSearchesRepository.findById(userId);
+        Optional<RecentSearches> recentSearches = iRecentSearchesRepository.findById(id);
 
         if(recentSearches.isPresent() && user.isPresent()) {
             iRecentSearchesRepository.deleteByIdAndUser(id, user.get());
@@ -86,15 +86,22 @@ public class RecentSearchesServiceImple implements IRecentSearchesService {
 
     @Override
     @Transactional
-    public void deleteAllByUser(HttpServletRequest request) { // 해당 사용자의 최근검색어 전부삭제
+    public boolean deleteAllByUser(HttpServletRequest request) { // 해당 사용자의 최근검색어 전체삭제
 
         Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
         Optional<User> user = iUserRepository.findById(userId);
 
         if(user.isPresent()) {
-            iRecentSearchesRepository.deleteAllByUser(user.get());
-        }
-    }
+            List<RecentSearches> recentSearches = iRecentSearchesRepository.findAllByUser(user.get());
 
+            for (RecentSearches temp : recentSearches) {
+                iRecentSearchesRepository.deleteById(temp.getId());
+            }
+
+            return true;
+        }
+
+        return false;
+    }
 
 }

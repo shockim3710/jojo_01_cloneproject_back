@@ -2,25 +2,12 @@ package com.cloneproject.ssgjojo.cart.service;
 
 import com.cloneproject.ssgjojo.cart.domain.Cart;
 import com.cloneproject.ssgjojo.cart.dto.CartAddDto;
-import com.cloneproject.ssgjojo.cart.dto.CartEditGetIdDto;
 import com.cloneproject.ssgjojo.cart.repository.ICartRepository;
 import com.cloneproject.ssgjojo.cartproductlist.domain.CartProductList;
 import com.cloneproject.ssgjojo.cartproductlist.dto.CartProductListAddDto;
 import com.cloneproject.ssgjojo.cartproductlist.dto.CartProductListGetIdEditDto;
 import com.cloneproject.ssgjojo.cartproductlist.repository.ICartProductListRepository;
-import com.cloneproject.ssgjojo.coupon.domain.Coupon;
-import com.cloneproject.ssgjojo.deliveryaddress.domain.DeliveryAddress;
-import com.cloneproject.ssgjojo.deliveryaddress.repository.IDeliveryAddressRepository;
 import com.cloneproject.ssgjojo.jwt.JwtTokenProvider;
-import com.cloneproject.ssgjojo.orders.domain.Orders;
-import com.cloneproject.ssgjojo.orders.dto.OrdersAddDto;
-import com.cloneproject.ssgjojo.orders.dto.OrdersEditGetAllDto;
-import com.cloneproject.ssgjojo.orders.dto.OrdersGetIdDto;
-import com.cloneproject.ssgjojo.orders.repository.IOrdersRepository;
-import com.cloneproject.ssgjojo.ordersproductlist.domain.OrdersProductList;
-import com.cloneproject.ssgjojo.ordersproductlist.dto.OrdersProductListAddDto;
-import com.cloneproject.ssgjojo.ordersproductlist.dto.OrdersProductListGetIdEditDto;
-import com.cloneproject.ssgjojo.ordersproductlist.repository.IOrdersProductListRepository;
 import com.cloneproject.ssgjojo.product.domain.Product;
 import com.cloneproject.ssgjojo.product.repository.IProductRepository;
 import com.cloneproject.ssgjojo.productoption.domain.ProductOption;
@@ -51,7 +38,7 @@ public class CartServiceImple implements ICartService {
 
     @Override
     @Transactional
-    public List<CartProductListAddDto> addCart(CartAddDto cartAddDto, HttpServletRequest request) {
+    public List<CartProductListAddDto> addCart(CartAddDto cartAddDto, HttpServletRequest request) { // 장바구니 추가
         Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
 
         Optional<User> user = iUserRepository.findById(Long.valueOf(userId));
@@ -104,7 +91,7 @@ public class CartServiceImple implements ICartService {
     }
 
     @Override
-    public List<CartProductListGetIdEditDto> getCartByUserId(HttpServletRequest request) {
+    public List<CartProductListGetIdEditDto> getCartByUserId(HttpServletRequest request) { // 해당 사용자의 장바구니 조회
 
         String userId = jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request));
         Optional<User> userOptional = iUserRepository.findById(Long.valueOf(userId));
@@ -161,7 +148,7 @@ public class CartServiceImple implements ICartService {
 
     @Override
     @Transactional
-    public String editCart(CartProductListGetIdEditDto cartProductListGetIdEditDto) {
+    public Optional<CartProductList> editCart(CartProductListGetIdEditDto cartProductListGetIdEditDto) { // 상품 수량 변경
 
         Optional<CartProductList> cartProductListOptional = iCartProductListRepository.findById(cartProductListGetIdEditDto.getId());
 
@@ -171,11 +158,43 @@ public class CartServiceImple implements ICartService {
             cartProductListOptional.get().setCartCount(cartProductListOptional.get().getCartCount() - 1);
         }
 
-        return "변경되었습니다.";
+        return cartProductListOptional;
     }
 
-//    @Override
-//    public CartEditGetIdDto editCart(CartEditGetIdDto cartEditGetIdDto) {
+    @Override
+    public Optional<CartProductList> deleteCart(Long id) { // 장바구니 상품 삭제
+
+        Optional<CartProductList> cartProductList = iCartProductListRepository.findById(id);
+
+        if(cartProductList.isPresent()) {
+            iCartProductListRepository.deleteById(id);
+
+            return cartProductList;
+        }
+
+        return null;
+    }
+
+    @Override
+    public boolean deleteCartAll(Long id) { // 장바구니 상품 전체삭제
+        Optional<Cart> cart = iCartRepository.findById(id);
+
+        if(cart.isPresent()) {
+
+            List<CartProductList> cartProductLists = iCartProductListRepository.findAllByCart(cart.get());
+
+            for (CartProductList temp : cartProductLists) {
+                iCartProductListRepository.deleteById(temp.getId());
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
+    //    @Override
+//    public CartEditGetIdDto editCart(CartEditGetIdDto cartEditGetIdDto) { // 상품 옵션변경
 //
 //        Optional<Cart> cart = iCartRepository.findById(cartEditGetIdDto.getId());
 //        Optional<User> user = iUserRepository.findById(cartEditGetIdDto.getUser());
@@ -243,29 +262,4 @@ public class CartServiceImple implements ICartService {
 //
 //        return null;
 //    }
-
-    @Override
-    public void deleteCart(Long id) {
-
-        Optional<CartProductList> cartProductList = iCartProductListRepository.findById(id);
-
-        if(cartProductList.isPresent()) {
-            iCartProductListRepository.deleteById(id);
-        }
-    }
-
-    @Override
-    public void deleteCartAll(Long id) {
-        Optional<Cart> cart = iCartRepository.findById(id);
-
-        if(cart.isPresent()) {
-
-            List<CartProductList> cartProductLists = iCartProductListRepository.findAllByCart(cart.get());
-
-            for (CartProductList temp : cartProductLists) {
-                iCartProductListRepository.deleteById(temp.getId());
-            }
-        }
-
-    }
 }

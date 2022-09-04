@@ -29,7 +29,6 @@ public class CartProductListGetIdEditDto {
     private int stock; // 재고
 
     private String plma;
-//    private int cnt;
 
     private Long cart;
 }

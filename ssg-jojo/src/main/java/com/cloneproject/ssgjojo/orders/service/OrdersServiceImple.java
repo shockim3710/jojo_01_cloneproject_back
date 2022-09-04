@@ -44,12 +44,11 @@ public class OrdersServiceImple implements IOrdersService{
 
     @Override
     @Transactional
-    public OrdersAddDto addOrders(OrdersAddDto ordersAddDto, HttpServletRequest request) {
+    public List<OrdersProductListAddDto> addOrders(OrdersAddDto ordersAddDto, HttpServletRequest request) { // 주문 추가
         Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
         Optional<User> user = iUserRepository.findById(userId);
         Optional<DeliveryAddress> deliveryAddress = iDeliveryAddressRepository.findById(ordersAddDto.getDeliveryAddress());
 
-        user.get().getName();
         if (user.isPresent() && deliveryAddress.isPresent()) {
 
             ordersAddDto.setWhetherExchange(false);
@@ -99,29 +98,14 @@ public class OrdersServiceImple implements IOrdersService{
 
             deliveryAddress.get().setWhetherOnlyThisTime(false);
 
-            return OrdersAddDto.builder()
-                    .ordersPrice(orders.getOrdersPrice())
-                    .whetherExchange(orders.isWhetherExchange())
-                    .ordersName(orders.getOrdersName())
-                    .ordersPhone(orders.getOrdersPhone())
-                    .ordersEmail(orders.getOrdersEmail())
-                    .deliveryDate(orders.getDeliveryDate())
-                    .deliveryRequest(orders.getDeliveryRequest())
-                    .user(user.get().getId())
-                    .deliveryAddress(deliveryAddress.get().getId())
-                    .address(deliveryAddress.get().getAddress())
-                    .addressName(deliveryAddress.get().getAddressName())
-                    .receiveName(deliveryAddress.get().getReceiveName())
-                    .zipCode(deliveryAddress.get().getZipCode())
-                    .ordersProductListAddDtoList(listAddDto)
-                    .build();
+            return listAddDto;
         }
 
         return null;
     }
 
     @Override
-    public List<OrdersGetIdDto> getOrdersByUserId(HttpServletRequest request) {
+    public List<OrdersGetIdDto> getOrdersByUserId(HttpServletRequest request) { // 해당 사용자의 주문 조회
         Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
         Optional<User> userOptional = iUserRepository.findById(userId);
 
@@ -133,10 +117,8 @@ public class OrdersServiceImple implements IOrdersService{
             ordersList.forEach(user -> {
 
 
-
                 Optional<Orders> ordersOptional = iOrdersRepository.findById(user.getId());
 
-//                if(ordersOptional.isPresent()) {
                 List<OrdersProductList> ordersProductLists = iOrdersProductListRepository.findAllByOrders(ordersOptional.get());
                 List<OrdersProductListGetIdEditDto> listGetIdDto = new ArrayList<>();
 
@@ -156,7 +138,6 @@ public class OrdersServiceImple implements IOrdersService{
                             .build());
 
                 });
-//                }
 
                 ordersGetIdDtoList.add(OrdersGetIdDto.builder()
                         .id(user.getId())
@@ -184,7 +165,7 @@ public class OrdersServiceImple implements IOrdersService{
     }
 
     @Override
-    public OrdersEditGetAllDto editOrders(OrdersEditGetAllDto ordersEditGetAllDto, HttpServletRequest request) {
+    public List<OrdersProductListGetIdEditDto> editOrders(OrdersEditGetAllDto ordersEditGetAllDto, HttpServletRequest request) { // 주문자 정보 수정
         Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
 
         Optional<Orders> orders = iOrdersRepository.findById(ordersEditGetAllDto.getId());
@@ -209,7 +190,6 @@ public class OrdersServiceImple implements IOrdersService{
 
             List<OrdersProductListGetIdEditDto> listEditDto = new ArrayList<>();
             for (OrdersProductListGetIdEditDto ordersProductListGetIdEditDto : ordersEditGetAllDto.getOrdersProductListGetIdDtoListEdit()) {
-                Optional<OrdersProductList> ordersProductListOptional = iOrdersProductListRepository.findById(ordersProductListGetIdEditDto.getId());
                 Optional<Product> product = iProductRepository.findById(ordersProductListGetIdEditDto.getProduct());
                 Optional<ProductOption> productOption = iProductOptionRepository.findById(ordersProductListGetIdEditDto.getProductOption());
 
@@ -236,30 +216,14 @@ public class OrdersServiceImple implements IOrdersService{
                         .build());
             }
 
-            return OrdersEditGetAllDto.builder()
-                    .id(temp.getId())
-                    .ordersPrice(temp.getOrdersPrice())
-                    .whetherExchange(temp.isWhetherExchange())
-                    .ordersName(temp.getOrdersName())
-                    .ordersPhone(temp.getOrdersPhone())
-                    .ordersEmail(temp.getOrdersEmail())
-                    .deliveryDate(temp.getDeliveryDate())
-                    .deliveryRequest(temp.getDeliveryRequest())
-                    .user(user.get().getId())
-                    .deliveryAddress(deliveryAddress.get().getId())
-                    .address(deliveryAddress.get().getAddress())
-                    .addressName(deliveryAddress.get().getAddressName())
-                    .receiveName(deliveryAddress.get().getReceiveName())
-                    .zipCode(deliveryAddress.get().getZipCode())
-                    .ordersProductListGetIdDtoListEdit(listEditDto)
-                    .build();
+            return listEditDto;
         }
 
         return null;
     }
 
     @Override
-    public void deleteOrders(Long id) {
+    public boolean deleteOrders(Long id) { // 주문 삭제
         Optional<Orders> orders = iOrdersRepository.findById(id);
 
         if(orders.isPresent()) {
@@ -272,12 +236,9 @@ public class OrdersServiceImple implements IOrdersService{
             }
             iOrdersRepository.deleteById(id);
 
+            return true;
         }
 
-    }
-
-    @Override
-    public List<Orders> getAllOrders() {
-        return iOrdersRepository.findAll();
+        return false;
     }
 }

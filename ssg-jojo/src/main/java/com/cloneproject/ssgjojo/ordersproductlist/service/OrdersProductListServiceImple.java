@@ -89,18 +89,6 @@ public class OrdersProductListServiceImple implements IOrdersProductListService 
             });
 
             return ordersProductListGetIdDtoListEdit;
-
-//            return ordersProductLists.stream().map(ordersProductList -> {
-//                return OrdersProductListGetIdDto.builder()
-//                        .id(ordersProductList.getId())
-//                        .count(ordersProductList.getCount())
-//                        .whetherRefund(ordersProductList.isWhetherRefund())
-//                        .product(ordersProductList.getProduct().getId())
-//                        .productName(ordersProductList.getProduct().getProductName())
-//                        .manufactureCompany(ordersProductList.getProduct().getManufactureCompany())
-////                                .thumbnail(orders.getProduct().getThumbnail())
-//                        .productOption(ordersProductList.getProductOption().getId())
-//            }).collect(Collectors.toList());
         }
 
         return null;

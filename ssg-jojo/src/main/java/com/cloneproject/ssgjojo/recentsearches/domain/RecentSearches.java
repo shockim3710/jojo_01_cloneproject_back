@@ -24,5 +24,4 @@ public class RecentSearches {
 
     @ManyToOne
     private User user;
-
 }

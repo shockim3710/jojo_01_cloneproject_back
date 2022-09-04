@@ -9,6 +9,4 @@ import java.util.List;
 public interface ICouponRepository extends JpaRepository<Coupon, Long> {
 
     List<Coupon> findAllByUser(User user);
-
-
 }

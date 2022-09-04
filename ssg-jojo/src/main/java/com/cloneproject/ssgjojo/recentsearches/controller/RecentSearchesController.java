@@ -31,8 +31,14 @@ public class RecentSearchesController {
     }
 
     @GetMapping("/recentsearches/get") // 해당 사용자의 최근검색어 조회
-    public List<String> getRecentSearches(HttpServletRequest request) {
-        return iRecentSearchesService.getRecentSearchesByUserId(request);
+    public ResponseEntity<?> getRecentSearches(HttpServletRequest request) {
+        List<String> recentSearches = iRecentSearchesService.getRecentSearchesByUserId(request);
+
+        if(recentSearches!=null){
+            return ResponseEntity.status(200).body(recentSearches);
+        }else {
+            return ResponseEntity.status(400).body("error page");
+        }
     }
 
     @DeleteMapping("/recentsearches/delete/{id}") // 해당 사용자의 최근검색어 삭제
@@ -46,9 +52,15 @@ public class RecentSearchesController {
         }
     }
 
-    @DeleteMapping("/recentsearches/delete/userId") // 해당 사용자의 최근검색어 전부삭제
-    public void deleteAllByUser(HttpServletRequest request) {
-        iRecentSearchesService.deleteAllByUser(request);
+    @DeleteMapping("/recentsearches/delete/all") // 해당 사용자의 최근검색어 전체삭제
+    public ResponseEntity<?> deleteAllByUser(HttpServletRequest request) {
+        boolean recentSearches = iRecentSearchesService.deleteAllByUser(request);
+
+        if(recentSearches == true){
+            return ResponseEntity.status(200).body("최근검색어가 전체 삭제되었습니다.");
+        }else {
+            return ResponseEntity.status(400).body("error page");
+        }
     }
 
 }

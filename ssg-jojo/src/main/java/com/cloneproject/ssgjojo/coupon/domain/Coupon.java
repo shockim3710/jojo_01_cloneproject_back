@@ -43,8 +43,6 @@ public class Coupon {
 
     private Long maxUsePrice; // 최대 할인가격 (최대 얼마까지만 할인)
 
-
     @ManyToOne
     private User user;
-
 }

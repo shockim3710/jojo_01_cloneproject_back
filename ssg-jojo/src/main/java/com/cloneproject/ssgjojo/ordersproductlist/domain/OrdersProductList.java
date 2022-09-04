@@ -1,19 +1,14 @@
 package com.cloneproject.ssgjojo.ordersproductlist.domain;
 
-import com.cloneproject.ssgjojo.deliveryaddress.domain.DeliveryAddress;
 import com.cloneproject.ssgjojo.orders.domain.Orders;
 import com.cloneproject.ssgjojo.product.domain.Product;
 import com.cloneproject.ssgjojo.productoption.domain.ProductOption;
-import com.cloneproject.ssgjojo.user.domain.User;
-import com.cloneproject.ssgjojo.util.BaseTimeEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 
 @Data
 @Entity

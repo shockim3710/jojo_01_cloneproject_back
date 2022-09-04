@@ -1,13 +1,9 @@
 package com.cloneproject.ssgjojo.ordersproductlist.dto;
 
-import com.cloneproject.ssgjojo.orders.domain.Orders;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.ManyToOne;
-import java.sql.Timestamp;
 
 @Data
 @Builder

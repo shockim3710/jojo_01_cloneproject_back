@@ -1,15 +1,17 @@
 package com.cloneproject.ssgjojo.deliveryaddress.service;
 
+import com.cloneproject.ssgjojo.deliveryaddress.domain.DeliveryAddress;
 import com.cloneproject.ssgjojo.deliveryaddress.dto.DeliveryAddressAddDto;
 import com.cloneproject.ssgjojo.deliveryaddress.dto.DeliveryAddressEditGetIdDto;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Optional;
 
 public interface IDeliveryAddressService {
 
-    DeliveryAddressAddDto addDeliveryAddress(DeliveryAddressAddDto deliveryAddressAddDto, HttpServletRequest request);
+    DeliveryAddress addDeliveryAddress(DeliveryAddressAddDto deliveryAddressAddDto, HttpServletRequest request);
     List<DeliveryAddressEditGetIdDto> getDeliveryAddressByUserId(HttpServletRequest request);
-    DeliveryAddressEditGetIdDto editDeliveryAddress(DeliveryAddressEditGetIdDto deliveryAddressEditGetIdDto, HttpServletRequest request);
-    void deleteDeliveryAddress(Long id);
+    DeliveryAddress editDeliveryAddress(DeliveryAddressEditGetIdDto deliveryAddressEditGetIdDto, HttpServletRequest request);
+    Optional<DeliveryAddress> deleteDeliveryAddress(Long id);
 }

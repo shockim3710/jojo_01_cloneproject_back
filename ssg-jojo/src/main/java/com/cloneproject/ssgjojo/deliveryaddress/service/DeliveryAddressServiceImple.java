@@ -25,15 +25,14 @@ public class DeliveryAddressServiceImple implements IDeliveryAddressService {
     private final IUserRepository iUserRepository;
     private final JwtTokenProvider jwtTokenProvider;
 
-
     @Override
-    public DeliveryAddressAddDto addDeliveryAddress(DeliveryAddressAddDto deliveryAddressAddDto, HttpServletRequest request) { // 배송지 추가
+    public DeliveryAddress addDeliveryAddress(DeliveryAddressAddDto deliveryAddressAddDto, HttpServletRequest request) { // 배송지 추가
         Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
         Optional<User> user = iUserRepository.findById(userId);
 
         if (user.isPresent()) {
 
-            DeliveryAddress temp = iDeliveryAddressRepository.save(DeliveryAddress.builder()
+            return iDeliveryAddressRepository.save(DeliveryAddress.builder()
                     .address(deliveryAddressAddDto.getAddress())
                     .whetherDefaultAddress(deliveryAddressAddDto.isWhetherDefaultAddress())
                     .whetherOnlyThisTime(deliveryAddressAddDto.isWhetherOnlyThisTime())
@@ -42,16 +41,6 @@ public class DeliveryAddressServiceImple implements IDeliveryAddressService {
                     .zipCode(deliveryAddressAddDto.getZipCode())
                     .user(user.get())
                     .build());
-
-            return DeliveryAddressAddDto.builder()
-                    .address(temp.getAddress())
-                    .whetherDefaultAddress(temp.isWhetherDefaultAddress())
-                    .whetherOnlyThisTime(temp.isWhetherOnlyThisTime())
-                    .receiveName(temp.getReceiveName())
-                    .addressName(temp.getAddressName())
-                    .zipCode(temp.getZipCode())
-                    .user(temp.getUser().getId())
-                    .build();
         }
 
         return null;
@@ -89,7 +78,7 @@ public class DeliveryAddressServiceImple implements IDeliveryAddressService {
     }
 
     @Override
-    public DeliveryAddressEditGetIdDto editDeliveryAddress(DeliveryAddressEditGetIdDto deliveryAddressEditGetIdDto, HttpServletRequest request) { // 배송지 수정
+    public DeliveryAddress editDeliveryAddress(DeliveryAddressEditGetIdDto deliveryAddressEditGetIdDto, HttpServletRequest request) { // 배송지 수정
         Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
 
         Optional<DeliveryAddress> deliveryAddress = iDeliveryAddressRepository.findById(deliveryAddressEditGetIdDto.getId());
@@ -120,8 +109,7 @@ public class DeliveryAddressServiceImple implements IDeliveryAddressService {
                 }
             }
 
-
-            DeliveryAddress temp = iDeliveryAddressRepository.save(DeliveryAddress.builder()
+            return iDeliveryAddressRepository.save(DeliveryAddress.builder()
                     .id(deliveryAddressEditGetIdDto.getId())
                     .address(deliveryAddressEditGetIdDto.getAddress())
                     .whetherDefaultAddress(deliveryAddressEditGetIdDto.isWhetherDefaultAddress())
@@ -131,29 +119,21 @@ public class DeliveryAddressServiceImple implements IDeliveryAddressService {
                     .zipCode(deliveryAddressEditGetIdDto.getZipCode())
                     .user(user.get())
                     .build());
-
-            return DeliveryAddressEditGetIdDto.builder()
-                    .id(temp.getId())
-                    .address(temp.getAddress())
-                    .whetherDefaultAddress(temp.isWhetherDefaultAddress())
-                    .whetherOnlyThisTime(temp.isWhetherOnlyThisTime())
-                    .addressName(temp.getAddressName())
-                    .receiveName(temp.getReceiveName())
-                    .zipCode(temp.getZipCode())
-                    .user(temp.getUser().getId())
-                    .build();
         }
 
         return null;
     }
 
     @Override
-    public void deleteDeliveryAddress(Long id) { // 해당 사용자의 배송지 삭제
+    public Optional<DeliveryAddress> deleteDeliveryAddress(Long id) { // 배송지 삭제
         Optional<DeliveryAddress> deliveryAddress = iDeliveryAddressRepository.findById(id);
 
         if(deliveryAddress.isPresent()) {
             iDeliveryAddressRepository.deleteById(id);
+
+            return deliveryAddress;
         }
 
+        return null;
     }
 }

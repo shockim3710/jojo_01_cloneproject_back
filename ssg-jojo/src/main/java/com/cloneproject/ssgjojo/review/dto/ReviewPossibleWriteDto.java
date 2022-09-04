@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
+import java.util.Date;
 
 @Data
 @AllArgsConstructor
@@ -16,6 +17,6 @@ public class ReviewPossibleWriteDto {
     private Long productId;
     private Long ordersId;
     private String productThumbnail;
-    private Timestamp deliveryDate;
+    private Date deliveryDate;
 
 }

@@ -1,8 +1,6 @@
 package com.cloneproject.ssgjojo.orders.domain;
 
 import com.cloneproject.ssgjojo.deliveryaddress.domain.DeliveryAddress;
-import com.cloneproject.ssgjojo.product.domain.Product;
-import com.cloneproject.ssgjojo.productoption.domain.ProductOption;
 import com.cloneproject.ssgjojo.user.domain.User;
 import com.cloneproject.ssgjojo.util.BaseTimeEntity;
 import lombok.AllArgsConstructor;
@@ -12,7 +10,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.util.Date;
 
 @Data
 @Entity
@@ -42,7 +40,7 @@ public class Orders extends BaseTimeEntity {
     private String ordersEmail; // 주문자 이메일
 
     @Column(nullable = false)
-    private Timestamp deliveryDate; // 배송날짜
+    private Date deliveryDate; // 배송날짜
     // 타임스탬프는 시간을 더해주거나 빼주는 그런게 따로 없어서
     // Calendar 객체를 사용
 

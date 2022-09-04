@@ -1,11 +1,13 @@
 package com.cloneproject.ssgjojo.orders.controller;
 
-import com.cloneproject.ssgjojo.orders.domain.Orders;
 import com.cloneproject.ssgjojo.orders.dto.OrdersAddDto;
 import com.cloneproject.ssgjojo.orders.dto.OrdersEditGetAllDto;
 import com.cloneproject.ssgjojo.orders.dto.OrdersGetIdDto;
 import com.cloneproject.ssgjojo.orders.service.IOrdersService;
+import com.cloneproject.ssgjojo.ordersproductlist.dto.OrdersProductListAddDto;
+import com.cloneproject.ssgjojo.ordersproductlist.dto.OrdersProductListGetIdEditDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,29 +21,48 @@ public class OrdersController {
 
     private final IOrdersService iOrdersService;
 
-    @PostMapping("/orders/add")
-    public OrdersAddDto addOrders(@RequestBody OrdersAddDto ordersAddDto, HttpServletRequest request) {
-        return iOrdersService.addOrders(ordersAddDto, request);
+    @PostMapping("/orders/add") // 주문 추가
+    public ResponseEntity<?> addOrders(@RequestBody OrdersAddDto ordersAddDto, HttpServletRequest request) {
+        List<OrdersProductListAddDto> orders = iOrdersService.addOrders(ordersAddDto, request);
+
+        if(orders!=null){
+            return ResponseEntity.status(200).body("주문이 완료되었습니다.");
+        }else {
+            return ResponseEntity.status(400).body("error page");
+        }
     }
 
-    @GetMapping("/orders/get")
-    public List<OrdersGetIdDto> getOrders(HttpServletRequest request) {
-        return iOrdersService.getOrdersByUserId(request);
+    @GetMapping("/orders/get") // 해당 사용자의 주문 조회
+    public ResponseEntity<?> getOrders(HttpServletRequest request) {
+        List<OrdersGetIdDto> orders = iOrdersService.getOrdersByUserId(request);
+
+        if(orders!=null){
+            return ResponseEntity.status(200).body(orders);
+        }else {
+            return ResponseEntity.status(400).body("error page");
+        }
     }
 
-    @PutMapping("/orders/edit")
-    public OrdersEditGetAllDto editOrders(@RequestBody OrdersEditGetAllDto ordersEditGetAllDto, HttpServletRequest request) {
-        return iOrdersService.editOrders(ordersEditGetAllDto, request);
+    @PutMapping("/orders/edit") // 주문자 정보 수정
+    public ResponseEntity<?> editOrders(@RequestBody OrdersEditGetAllDto ordersEditGetAllDto, HttpServletRequest request) {
+        List<OrdersProductListGetIdEditDto> orders = iOrdersService.editOrders(ordersEditGetAllDto, request);
+
+        if(orders!=null){
+            return ResponseEntity.status(200).body("주문자 정보가 수정되었습니다.");
+        }else {
+            return ResponseEntity.status(400).body("error page");
+        }
     }
 
-    @GetMapping("/orders/get/getAll")
-    public List<Orders> getAllOrders() {
-        return iOrdersService.getAllOrders();
-    }
+    @DeleteMapping("/orders/delete/{id}") // 주문 삭제
+    public ResponseEntity<?> deleteOrders(@PathVariable Long id) {
+        boolean orders = iOrdersService.deleteOrders(id);
 
-    @DeleteMapping("/orders/delete/{id}")
-    public void deleteOrders(@PathVariable Long id) {
-        iOrdersService.deleteOrders(id);
+        if(orders == true){
+            return ResponseEntity.status(200).body("주문이 삭제되었습니다.");
+        }else {
+            return ResponseEntity.status(400).body("error page");
+        }
     }
 
 }

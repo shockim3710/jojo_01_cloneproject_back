@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -21,7 +21,7 @@ public class OrdersEditGetAllDto {
     private String ordersName; // 주문자 이름 (주문 수정)
     private String ordersPhone; // 주문자 전화번호 (주문 수정)
     private String ordersEmail; // 주문자 이메일 (주문 수정)
-    private Timestamp deliveryDate; // 배송날짜
+    private Date deliveryDate; // 배송날짜
     private String deliveryRequest; // 배송요청사항 (주문 수정)
 
     private Long user;

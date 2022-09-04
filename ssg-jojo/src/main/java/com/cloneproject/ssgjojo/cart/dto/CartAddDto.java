@@ -1,7 +1,6 @@
 package com.cloneproject.ssgjojo.cart.dto;
 
 import com.cloneproject.ssgjojo.cartproductlist.dto.CartProductListAddDto;
-import com.cloneproject.ssgjojo.ordersproductlist.dto.OrdersProductListAddDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

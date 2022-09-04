@@ -39,5 +39,4 @@ public class DeliveryAddress {
 
     @ManyToOne
     private User user;
-
 }
