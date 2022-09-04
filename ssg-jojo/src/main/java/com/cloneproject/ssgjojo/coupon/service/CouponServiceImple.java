@@ -4,7 +4,6 @@ import com.cloneproject.ssgjojo.coupon.domain.Coupon;
 import com.cloneproject.ssgjojo.coupon.dto.CouponAddDto;
 import com.cloneproject.ssgjojo.coupon.dto.CouponUseGetIdDto;
 import com.cloneproject.ssgjojo.coupon.repository.ICouponRepository;
-import com.cloneproject.ssgjojo.exceptionoutput.CouponException;
 import com.cloneproject.ssgjojo.jwt.JwtTokenProvider;
 import com.cloneproject.ssgjojo.user.domain.User;
 import com.cloneproject.ssgjojo.user.repository.IUserRepository;
@@ -28,15 +27,14 @@ public class CouponServiceImple implements ICouponService {
     private final JwtTokenProvider jwtTokenProvider;
 
     @Override
-    public CouponAddDto addCoupon(CouponAddDto couponAddDto, HttpServletRequest request) {
+    public Coupon addCoupon(CouponAddDto couponAddDto, HttpServletRequest request) { // 쿠폰 추가
         Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
-        Optional<User> user = Optional.ofNullable(iUserRepository.findById(userId).orElseThrow(CouponException::new));
-//        Optional<User> user = iUserRepository.findById(couponAddDto.getUser());
+        Optional<User> user = iUserRepository.findById(userId);
         if (user.isPresent()) {
 
             couponAddDto.setWhetherIsUseStatus(false);
 
-            Coupon temp = iCouponRepository.save(Coupon.builder()
+            return iCouponRepository.save(Coupon.builder()
                             .couponName(couponAddDto.getCouponName())
                             .couponContent(couponAddDto.getCouponContent())
                             .couponStartDate(couponAddDto.getCouponStartDate())
@@ -48,28 +46,15 @@ public class CouponServiceImple implements ICouponService {
                             .maxUsePrice(couponAddDto.getMaxUsePrice())
                             .user(user.get())
                             .build());
-
-            return  CouponAddDto.builder()
-                    .couponName(temp.getCouponName())
-                    .couponContent(temp.getCouponContent())
-                    .couponStartDate(temp.getCouponStartDate())
-                    .couponEndDate(temp.getCouponEndDate())
-                    .whetherIsUseStatus(temp.isWhetherIsUseStatus())
-                    .bargainPrice(temp.getBargainPrice())
-                    .bargainPercent(temp.getBargainPercent())
-                    .useOverPrice(temp.getUseOverPrice())
-                    .maxUsePrice(temp.getMaxUsePrice())
-                    .user(temp.getUser().getId())
-                    .build();
         }
 
         return null;
     }
 
     @Override
-    public List<CouponUseGetIdDto> getCouponByUserId(HttpServletRequest request) {
+    public List<CouponUseGetIdDto> getCouponByUserId(HttpServletRequest request) { // 해당 사용자의 쿠폰 조회
         Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
-        Optional<User> userOptional = Optional.ofNullable(iUserRepository.findById(userId).orElseThrow(CouponException::new));
+        Optional<User> userOptional = iUserRepository.findById(userId);
 
         if(userOptional.isPresent()) {
             List<Coupon> couponList = iCouponRepository.findAllByUser(userOptional.get());
@@ -98,7 +83,7 @@ public class CouponServiceImple implements ICouponService {
 
     @Override
     @Transactional
-    public Coupon deleteCoupon(Long id) {
+    public Coupon deleteCoupon(Long id) { // 해당 사용자의 쿠폰 삭제
         Optional<Coupon> coupon = iCouponRepository.findById(id);
 
         if(coupon.isPresent()) {

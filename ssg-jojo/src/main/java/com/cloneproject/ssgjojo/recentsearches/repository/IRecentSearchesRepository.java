@@ -8,12 +8,15 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface IRecentSearchesRepository extends JpaRepository<RecentSearches, Long> {
 
+    Optional<RecentSearches> findByUserIdAndHistories(Long userId, String histories);
+
     List<RecentSearches> findAllByUser(User user);
 
-    @Query(value = "select distinct(rs.histories) from RecentSearches rs where rs.user.id=:id")
+    @Query(value = "select rs.histories from RecentSearches rs where rs.user.id=:id ")
     List<String> findTop10ById(@Param("id") Long id, Pageable pageable);
 
     void deleteByIdAndUser(Long id, User user);

@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface ICouponService {
 
-    CouponAddDto addCoupon(CouponAddDto couponAddDto, HttpServletRequest request);
+    Coupon addCoupon(CouponAddDto couponAddDto, HttpServletRequest request);
     List<CouponUseGetIdDto> getCouponByUserId(HttpServletRequest request);
     Coupon deleteCoupon(Long id);
 

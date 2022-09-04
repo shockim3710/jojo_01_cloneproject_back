@@ -110,6 +110,8 @@ public class UserServiceImple implements IUserService{
             return UserGetIdDto.builder()
                     .name(user.getName())
                     .membershipLevel(user.getMembershipLevel())
+                    .email(user.getEmail())
+                    .phone(user.getPhone())
                     .build();
         }
 

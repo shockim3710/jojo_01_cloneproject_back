@@ -5,10 +5,12 @@ import com.cloneproject.ssgjojo.coupon.dto.CouponAddDto;
 import com.cloneproject.ssgjojo.coupon.dto.CouponUseGetIdDto;
 import com.cloneproject.ssgjojo.coupon.service.ICouponService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -18,22 +20,37 @@ public class CouponController {
 
     private final ICouponService iCouponService;
 
-    @PostMapping("/coupon/add")
-    public CouponAddDto addCoupon(@RequestBody CouponAddDto couponAddDto, HttpServletRequest request) {
-        return iCouponService.addCoupon(couponAddDto, request);
+    @PostMapping("/coupon/add") // 쿠폰 추가
+    public ResponseEntity<?> addCoupon(@RequestBody CouponAddDto couponAddDto, HttpServletRequest request) {
+        Coupon coupon = iCouponService.addCoupon(couponAddDto, request);
+
+        if(coupon!=null){
+            return ResponseEntity.status(200).body("쿠폰이 추가되었습니다.");
+        }else {
+            return ResponseEntity.status(400).body("error page");
+        }
     }
 
-    @GetMapping("/coupon/get")
-    public List<CouponUseGetIdDto> getCoupon(HttpServletRequest request) {
-        return iCouponService.getCouponByUserId(request);
+    @GetMapping("/coupon/get") // 해당 사용자의 쿠폰 조회
+    public ResponseEntity<?> getCoupon(HttpServletRequest request) {
+        List<CouponUseGetIdDto> coupon = iCouponService.getCouponByUserId(request);
+
+        if(coupon!=null){
+            return ResponseEntity.status(200).body(coupon);
+        }else {
+            return ResponseEntity.status(400).body("error page");
+        }
     }
 
-    @PutMapping("/coupon/delete/{id}")
-    public Coupon deleteCoupon(@PathVariable Long id) {
-        return iCouponService.deleteCoupon(id);
+    @PutMapping("/coupon/delete/{id}") // 해당 사용자의 쿠폰 삭제
+    public ResponseEntity<?> deleteCoupon(@PathVariable Long id) {
+
+        Coupon coupon = iCouponService.deleteCoupon(id);
+
+        if(coupon!=null){
+            return ResponseEntity.status(200).body("쿠폰이 삭제되었습니다.");
+        }else {
+            return ResponseEntity.status(400).body("error page");
+        }
     }
-
-
-
-
 }

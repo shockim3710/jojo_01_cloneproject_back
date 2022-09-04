@@ -29,20 +29,20 @@ public class RecentSearchesServiceImple implements IRecentSearchesService {
     private final JwtTokenProvider jwtTokenProvider;
 
     @Override
-    public RecentSearchesAddDto addRecentSearches(RecentSearchesAddDto recentSearchesAddDto, HttpServletRequest request) { // 최근검색어 추가
+    public RecentSearches addRecentSearches(RecentSearchesAddDto recentSearchesAddDto, HttpServletRequest request) { // 최근검색어 추가
         Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
         Optional<User> user = iUserRepository.findById(userId);
 
         if(user.isPresent()) {
-            RecentSearches temp = iRecentSearchesRepository.save(RecentSearches.builder()
+            Optional<RecentSearches> history = iRecentSearchesRepository.findByUserIdAndHistories(userId, recentSearchesAddDto.getHistories());
+
+            if(history.isPresent()) {
+                iRecentSearchesRepository.deleteById(history.get().getId());
+            }
+            return iRecentSearchesRepository.save(RecentSearches.builder()
                     .histories(recentSearchesAddDto.getHistories())
                     .user(user.get())
                     .build());
-
-            return RecentSearchesAddDto.builder()
-                    .histories(temp.getHistories())
-                    .user(temp.getUser().getId())
-                    .build();
         }
 
         return null;
@@ -69,7 +69,7 @@ public class RecentSearchesServiceImple implements IRecentSearchesService {
 
     @Override
     @Transactional
-    public void deleteRecentSearches(Long id, HttpServletRequest request) { // 해당 사용자의 최근검색어 삭제
+    public Optional<RecentSearches> deleteRecentSearches(Long id, HttpServletRequest request) { // 해당 사용자의 최근검색어 삭제
 
         Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
         Optional<User> user = iUserRepository.findById(userId);
@@ -77,12 +77,16 @@ public class RecentSearchesServiceImple implements IRecentSearchesService {
 
         if(recentSearches.isPresent() && user.isPresent()) {
             iRecentSearchesRepository.deleteByIdAndUser(id, user.get());
+
+            return recentSearches;
         }
+
+        return null;
     }
 
     @Override
     @Transactional
-    public void deleteAllByUser(HttpServletRequest request) {
+    public void deleteAllByUser(HttpServletRequest request) { // 해당 사용자의 최근검색어 전부삭제
 
         Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
         Optional<User> user = iUserRepository.findById(userId);
