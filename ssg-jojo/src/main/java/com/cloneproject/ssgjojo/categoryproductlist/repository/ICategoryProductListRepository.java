@@ -15,6 +15,10 @@ public interface ICategoryProductListRepository extends JpaRepository<CategoryPr
     void deleteByProduct(Product product);
     Optional<CategoryProductList> findByProduct(Product product);
 
+    @Query(value = " select count(ct) from CategoryProductList ct " +
+            " where ct.categoryLv1.id = :id ")
+    Long countByCategoryLv1(@Param("id") Long id);
+
     @Query("select new com.cloneproject.ssgjojo.product.dto.ProductListDto( " +
             " ct.product.id, ct.product.thumbnail, '신세계몰', ct.product.productName," +
             " ct.product.manufactureCompany, ct.product.discountRate, " +
@@ -45,6 +49,10 @@ public interface ICategoryProductListRepository extends JpaRepository<CategoryPr
             " where ct.categoryLv1.id =:categoryLv1 " +
             " order by ct.product.id asc ")
     List<ProductListDto> findByCategoryLv1idWithUser(@Param("categoryLv1") Long categoryLv1, @Param("userId") Long userId, Pageable pageable);
+
+    @Query(value = " select count(ct) from CategoryProductList ct " +
+            " where ct.categoryLv2.id = :id ")
+    Long countByCategoryLv2(@Param("id") Long id);
 
     @Query("select new com.cloneproject.ssgjojo.product.dto.ProductListDto( " +
             " ct.product.id, ct.product.thumbnail, '신세계몰', ct.product.productName," +
@@ -77,6 +85,10 @@ public interface ICategoryProductListRepository extends JpaRepository<CategoryPr
             " order by ct.product.id asc ")
     List<ProductListDto> findByCategoryLv2idWithUser(@Param("categoryLv2") Long categoryLv2, @Param("userId") Long userId, Pageable pageable);
 
+    @Query(value = " select count(ct) from CategoryProductList ct " +
+            " where ct.categoryLv3.id = :id ")
+    Long countByCategoryLv3(@Param("id") Long id);
+
     @Query("select new com.cloneproject.ssgjojo.product.dto.ProductListDto( " +
             " ct.product.id, ct.product.thumbnail, '신세계몰', ct.product.productName," +
             " ct.product.manufactureCompany, ct.product.discountRate, " +
@@ -107,6 +119,10 @@ public interface ICategoryProductListRepository extends JpaRepository<CategoryPr
             " where ct.categoryLv3.id =:categoryLv3 " +
             " order by ct.product.id asc ")
     List<ProductListDto> findByCategoryLv3idWithUser(@Param("categoryLv3") Long categoryLv3, @Param("userId") Long userId, Pageable pageable);
+
+    @Query(value = " select count(ct) from CategoryProductList ct " +
+            " where ct.categoryLv4.id = :id ")
+    Long countByCategoryLv4(@Param("id") Long id);
 
     @Query("select new com.cloneproject.ssgjojo.product.dto.ProductListDto( " +
             " ct.product.id, ct.product.thumbnail, '신세계몰', ct.product.productName," +

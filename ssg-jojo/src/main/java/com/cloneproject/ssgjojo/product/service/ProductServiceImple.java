@@ -492,9 +492,10 @@ public class ProductServiceImple implements IProductService {
 
         Pageable pr = PageRequest.of(page - 1, 20, Sort.by("id").descending());
 
+        CategoryDto parentLevelCategory = new CategoryDto();
         List<CategoryDto> sameLevelCategory = new ArrayList<CategoryDto>();
         List<CategoryDto> childLevelCategory = new ArrayList<CategoryDto>();
-
+        Long totalCnt = 0L;
         Long userId = -1L;
 
         if(request.getHeader("Authorization") != null) {
@@ -508,9 +509,11 @@ public class ProductServiceImple implements IProductService {
                 findResult = iCategoryProductListRepository.findByCategoryLv1idWithUser(id, userId, pr);
             else
                 findResult = iCategoryProductListRepository.findByCategoryLv1id(id, pr);
-
+            parentLevelCategory = null;
             sameLevelCategory = iCategoryLv1Repository.getCategoryLv1(id);
             childLevelCategory = iCategoryLv2Repository.findAllByCategoryLv1_Id(id);
+
+            totalCnt = iCategoryProductListRepository.countByCategoryLv1(id);
 
         } else if (lv == 2) {
             if(userId != -1L)
@@ -518,31 +521,42 @@ public class ProductServiceImple implements IProductService {
             else
                 findResult = iCategoryProductListRepository.findByCategoryLv2id(id, pr);
 
+            parentLevelCategory = iCategoryLv2Repository.getParentCategoryLv2(id);
             sameLevelCategory = iCategoryLv2Repository.getCategoryLv2(id);
             childLevelCategory = iCategoryLv3Repository.findAllByCategoryLv2_Id(id);
+
+            totalCnt = iCategoryProductListRepository.countByCategoryLv2(id);
         } else if (lv == 3) {
             if(userId != -1L)
                 findResult = iCategoryProductListRepository.findByCategoryLv3idWithUser(id, userId, pr);
             else
                 findResult = iCategoryProductListRepository.findByCategoryLv3id(id, pr);
 
+            parentLevelCategory = iCategoryLv3Repository.getParentCategoryLv3(id);
             sameLevelCategory = iCategoryLv3Repository.getCategoryLv3(id);
             childLevelCategory = iCategoryLv4Repository.findAllByCategoryLv3_Id(id);
+
+            totalCnt = iCategoryProductListRepository.countByCategoryLv3(id);
         } else if (lv == 4) {
             if(userId != -1L)
                 findResult = iCategoryProductListRepository.findByCategoryLv4idWithUser(id, userId, pr);
             else
                 findResult = iCategoryProductListRepository.findByCategoryLv4id(id, pr);
 
+            parentLevelCategory = iCategoryLv4Repository.getParentCategoryLv4(id);
             sameLevelCategory = iCategoryLv4Repository.getCategoryLv4(id);
+
+            totalCnt = iCategoryProductListRepository.countByCategoryLv4(id);
         } else {
             return null;
         }
 
         return ProductInfoCategoryDto.builder()
                 .productList(findResult)
+                .parentCategory(parentLevelCategory)
                 .childLevelCategory(childLevelCategory)
                 .sameLevelCategory(sameLevelCategory)
+                .totalCnt(totalCnt)
                 .build();
     }
 

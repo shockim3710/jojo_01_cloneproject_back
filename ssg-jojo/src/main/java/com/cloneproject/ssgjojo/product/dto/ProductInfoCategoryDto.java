@@ -1,5 +1,6 @@
 package com.cloneproject.ssgjojo.product.dto;
 
+import com.cloneproject.ssgjojo.categorylv1.dto.CategoryDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,7 +13,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductInfoCategoryDto {
-    List<?> sameLevelCategory;
-    List<?> childLevelCategory;
+    Long totalCnt;
+    CategoryDto parentCategory;
+    List<CategoryDto> sameLevelCategory;
+    List<CategoryDto> childLevelCategory;
     List<ProductListDto> productList;
 }
