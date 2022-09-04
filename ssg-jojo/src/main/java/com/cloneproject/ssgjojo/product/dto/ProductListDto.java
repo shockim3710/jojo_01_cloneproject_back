@@ -47,7 +47,7 @@ public class ProductListDto {
         this.manufactureCompany = manufactureCompany;
         this.discountRate = discountRate;
         this.oldPrice = discountRate != 0 ? oldPrice : 0;
-        this.newPrice = discountRate != 0 ? newPrice * (1 - (discountRate / 100)) : newPrice;
+        this.newPrice = discountRate != 0 ? (long) (newPrice * (1 - ((float)discountRate / 100))) : newPrice;
         this.reviewScore = reviewScore;
         this.reviewNum = reviewNum;
         this.fee = fee;
