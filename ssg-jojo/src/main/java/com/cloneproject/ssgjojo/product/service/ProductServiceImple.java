@@ -1,17 +1,15 @@
 package com.cloneproject.ssgjojo.product.service;
 
 
+import com.cloneproject.ssgjojo.attention.repository.IAttentionRepository;
 import com.cloneproject.ssgjojo.categorylv1.domain.CategoryLv1;
 import com.cloneproject.ssgjojo.categorylv1.dto.CategoryDto;
 import com.cloneproject.ssgjojo.categorylv1.repository.ICategoryLv1Repository;
 import com.cloneproject.ssgjojo.categorylv2.domain.CategoryLv2;
-import com.cloneproject.ssgjojo.categorylv2.dto.CategoryLv2Dto;
 import com.cloneproject.ssgjojo.categorylv2.repository.ICategoryLv2Repository;
 import com.cloneproject.ssgjojo.categorylv3.domain.CategoryLv3;
-import com.cloneproject.ssgjojo.categorylv3.dto.CategoryLv3Dto;
 import com.cloneproject.ssgjojo.categorylv3.repository.ICategoryLv3Repository;
 import com.cloneproject.ssgjojo.categorylv4.domain.CategoryLv4;
-import com.cloneproject.ssgjojo.categorylv4.dto.CategoryLv4Dto;
 import com.cloneproject.ssgjojo.categorylv4.repository.ICategoryLv4Repository;
 
 import com.cloneproject.ssgjojo.categoryproductlist.domain.CategoryProductList;
@@ -89,6 +87,7 @@ public class ProductServiceImple implements IProductService {
     private final JwtTokenProvider jwtTokenProvider;
 
     private final IRecentSearchesRepository iRecentSearchesRepository;
+    private final IAttentionRepository iAttentionRepository;
 
 
     // 상품 추가
@@ -187,168 +186,6 @@ public class ProductServiceImple implements IProductService {
         return null;
     }
 
-    // 상품 아이디를 통한 조회
-/*    @Override
-    public ProductInfoDto getProductById(Long id) {
-        Optional<Product> product = iProductRepository.findById(id);
-
-        // 상품 유효성 검증
-        if(product.isPresent()) {
-            // 상품 - 카테고리 중간 테이블에 데이터 있는지 확인
-            Optional<CategoryProductList> categoryProductList = iCategoryProductListRepository.findByProduct(product.get());
-            // 옵션 테이블에 해당 상품에 대한 데이터 있는
-            List<ProductOption> productOptionList = iProductOptionRepository.findAllByProduct(product.get());
-            List<ProductPhoto> productPhotoList = iProductPhotoRepository.findAllByProduct(product.get());
-            List<ProductDetailPhoto> productDetailPhotoList = iProductDetailPhotoRepository.findAllByProduct(product.get());
-
-            // 중간 테이블 및 옵션 리스트 유효성 검증
-            if(categoryProductList.isPresent() && !productOptionList.isEmpty() && !productPhotoList.isEmpty() && !productDetailPhotoList.isEmpty()) {
-                List<ProductOptionOutputDto> optionOutDtoList = new ArrayList<>();
-
-                // 하나의 상품에 여러개의 옵션이 있을 수 있으므로
-                // 옵션 테이블의 데이터를 내가 보내주고 싶은 필드만
-                // DTO로 만들고 build 한 뒤, optionOutDtoList에 추가해준다.
-                for(ProductOption tmp : productOptionList) {
-                    optionOutDtoList.add(ProductOptionOutputDto.builder()
-                            .id(tmp.getId())
-                            .productId(tmp.getProduct().getId())
-                            .productOption1Name(tmp.getProductOption1Name())
-                            .productOption1Contents(tmp.getProductOption1Contents())
-                            .productOption2Name(tmp.getProductOption2Name())
-                            .productOption2Contents(tmp.getProductOption2Contents())
-                            .stock(tmp.getStock())
-                            .build());
-                }
-
-                // 상품 이미지 목록 DTO 형태로 변환하여 저장
-                List<ProductPhotoDto> photoDtoList = new ArrayList<>();
-                for(ProductPhoto tmp : productPhotoList) {
-                    photoDtoList.add(ProductPhotoDto.builder()
-                            .productPhotoOriginName(tmp.getProductPhotoOriginName())
-                            .productPhotoPath(tmp.getProductPhotoPath())
-                            .productPhotoSeq(tmp.getProductPhotoSeq())
-                            .productId(tmp.getProduct().getId())
-                            .build());
-                }
-
-                // 상품 상세 이미지 목록 DTO 형태로 변환하여 저장
-                List<ProductDetailPhotoDto> detailPhotoDtoList = new ArrayList<>();
-                for(ProductDetailPhoto tmp : productDetailPhotoList) {
-                    detailPhotoDtoList.add(ProductDetailPhotoDto.builder()
-                            .productDetailPhotoOriginName(tmp.getProductDetailPhotoOriginName())
-                            .productDetailPhotoPath(tmp.getProductDetailPhotoPath())
-                            .productDetailPhotoSeq(tmp.getProductDetailPhotoSeq())
-                            .productId(tmp.getProduct().getId())
-                            .build());
-                }
-
-                // 최종적으로 반환될 Dto
-                // 상품 기본 정보 + 카테고리 + 상품에 해당하는 옵션 리스트를 담아서 보내준다.
-                ProductInfoDto returnDto = ProductInfoDto.builder()
-                        .id(product.get().getId())
-                        .price(product.get().getPrice())
-                        .description(product.get().getDescription())
-                        .productName(product.get().getProductName())
-                        .manufactureCompany(product.get().getManufactureCompany())
-                        .discountRate(product.get().getDiscountRate())
-                        .fee(product.get().getFee())
-                        .adultCase(product.get().isAdultCase())
-                        .thumbnail(product.get().getThumbnail())
-                        .categoryLv4(categoryProductList.get().getCategoryLv4().getId())
-                        .categoryLv3(categoryProductList.get().getCategoryLv3().getId())
-                        .categoryLv2(categoryProductList.get().getCategoryLv2().getId())
-                        .categoryLv1(categoryProductList.get().getCategoryLv1().getId())
-                        .productOptionList(optionOutDtoList)
-                        .productPhotoList(photoDtoList)
-                        .productDetailPhotoList(detailPhotoDtoList)
-                        .build();
-
-                return returnDto;
-            }
-        }
-        return null;
-    }*/
-
-/*
-    @Override
-    public List<ProductInfoDto> getAllProduct() {
-        List<Product> productList = iProductRepository.findAll();
-        List<ProductInfoDto> productInfoDtoList = new ArrayList<>();
-
-
-        for(Product product : productList) {
-            Optional<CategoryProductList> categoryProductList = iCategoryProductListRepository.findByProduct(product);
-
-
-            // 중간 테이블 및 옵션 리스트 유효성 검증
-            if(categoryProductList.isPresent()) {
-                List<ProductOption> optionList = iProductOptionRepository.findAllByProduct(product);
-                List<ProductPhoto> photoList = iProductPhotoRepository.findAllByProduct(product);
-                List<ProductDetailPhoto> detailPhotoList = iProductDetailPhotoRepository.findAllByProduct(product);
-
-                List<ProductOptionOutputDto> optionOutputDtoList = new ArrayList<>();
-                List<ProductPhotoDto> photoDtoList = new ArrayList<>();
-                List<ProductDetailPhotoDto> detailPhotoDtoList = new ArrayList<>();
-
-                for(ProductOption option : optionList) {
-                    optionOutputDtoList.add(ProductOptionOutputDto.builder()
-                                    .id(option.getId())
-                                    .productOption1Name(option.getProductOption1Name())
-                                    .productOption1Contents(option.getProductOption1Contents())
-                                    .productOption2Name(option.getProductOption2Name())
-                                    .productOption2Contents(option.getProductOption2Contents())
-                                    .productId(product.getId())
-                                    .stock(option.getStock())
-                            .build()
-                    );
-                }
-
-                for(ProductPhoto photo : photoList) {
-                    photoDtoList.add(ProductPhotoDto.builder()
-                                    .productId(photo.getProduct().getId())
-                                    .productPhotoOriginName(photo.getProductPhotoOriginName())
-                                    .productPhotoSeq(photo.getProductPhotoSeq())
-                                    .productPhotoPath(photo.getProductPhotoPath())
-                            .build());
-                }
-
-                for(ProductDetailPhoto detailPhoto : detailPhotoList) {
-                    detailPhotoDtoList.add(ProductDetailPhotoDto.builder()
-                                    .productId(detailPhoto.getProduct().getId())
-                                    .productDetailPhotoOriginName(detailPhoto.getProductDetailPhotoOriginName())
-                                    .productDetailPhotoSeq(detailPhoto.getProductDetailPhotoSeq())
-                                    .productDetailPhotoPath(detailPhoto.getProductDetailPhotoPath())
-                            .build()
-                    );
-                }
-
-
-                productInfoDtoList.add(ProductInfoDto.builder()
-                        .id(product.getId())
-                        .price(product.getPrice())
-                        .description(product.getDescription())
-                        .productName(product.getProductName())
-                        .manufactureCompany(product.getManufactureCompany())
-                        .discountRate(product.getDiscountRate())
-                        .fee(product.getFee())
-                        .adultCase(product.isAdultCase())
-                        .thumbnail(product.getThumbnail())
-                        .categoryLv4(categoryProductList.get().getCategoryLv4().getId())
-                        .categoryLv3(categoryProductList.get().getCategoryLv3().getId())
-                        .categoryLv2(categoryProductList.get().getCategoryLv2().getId())
-                        .categoryLv1(categoryProductList.get().getCategoryLv1().getId())
-                        .productOptionList(optionOutputDtoList)
-                        .productPhotoList(photoDtoList)
-                        .productDetailPhotoList(detailPhotoDtoList)
-                        .build());
-            }
-        }
-
-
-        return productInfoDtoList;
-    }
-*/
-
     // 상품 삭제
     @Override
     @Transactional
@@ -443,44 +280,22 @@ public class ProductServiceImple implements IProductService {
 
     // 전체 상품 목록 반환
     @Override
-    public List<ProductListDto> getAllProductList() {
+    public List<ProductListAttentionDto> getAllProductList(HttpServletRequest request) {
+        List<ProductListAttentionDto> productList = new ArrayList<>();
         Pageable pr = PageRequest.of(0, 20);
 
-        List<Product> productList = iProductRepository.getProduct(pr);
-        List<ProductListDto> allList = new ArrayList<>();
+        if(request.getHeader("Authorization") != null) {
+            Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
+            Optional<User> user = iUserRepository.findById(userId);
 
-
-        for(Product product : productList) {
-            Long newPrice = 0L;
-            Long oldPrice = 0L;
-            Float reviewScore = iReviewRepository.getReviewAvgScore(product.getId());
-            int reviewNum = iReviewRepository.getReviewCountByProduct(product.getId());
-
-            int discountRate = product.getDiscountRate();
-            if(discountRate != 0) {
-                oldPrice = product.getPrice();
-                newPrice = (long) ((float) oldPrice * (1 - ((float) discountRate /100 )));
+            if(user.isPresent()) {
+                productList = iProductRepository.getProductListWithUser(pr, userId);
             }
-            else
-                newPrice= product.getPrice();
-
-            allList.add(ProductListDto.builder()
-                    .id(product.getId())
-                    .thumbnailUri(product.getThumbnail())
-                    .mallName("신세계몰")
-                    .productName(product.getProductName())
-                    .manufactureCompany(product.getManufactureCompany())
-                    .discountRate(product.getDiscountRate())
-                    .oldPrice(oldPrice)
-                    .newPrice(newPrice)
-                    .reviewScore(reviewScore == null ? 0 : reviewScore)
-                    .reviewNum(reviewNum)
-                    .fee(product.getFee())
-                    .adultCase(product.isAdultCase())
-                    .build());
         }
+        else
+            productList= iProductRepository.getProductList(pr);
 
-        return allList;
+        return productList;
     }
 
     @Override
@@ -509,12 +324,16 @@ public class ProductServiceImple implements IProductService {
             }
         }
 
-        Long newPrice = 0L;
-        Long oldPrice = 0L;
+
+        // 리뷰 평점, 리뷰 개수 조회
         Float reviewScore = iReviewRepository.getReviewAvgScore(product.get().getId());
         int reviewNum = iReviewRepository.getReviewCountByProduct(product.get().getId());
 
+        Long newPrice = 0L;
+        Long oldPrice = 0L;
         int discountRate = product.get().getDiscountRate();
+
+        // 할인 가격 적용
         if(discountRate != 0) {
             oldPrice = product.get().getPrice();
             newPrice = (long) ((float) oldPrice * (1 - ((float) discountRate / 100)));
@@ -756,13 +575,11 @@ public class ProductServiceImple implements IProductService {
 
 
         for(Product product : productList) {
-
             if(!productList.isEmpty()) {
                 Long newPrice = 0L;
                 Long oldPrice = 0L;
                 Float reviewScore = iReviewRepository.getReviewAvgScore(product.getId());
                 int reviewNum = iReviewRepository.getReviewCountByProduct(product.getId());
-
 
                 int discountRate = product.getDiscountRate();
                 if(discountRate != 0) {

@@ -33,8 +33,8 @@ public class ProductController {
     }
 
     @GetMapping("/product/getlist")
-    public List<ProductListDto> getProductAllList() {
-        return iProductService.getAllProductList();
+    public List<ProductListAttentionDto> getProductAllList(HttpServletRequest request) {
+        return iProductService.getAllProductList(request);
     }
 
     @DeleteMapping("/product/{id}")
