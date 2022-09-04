@@ -28,6 +28,7 @@ public class AttentionServiceImple implements IAttentionService{
     private final IUserRepository iUserRepository;
     private final JwtTokenProvider jwtTokenProvider;
 
+
     // 좋아요 항목 추가
     @Override
     public void AttentionAdd(AttentionAddDto addDto, HttpServletRequest request) {
@@ -159,6 +160,7 @@ public class AttentionServiceImple implements IAttentionService{
         return null;
     }
 
+    // 특정 폴더에 있는 좋아요 항목 조회
     @Override
     public List<AttentionOutputDto> findAllByAttentionFolder(Long folderId) {
         Optional<AttentionFolder> attentionFolder = iAttentionFolderRepository.findById(folderId);
@@ -182,10 +184,8 @@ public class AttentionServiceImple implements IAttentionService{
                                 .productPrice(productPrice)
                         .build());
             }
-
             return returnDto;
         }
-
         return null;
     }
 
@@ -205,7 +205,6 @@ public class AttentionServiceImple implements IAttentionService{
             }
             return true;
         }
-
         return false;
     }
 
@@ -222,10 +221,8 @@ public class AttentionServiceImple implements IAttentionService{
                 if(attention.get().getUser().getId() == user.get().getId())
                     iAttentionRepository.deleteById(attentionId);
             }
-
             return true;
         }
-
         return false;
     }
 }

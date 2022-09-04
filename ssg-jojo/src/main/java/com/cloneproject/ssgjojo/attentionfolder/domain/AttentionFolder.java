@@ -9,6 +9,12 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 
+/**
+ * id: AttentionFolder PK
+ * no: 폴더 번호
+ * fodlerName: 폴더 이름
+ * user : 사용자
+ */
 @Entity
 @Data
 @Builder

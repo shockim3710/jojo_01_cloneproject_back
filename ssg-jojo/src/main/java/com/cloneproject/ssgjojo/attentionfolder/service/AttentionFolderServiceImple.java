@@ -23,6 +23,8 @@ public class AttentionFolderServiceImple implements IAttentionFolderService{
     private final IAttentionFolderRepository iAttentionFolderRepository;
     private final IUserRepository iUserRepository;
 
+    
+    // 좋아요 폴더 추가
     @Override
     public AttentionFolderOutputDto addFolder(AttentionFolderAddDto addDto) {
         Optional<User> user = iUserRepository.findById(addDto.getUserId());
@@ -50,41 +52,7 @@ public class AttentionFolderServiceImple implements IAttentionFolderService{
         return null;
     }
 
-    @Override
-    @Transactional
-    public AttentionFolderOutputDto editFolder(AttentionFolderEditDto editDto) {
-        Optional<AttentionFolder> folder = iAttentionFolderRepository.findById(editDto.getFolderId());
-        Optional<User> user = iUserRepository.findById(editDto.getUserId());
-
-        if(folder.isPresent() && user.isPresent()) {
-            folder.get().setFolderName(editDto.getFolderName());
-
-            return AttentionFolderOutputDto.builder()
-                    .id(folder.get().getId())
-                    .no(folder.get().getNo())
-                    .folderName(folder.get().getFolderName())
-                    .userId(folder.get().getUser().getId())
-                    .build();
-        }
-
-        return null;
-    }
-
-    @Override
-    @Transactional
-    public void deleteFolderById(AttentionFolderDeleteDto deleteDto) {
-        Optional<AttentionFolder> folder = iAttentionFolderRepository.findById(deleteDto.getFolderId());
-        Optional<User> user = iUserRepository.findById(deleteDto.getUserId());
-
-        // 0번은 기본 폴더로 삭제 불가능.
-        if (folder.get().getNo() == 0)
-            return;
-
-        if(folder.isPresent() && user.isPresent()) {
-            iAttentionFolderRepository.deleteById(folder.get().getId());
-        }
-    }
-
+    // 유저별 좋아요 폴더 조회
     @Override
     public List<AttentionFolderOutputDto> findAllByUser(Long userId) {
         Optional<User> user = iUserRepository.findById(userId);
@@ -107,4 +75,43 @@ public class AttentionFolderServiceImple implements IAttentionFolderService{
 
         return null;
     }
+    
+    // 좋아요 폴더 수정
+    @Override
+    @Transactional
+    public AttentionFolderOutputDto editFolder(AttentionFolderEditDto editDto) {
+        Optional<AttentionFolder> folder = iAttentionFolderRepository.findById(editDto.getFolderId());
+        Optional<User> user = iUserRepository.findById(editDto.getUserId());
+
+        if(folder.isPresent() && user.isPresent()) {
+            folder.get().setFolderName(editDto.getFolderName());
+
+            return AttentionFolderOutputDto.builder()
+                    .id(folder.get().getId())
+                    .no(folder.get().getNo())
+                    .folderName(folder.get().getFolderName())
+                    .userId(folder.get().getUser().getId())
+                    .build();
+        }
+
+        return null;
+    }
+
+    // 좋아요 폴더 삭제
+    @Override
+    @Transactional
+    public void deleteFolderById(AttentionFolderDeleteDto deleteDto) {
+        Optional<AttentionFolder> folder = iAttentionFolderRepository.findById(deleteDto.getFolderId());
+        Optional<User> user = iUserRepository.findById(deleteDto.getUserId());
+
+        // 0번은 기본 폴더로 삭제 불가능.
+        if (folder.get().getNo() == 0)
+            return;
+
+        if(folder.isPresent() && user.isPresent()) {
+            iAttentionFolderRepository.deleteById(folder.get().getId());
+        }
+    }
+
+
 }
