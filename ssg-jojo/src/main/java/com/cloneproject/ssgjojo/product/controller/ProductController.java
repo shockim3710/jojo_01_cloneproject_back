@@ -33,7 +33,7 @@ public class ProductController {
     }
 
     @GetMapping("/product/getlist")
-    public List<ProductListAttentionDto> getProductAllList(HttpServletRequest request) {
+    public List<ProductListDto> getProductAllList(HttpServletRequest request) {
         return iProductService.getAllProductList(request);
     }
 
@@ -59,7 +59,7 @@ public class ProductController {
 
     // 상품 검색
     @GetMapping("/product/search")
-    public List<ProductListAttentionDto> searchProduct(@RequestParam String keyword,
+    public List<ProductListDto> searchProduct(@RequestParam String keyword,
                                               @RequestParam(name = "page", defaultValue = "1") int page,
                                               HttpServletRequest request) {
         return iProductService.productSearch(keyword, page, request);

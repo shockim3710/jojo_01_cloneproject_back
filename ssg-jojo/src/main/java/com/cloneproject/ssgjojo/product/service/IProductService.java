@@ -14,8 +14,8 @@ public interface IProductService {
 //    List<ProductInfoDto> getAllProduct();
     void deleteProduct(Long id);
     Product editProduct(ProductUpdateDto productUpdateDto);
-    List<ProductListAttentionDto> getAllProductList(HttpServletRequest request);
+    List<ProductListDto> getAllProductList(HttpServletRequest request);
     ProductInfoCategoryDto findProductByCategoryLv(Long lv, Long id, int page, HttpServletRequest request);
     ProductDetailDto getProductDetail(Long productId, HttpServletRequest request);
-    List<ProductListAttentionDto> productSearch(String keyword, int page, HttpServletRequest request);
+    List<ProductListDto> productSearch(String keyword, int page, HttpServletRequest request);
 }

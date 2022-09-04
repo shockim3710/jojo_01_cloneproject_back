@@ -280,8 +280,8 @@ public class ProductServiceImple implements IProductService {
 
     // 전체 상품 목록 반환
     @Override
-    public List<ProductListAttentionDto> getAllProductList(HttpServletRequest request) {
-        List<ProductListAttentionDto> productList = new ArrayList<>();
+    public List<ProductListDto> getAllProductList(HttpServletRequest request) {
+        List<ProductListDto> productList = new ArrayList<>();
         Pageable pr = PageRequest.of(0, 20);
 
         if(request.getHeader("Authorization") != null) {
@@ -488,7 +488,7 @@ public class ProductServiceImple implements IProductService {
 
     @Override
     public ProductInfoCategoryDto findProductByCategoryLv(Long lv, Long id, int page, HttpServletRequest request) {
-        List<ProductListAttentionDto> findResult = new ArrayList<>();
+        List<ProductListDto> findResult = new ArrayList<>();
 
         Pageable pr = PageRequest.of(page - 1, 20, Sort.by("id").descending());
 
@@ -548,7 +548,7 @@ public class ProductServiceImple implements IProductService {
 
     // 상품 검색
     @Override
-    public List<ProductListAttentionDto> productSearch(String keyword, int page, HttpServletRequest request) {
+    public List<ProductListDto> productSearch(String keyword, int page, HttpServletRequest request) {
         Pageable pr = PageRequest.of(page - 1, 20, Sort.by("id").descending());
         Long userId = -1L;
 
@@ -565,7 +565,7 @@ public class ProductServiceImple implements IProductService {
                         .build());
         }
 
-        List<ProductListAttentionDto> productListDtoList = new ArrayList<>();
+        List<ProductListDto> productListDtoList = new ArrayList<>();
 
         keyword = "%" + keyword + "%";
 

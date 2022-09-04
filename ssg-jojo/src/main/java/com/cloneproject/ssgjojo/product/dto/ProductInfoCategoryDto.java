@@ -14,5 +14,5 @@ import java.util.List;
 public class ProductInfoCategoryDto {
     List<?> sameLevelCategory;
     List<?> childLevelCategory;
-    List<ProductListAttentionDto> productList;
+    List<ProductListDto> productList;
 }
