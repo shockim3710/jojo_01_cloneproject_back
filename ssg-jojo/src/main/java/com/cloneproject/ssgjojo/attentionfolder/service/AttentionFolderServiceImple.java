@@ -57,6 +57,7 @@ public class AttentionFolderServiceImple implements IAttentionFolderService{
         return null;
     }
 
+
     // 유저별 좋아요 폴더 조회
     @Override
     public List<AttentionFolderOutputDto> findAllByUser(HttpServletRequest request) {
@@ -82,7 +83,8 @@ public class AttentionFolderServiceImple implements IAttentionFolderService{
 
         return null;
     }
-    
+
+
     // 좋아요 폴더 수정
     @Override
     @Transactional

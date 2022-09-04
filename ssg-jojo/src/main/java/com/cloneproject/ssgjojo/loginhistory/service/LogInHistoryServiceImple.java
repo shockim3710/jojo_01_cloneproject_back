@@ -25,6 +25,8 @@ public class LogInHistoryServiceImple implements ILogInHistoryService {
     private final IUserRepository iUserRepository;
     private final JwtTokenProvider jwtTokenProvider;
 
+
+
     // 해당 유저의 로그인 기록 조회
     @Override
     public List<LogInHistoryOutputDto> getHistoryByUserId(HttpServletRequest request) {
@@ -43,7 +45,6 @@ public class LogInHistoryServiceImple implements ILogInHistoryService {
                             .id(logInHistory.getId())
                             .logInIp(logInHistory.getLogInIp())
                             .logInTime(logInHistory.getLogInTime())
-                            .userId(logInHistory.getUser().getId())
                             .build());
                 }
             }

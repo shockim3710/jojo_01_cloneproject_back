@@ -21,6 +21,9 @@ public class ProductTimeDealServiceImple implements IProductTimeDealService{
     private final IProductTimeDealRepository iProductTimeDealRepository;
     private final IProductRepository iProductRepository;
 
+
+
+    // 타임 딜 추가
     @Override
     public ProductTimeDealOutputDto addTimeDeal(ProductTimeDealAddDto productTimeDealAddDto) {
         Optional<Product> product = iProductRepository.findById(productTimeDealAddDto.getProductId());
@@ -52,6 +55,8 @@ public class ProductTimeDealServiceImple implements IProductTimeDealService{
         return null;
     }
 
+
+    // 타임 딜 상품 조회
     @Override
     public List<ProductTimeDealOutputDto> findTimeDealList() {
         List<ProductTimeDeal> timeDealList = iProductTimeDealRepository.findProductTimeDealList();

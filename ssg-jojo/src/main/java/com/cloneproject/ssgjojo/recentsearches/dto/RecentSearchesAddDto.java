@@ -11,6 +11,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class RecentSearchesAddDto {
     private String histories; // 최근검색어
-
     private Long user;
 }

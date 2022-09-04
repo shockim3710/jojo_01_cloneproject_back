@@ -18,6 +18,8 @@ public class ProductNewServiceService implements IProductNewServiceService{
     private final AwsS3ResourceStorage awsS3ResourceStorage;
     private final IProductNewServiceRepository iProductNewServiceRepository;
 
+
+
     // 뉴 서비스 등록
     @Override
     public ProductNewService addProductNewService(ProductNewServiceAddDto productNewServiceAddDto, MultipartFile newServicePhoto) {
@@ -31,6 +33,7 @@ public class ProductNewServiceService implements IProductNewServiceService{
                 .newServiceUri(productNewServiceAddDto.getNewServiceUri())
                 .build());
     }
+
 
     // 뉴 서비스 조회
     @Override

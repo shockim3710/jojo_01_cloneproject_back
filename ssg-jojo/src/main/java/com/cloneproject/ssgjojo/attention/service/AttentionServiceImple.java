@@ -28,7 +28,6 @@ public class AttentionServiceImple implements IAttentionService{
     private final IUserRepository iUserRepository;
     private final JwtTokenProvider jwtTokenProvider;
 
-
     // 좋아요 항목 추가
     @Override
     public void AttentionAdd(AttentionAddDto addDto, HttpServletRequest request) {
@@ -60,6 +59,7 @@ public class AttentionServiceImple implements IAttentionService{
     // 좋아요 항목 폴더에 추가
     @Override
     public void AttentionAddFolder(AttentionInputFolderDto addFolderDto, HttpServletRequest request) {
+
         Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
         Optional<User> user = iUserRepository.findById(userId);
 

@@ -52,7 +52,7 @@ public class AccountPaymentServiceImple implements IAccountPaymentService{
         return null;
     }
 
-    // 해당 유저 id로 결제 계좌 조회
+    // 해당 유저의 결제 계좌 조회
     @Override
     public List<AccountPaymentOutputDto> getAccountPaymentByUserId(HttpServletRequest request) {
 

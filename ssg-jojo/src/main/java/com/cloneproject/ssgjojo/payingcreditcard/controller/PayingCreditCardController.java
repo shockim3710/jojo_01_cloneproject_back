@@ -25,7 +25,7 @@ public class PayingCreditCardController {
         return iPayingCreditCardService.addPayingCreditCard(payingCreditCardInputDto, request);
     }
 
-    // 해당 유저의 결제 카드 조회
+    // 유저별 결제 카드 조회
     @GetMapping("/payingcreditcard")
     public List<PayingCreditCardOutputDto> getPayingCreditCardByUserId(HttpServletRequest request) {
         return iPayingCreditCardService.getPayingCreditCardByUserId(request);

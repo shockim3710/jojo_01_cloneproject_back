@@ -22,7 +22,7 @@ public class ReviewOutputDto {
     private String title;
     private String mainText;
     private int score;
-    private String userId;
+    private String userAccount;
     private Long productId;
     private Timestamp createdTime;
 

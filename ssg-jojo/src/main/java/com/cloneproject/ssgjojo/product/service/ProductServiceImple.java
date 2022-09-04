@@ -66,6 +66,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class ProductServiceImple implements IProductService {
     private final IProductRepository iProductRepository;
+
     private final ICategoryLv4Repository iCategoryLv4Repository;
     private final ICategoryLv3Repository iCategoryLv3Repository;
     private final ICategoryLv2Repository iCategoryLv2Repository;
@@ -90,7 +91,7 @@ public class ProductServiceImple implements IProductService {
     private final IAttentionRepository iAttentionRepository;
 
 
-    // 상품 추가
+    // 상품 추가 (이미지 포함)
     @Override
     public Product addProduct(ProductAddDto productAddDto, MultipartFile thumbnail, List<MultipartFile> productPhoto, List<MultipartFile> productDetail) {
         Optional<CategoryLv1> categoryLv1 = iCategoryLv1Repository.findById(productAddDto.getCategoryLv1());
@@ -298,6 +299,8 @@ public class ProductServiceImple implements IProductService {
         return productList;
     }
 
+
+    // 상품 상세
     @Override
     @Transactional
     public ProductDetailDto getProductDetail(Long productId, HttpServletRequest request) {
@@ -486,6 +489,7 @@ public class ProductServiceImple implements IProductService {
     }
 
 
+    // 상품 리스트 조회
     @Override
     public ProductInfoCategoryDto findProductByCategoryLv(Long lv, Long id, int page, HttpServletRequest request) {
         List<ProductListDto> findResult = new ArrayList<>();

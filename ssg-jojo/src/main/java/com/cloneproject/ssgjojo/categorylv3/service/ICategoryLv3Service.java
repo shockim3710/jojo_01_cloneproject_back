@@ -9,6 +9,5 @@ public interface ICategoryLv3Service {
 
     CategoryLv3 addCategory(CategoryLv3Dto categoryLv3Dto);
     CategoryLv3 editCategory(CategoryLv3 categoryLv3);
-
     void deleteCategory(Long id);
 }

@@ -29,7 +29,9 @@ public class QnAServiceImple implements IQnAService {
     private final IProductRepository iProductRepository;
     private final JwtTokenProvider jwtTokenProvider;
 
-    // 유저가 상품문의글 작성
+
+
+    // 상품문의글 작성
     @Override
     public QnAOutputDto addQ(QuestionInputDto questionInputDto, HttpServletRequest request) {
 
@@ -62,7 +64,7 @@ public class QnAServiceImple implements IQnAService {
     }
 
 
-    // 유저가 작성한 기존 상품문의글 편집
+    // 기존 상품문의글 편집
     @Override
     public QnAOutputDto editQ(QnAEditDto qnAEditDto, HttpServletRequest request) {
 
@@ -133,7 +135,7 @@ public class QnAServiceImple implements IQnAService {
     }
 
 
-    // 유저가 작성된 상품문의글 삭제
+    // 작성된 상품문의글 삭제
     @Override
     public void deleteQuestion(QnADeleteDto qnADeleteDto, HttpServletRequest request) {
 

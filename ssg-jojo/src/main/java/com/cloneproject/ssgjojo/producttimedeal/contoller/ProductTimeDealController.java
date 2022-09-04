@@ -16,11 +16,13 @@ import java.util.List;
 public class ProductTimeDealController {
     private final IProductTimeDealService iProductTimeDealService;
 
+    // 타임 딜 추가
     @PostMapping("/timedeal/add")
     public ProductTimeDealOutputDto addProductTimeDeal(@RequestBody ProductTimeDealAddDto productTimeDealAddDto) {
         return iProductTimeDealService.addTimeDeal(productTimeDealAddDto);
     }
 
+    // 타임 딜 상품 조회
     @GetMapping("/timedeal/list")
     public List<ProductTimeDealOutputDto> findTimeDealList() {
         return iProductTimeDealService.findTimeDealList();

@@ -26,6 +26,9 @@ public class RecentlyProductServiceImple implements IRecentlyProductService{
     private final IProductRepository iProductRepository;
     private final JwtTokenProvider jwtTokenProvider;
 
+
+
+    // 유저별 최근 본 상품 조회
     @Override
     public List<RecentlyProductOutputDto> findAllByUser(HttpServletRequest request) {
 
@@ -66,6 +69,8 @@ public class RecentlyProductServiceImple implements IRecentlyProductService{
         return null;
     }
 
+
+    // 최근 본 상품 각각 삭제
     @Override
     @Transactional
     public String deleteByRecentlyId(List<RecentlyProductDeleteDto> recentlyProductDeleteDto, HttpServletRequest request) {
@@ -94,6 +99,8 @@ public class RecentlyProductServiceImple implements IRecentlyProductService{
         return "True";
     }
 
+
+    // 최근 본 상품 전체 삭제
     @Override
     @Transactional
     public String deleteAllByUserId(HttpServletRequest request) {
