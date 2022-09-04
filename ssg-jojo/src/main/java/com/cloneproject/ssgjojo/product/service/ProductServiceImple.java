@@ -548,12 +548,14 @@ public class ProductServiceImple implements IProductService {
 
     // 상품 검색
     @Override
-    public List<ProductListDto> productSearch(String keyword, HttpServletRequest request) {
+    public List<ProductListAttentionDto> productSearch(String keyword, int page, HttpServletRequest request) {
+        Pageable pr = PageRequest.of(page - 1, 20, Sort.by("id").descending());
+        Long userId = -1L;
 
         // Request 헤더에서 Authorization에 대한 설정이 있을 경우
-        // 최근 본 상품에 등록
+        // 최근 검색어에 등록
         if(request.getHeader("Authorization") != null) {
-            Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
+            userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
             Optional<User> user = iUserRepository.findById(userId);
 
             if(user.isPresent())
@@ -561,45 +563,16 @@ public class ProductServiceImple implements IProductService {
                         .histories(keyword)
                         .user(user.get())
                         .build());
-
         }
 
-        List<Product> productList = iProductRepository.findByProductNameContaining(keyword);
-        List<ProductListDto> productListDtoList = new ArrayList<>();
+        List<ProductListAttentionDto> productListDtoList = new ArrayList<>();
 
+        keyword = "%" + keyword + "%";
 
-        for(Product product : productList) {
-            if(!productList.isEmpty()) {
-                Long newPrice = 0L;
-                Long oldPrice = 0L;
-                Float reviewScore = iReviewRepository.getReviewAvgScore(product.getId());
-                int reviewNum = iReviewRepository.getReviewCountByProduct(product.getId());
-
-                int discountRate = product.getDiscountRate();
-                if(discountRate != 0) {
-                    oldPrice = product.getPrice();
-                    newPrice = (long) ((float) oldPrice * (1 - ((float) discountRate /100 )));
-                }
-                else
-                    newPrice= product.getPrice();
-
-
-                productListDtoList.add(ProductListDto.builder()
-                        .id(product.getId())
-                        .thumbnailUri(product.getThumbnail())
-                        .mallName("신세계몰")
-                        .productName(product.getProductName())
-                        .manufactureCompany(product.getManufactureCompany())
-                        .discountRate(product.getDiscountRate())
-                        .oldPrice(oldPrice)
-                        .newPrice(newPrice)
-                        .reviewScore(reviewScore == null ? 0 : reviewScore)
-                        .reviewNum(reviewNum)
-                        .fee(product.getFee())
-                        .adultCase(product.isAdultCase())
-                        .build());
-            }
-        }
+        if(userId != -1L)
+            productListDtoList = iProductRepository.getProductListWithKeywordAndUser(pr, userId, keyword);
+        else
+            productListDtoList = iProductRepository.getProductListWithKeyword(pr, keyword);
 
         return productListDtoList;
     }

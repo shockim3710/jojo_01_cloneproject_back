@@ -17,5 +17,5 @@ public interface IProductService {
     List<ProductListAttentionDto> getAllProductList(HttpServletRequest request);
     ProductInfoCategoryDto findProductByCategoryLv(Long lv, Long id, int page, HttpServletRequest request);
     ProductDetailDto getProductDetail(Long productId, HttpServletRequest request);
-    List<ProductListDto> productSearch(String keyword, HttpServletRequest request);
+    List<ProductListAttentionDto> productSearch(String keyword, int page, HttpServletRequest request);
 }
