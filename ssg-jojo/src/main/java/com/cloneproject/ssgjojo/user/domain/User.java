@@ -13,8 +13,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Data
 @AllArgsConstructor
@@ -101,6 +99,4 @@ public class User extends BaseTimeEntity implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-
-
 }

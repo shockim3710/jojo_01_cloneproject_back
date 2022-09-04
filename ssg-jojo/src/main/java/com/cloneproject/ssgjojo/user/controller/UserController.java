@@ -1,15 +1,15 @@
 package com.cloneproject.ssgjojo.user.controller;
 
-import com.cloneproject.ssgjojo.jwt.JwtTokenProvider;
 import com.cloneproject.ssgjojo.user.domain.User;
 import com.cloneproject.ssgjojo.user.dto.*;
-import com.cloneproject.ssgjojo.user.repository.IUserRepository;
 import com.cloneproject.ssgjojo.user.service.IUserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -20,48 +20,68 @@ public class UserController {
     private final IUserService iUserService;
 
     @PostMapping("/user/signup") // 회원가입
-    public String addUser(@RequestBody UserSignupDto userSignupDto) {
+    public ResponseEntity<?> addUser(@RequestBody UserSignupDto userSignupDto) {
+        User user = iUserService.addUser(userSignupDto);
 
-        return iUserService.addUser(userSignupDto);
+        if(user!=null){
+            return ResponseEntity.status(200).body("환영합니다.");
+        }else {
+            return ResponseEntity.status(400).body("error page");
+        }
     }
 
-    @PostMapping("/user/signupid")
-    public String getUserSignUpId(@RequestBody UserSignupDto userSignupDto) {
+    @PostMapping("/user/signupid") // 아이디 중복확인
+    public ResponseEntity<?> getUserSignUpId(@RequestBody UserSignupDto userSignupDto) {
 
-        return iUserService.getUserSignUpId(userSignupDto);
+        if(iUserService.getUserSignUpId(userSignupDto)){
+            return ResponseEntity.status(200).body("가입 가능");
+        }else{
+            return ResponseEntity.status(200).body("가입 불가능");
+        }
     }
-
-//    @PostMapping("/user/kakaosignup") // 카카오 회원가입
-//    public User addUser(@RequestBody UserKakaoSignupDto userKakaoSignupDto) {
-//
-//        return iUserService.addKakaoUser(userKakaoSignupDto);
-//    }
 
     @GetMapping("/user/get") // 마이페이지
-    public UserGetIdDto getUser(HttpServletRequest request) {
-        return iUserService.getUserById(request);
+    public ResponseEntity<?> getUser(HttpServletRequest request) {
+        UserGetIdDto user = iUserService.getUserById(request);
+
+        if(user!=null){
+            return ResponseEntity.status(200).body(user);
+        }else {
+            return ResponseEntity.status(400).body("error page");
+        }
     }
 
-    @PostMapping("/user/login")
-    public String getUserLogin(@RequestBody UserLoginDto userLoginDto) {
+    @PostMapping("/user/login") // 로그인
+    public ResponseEntity<?> getUserLogin(@RequestBody UserLoginDto userLoginDto) {
+        String user = iUserService.getUserLogin(userLoginDto);
 
-        return iUserService.getUserLogin(userLoginDto);
+        if(user!=null){
+            return ResponseEntity.status(200).body(user);
+        }else {
+            return ResponseEntity.status(400).body("error page");
+        }
     }
-
-
-//    @GetMapping("/user/getAll") // 전체 회원 조회
-//    public List<UserEditGetAllDto> getAll() {
-//        return iUserService.getAll();
-//    }
 
     @PutMapping("/user/edit") // 회원 정보 수정
-    public String editUser(@RequestBody UserEditGetAllDto userEditDto, HttpServletRequest request) {
-        return iUserService.editUser(userEditDto, request);
+    public ResponseEntity<?> editUser(@RequestBody UserEditGetAllDto userEditDto, HttpServletRequest request) {
+        String user = iUserService.editUser(userEditDto, request);
+
+        if(user!=null){
+            return ResponseEntity.status(200).body(user);
+        }else {
+            return ResponseEntity.status(400).body("error page");
+        }
     }
 
     @PutMapping("/user/delete") // 회원 탈퇴
-    public String deleteUser(HttpServletRequest request) {
-        return iUserService.deleteUser(request);
+    public ResponseEntity<?> deleteUser(HttpServletRequest request) {
+        Optional<User> user = iUserService.deleteUser(request);
+
+        if(user.isPresent()){
+            return ResponseEntity.status(200).body("탈퇴하였습니다.");
+        }else {
+            return ResponseEntity.status(400).body("error page");
+        }
     }
 
 }

@@ -38,7 +38,7 @@ public class UserServiceImple implements IUserService{
 
 
     @Override
-    public String addUser(UserSignupDto userSignupDto) { // 회원가입
+    public User addUser(UserSignupDto userSignupDto) { // 회원가입
 
         userSignupDto.setIsLeave(false);
         userSignupDto.setMembershipLevel("Friends");
@@ -90,68 +90,14 @@ public class UserServiceImple implements IUserService{
                 .user(user)
                 .build());
 
-        return "환영합니다.";
-
-
-
-
-
-
-
-
-
+        return user;
     }
 
     @Override
-    public String getUserSignUpId(UserSignupDto userSignupDto) { // 아이디 중복확인
-
+    public boolean getUserSignUpId(UserSignupDto userSignupDto) { // 아이디 중복확인
         List<User> userList = iUserRepository.findAllByUserId(userSignupDto.getUserId());
-
-        if(userList.size() == 0) {
-            return "가입 가능";
-        }
-
-
-        return "가입 불가능";
+        return userList.size() == 0? true:false;
     }
-
-//    @Override
-//    public User addKakaoUser(UserKakaoSignupDto userKakaoSignupDto) { // 카카오로 회원가입
-//        userKakaoSignupDto.setIsLeave(false);
-//        userKakaoSignupDto.setMembershipLevel("Friends");
-//        userKakaoSignupDto.setWhetherSnsSignUp(true);
-//
-//        User user = iUserRepository.save(User.builder()
-//                .userId(userKakaoSignupDto.getEmail())
-//                .name(userKakaoSignupDto.getName())
-//                .birth(userKakaoSignupDto.getBirth())
-//                .phone(userKakaoSignupDto.getPhone())
-//                .email(userKakaoSignupDto.getEmail())
-//                .gender(userKakaoSignupDto.getGender())
-//                .membershipLevel(userKakaoSignupDto.getMembershipLevel())
-//                .isLeave(userKakaoSignupDto.getIsLeave())
-//                .whetherSnsSignUp(userKakaoSignupDto.getWhetherSnsSignUp())
-//                .build());
-//
-//        userKakaoSignupDto.setWhetherDefaultAddress(true);
-//        userKakaoSignupDto.setWhetherOnlyThisTime(false);
-//
-//        iDeliveryAddressRepository.save(DeliveryAddress.builder()
-//                .user(user)
-//                .address(userKakaoSignupDto.getAddress())
-//                .whetherDefaultAddress(userKakaoSignupDto.isWhetherDefaultAddress())
-//                .whetherOnlyThisTime(userKakaoSignupDto.isWhetherOnlyThisTime())
-//                .build());
-//
-//                userKakaoSignupDto.setFolderName("전체보기");
-//
-//        iAttentionFolderRepository.save(AttentionFolder.builder()
-//                .user(user)
-//                .folderName(userKakaoSignupDto.getFolderName())
-//                .build());
-//
-//        return user;
-//    }
 
     @Override
     public UserGetIdDto getUserById(HttpServletRequest request) { // 마이페이지
@@ -236,49 +182,15 @@ public class UserServiceImple implements IUserService{
 
     @Override
     @Transactional
-    public String deleteUser(HttpServletRequest request) { // 회원 탈퇴
+    public Optional<User> deleteUser(HttpServletRequest request) { // 회원 탈퇴
         String userId = jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request));
         Optional<User> user = iUserRepository.findById(Long.valueOf(userId));
 
         if(user.isPresent()) {
             user.get().setIsLeave(true);
-            return "탈퇴하였습니다.";
+            return user;
         }
         return null;
-
-
-        /*
-         * ExceptionHandler를 활용해서 서비스에서 던져주면 컨트롤러에서 처리할 수 있음
-         */
-        /*return iUserRepository.save(User.builder()
-                .isLeave(userEditDto.getIsLeave()) // (회원 탈퇴)
-                .build());*/
     }
 
-
-//    @Override
-//    public List<UserEditGetAllDto> getAll() { // 전체 회원 조회
-//        List<User> userList = iUserRepository.findAll();
-//        List<UserEditGetAllDto> userDtoUserGetAllDtoList = new ArrayList<>();
-//
-//        userList.forEach( user -> {
-//            userDtoUserGetAllDtoList.add(UserEditGetAllDto.builder()
-//                    .userId(user.getUserId())
-//                    .id(user.getId())
-//                    .birth(user.getBirth())
-//                    .gender(user.getGender())
-//                    .email(user.getEmail())
-//                    .name(user.getName())
-//                    .password(user.getPassword())
-//                    .phone(user.getPhone())
-//                    .membershipLevel(user.getMembershipLevel())
-//                    .isLeave(user.getIsLeave())
-//                    .createTime((user.getCreatedDate()))
-//                    .whetherSnsSignUp(user.getWhetherSnsSignUp())
-//                    .build());
-//                }
-//        );
-//
-//        return userDtoUserGetAllDtoList;
-//    }
 }
