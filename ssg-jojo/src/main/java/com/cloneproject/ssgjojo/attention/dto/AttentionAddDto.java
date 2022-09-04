@@ -10,7 +10,6 @@ import java.sql.Timestamp;
 
 /**
  * AttentionAddDto: 좋아요 추가할 때 사용되는 Dto
- * userId: 사용자 PK
  * productId: 상품 PK
  */
 @Data
@@ -18,6 +17,5 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AttentionAddDto {
-    private Long userId;
     private Long productId;
 }
