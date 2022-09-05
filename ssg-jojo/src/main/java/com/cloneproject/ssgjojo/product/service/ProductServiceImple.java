@@ -277,7 +277,7 @@ public class ProductServiceImple implements IProductService {
         List<ProductListDto> productList = new ArrayList<>();
         Pageable pr = PageRequest.of(0, 20, Sort.by("id").ascending());
 
-        if(request.getHeader("Authorization") != null) {
+        if(request.getHeader("Authorization") != null && !request.getHeader("Authorization").equals("null")) {
             Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
             Optional<User> user = iUserRepository.findById(userId);
 
@@ -300,7 +300,7 @@ public class ProductServiceImple implements IProductService {
 
         // Request 헤더에서 Authorization에 대한 설정이 있을 경우
         // 최근 본 상품에 등록
-        if(request.getHeader("Authorization") != null) {
+        if(request.getHeader("Authorization") != null && !request.getHeader("Authorization").equals("null")) {
             Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
             Optional<User> user = iUserRepository.findById(userId);
 
@@ -496,7 +496,7 @@ public class ProductServiceImple implements IProductService {
         Long totalCnt = 0L;
         Long userId = -1L;
 
-        if(request.getHeader("Authorization") != null) {
+        if(request.getHeader("Authorization") != null && !request.getHeader("Authorization").equals("null")) {
             userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
             User user = iUserRepository.findById(userId).orElseThrow(()
                     -> new IllegalStateException("없는 사용자입니다."));
@@ -566,7 +566,7 @@ public class ProductServiceImple implements IProductService {
 
         // Request 헤더에서 Authorization에 대한 설정이 있을 경우
         // 최근 검색어에 등록
-        if(request.getHeader("Authorization") != null) {
+        if(request.getHeader("Authorization") != null && !request.getHeader("Authorization").equals("null")) {
             userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
             Optional<User> user = iUserRepository.findById(userId);
 
