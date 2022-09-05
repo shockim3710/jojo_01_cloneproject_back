@@ -11,5 +11,4 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AttentionFolderAddDto {
     private String folderName;
-    private Long userId;
 }

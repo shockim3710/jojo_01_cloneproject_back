@@ -88,7 +88,6 @@ public class OrdersServiceImple implements IOrdersService{
                         .thumbnail(product.get().getThumbnail())
                         .productOption(temp.getProductOption().getId())
                         .productOption1Contents(productOption.get().getProductOption1Contents())
-                        .productOption2Contents(productOption.get().getProductOption2Contents())
                         .orders(orders.getId())
                         .build()
                 );
@@ -134,7 +133,6 @@ public class OrdersServiceImple implements IOrdersService{
                             .thumbnail(order.getProduct().getThumbnail())
                             .productOption(order.getProductOption().getId())
                             .productOption1Contents(order.getProductOption().getProductOption1Contents())
-                            .productOption2Contents(order.getProductOption().getProductOption2Contents())
                             .build());
 
                 });
@@ -211,7 +209,6 @@ public class OrdersServiceImple implements IOrdersService{
                         .thumbnail(product.get().getThumbnail())
                         .productOption(ordersProductList.getProductOption().getId())
                         .productOption1Contents(productOption.get().getProductOption1Contents())
-                        .productOption2Contents(productOption.get().getProductOption2Contents())
                         .orders(temp.getId())
                         .build());
             }

@@ -74,7 +74,6 @@ public class CartServiceImple implements ICartService {
                             .fee(temp.getProduct().getFee())
                             .productOption(temp.getProductOption().getId())
                             .productOption1Contents(temp.getProductOption().getProductOption1Contents())
-                            .productOption2Contents(temp.getProductOption().getProductOption2Contents())
                             .stock(temp.getProductOption().getStock())
                             .build());
                 }
@@ -134,7 +133,6 @@ public class CartServiceImple implements ICartService {
                             .fee(cart.getProduct().getFee())
                             .productOption(cart.getProductOption().getId())
                             .productOption1Contents(cart.getProductOption().getProductOption1Contents())
-                            .productOption2Contents(cart.getProductOption().getProductOption2Contents())
                             .stock(cart.getProductOption().getStock())
                             .build());
                 });

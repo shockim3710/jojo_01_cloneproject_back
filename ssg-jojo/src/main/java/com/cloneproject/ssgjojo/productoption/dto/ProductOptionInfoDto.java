@@ -7,14 +7,10 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
-public class ProductOptionOutputDto {
-    private Long id;
-    private String productOption1Name;
+@AllArgsConstructor
+public class ProductOptionInfoDto {
+    private Long optionId;
     private String productOption1Contents;
-
     private int stock;
-
-    private Long productId;
 }

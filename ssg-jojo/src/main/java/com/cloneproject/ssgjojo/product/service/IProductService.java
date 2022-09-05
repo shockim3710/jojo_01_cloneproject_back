@@ -8,13 +8,14 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public interface IProductService {
+//    Product addProduct(ProductAddDto ProductAddDto);
     Product addProduct(ProductAddDto productAddDto, MultipartFile thumbnail, List<MultipartFile> productPhoto, List<MultipartFile> productDetail);
 //    ProductInfoDto getProductById(Long id);
 //    List<ProductInfoDto> getAllProduct();
-    void deleteProduct(Long id);
     Product editProduct(ProductUpdateDto productUpdateDto);
-    List<ProductListDto> getAllProductList();
-    List<ProductListDto> findProductByCategoryLv(Long lv, Long id, int page);
+    List<ProductListDto> getAllProductList(HttpServletRequest request);
+    ProductInfoCategoryDto findProductByCategoryLv(Long lv, Long id, int page, HttpServletRequest request);
     ProductDetailDto getProductDetail(Long productId, HttpServletRequest request);
-    List<ProductListDto> productSearch(String keyword, HttpServletRequest request);
+    List<ProductListDto> productSearch(String keyword, int page, HttpServletRequest request);
+    boolean deleteProduct(Long id);
 }

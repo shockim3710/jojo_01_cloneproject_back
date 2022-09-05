@@ -1,14 +1,10 @@
 package com.cloneproject.ssgjojo.product.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Builder
 @NoArgsConstructor
-@AllArgsConstructor
 public class ProductListDto {
     /**
      * id : 상품아이디
@@ -23,18 +19,39 @@ public class ProductListDto {
      * reviewNum : 상품 리뷰 개수
      * fee : 배송비
      * adultCase : 성인 판매 여부
+     * attention : 좋아요 여부
      */
-    private Long id;
+    private long id;
     private String thumbnailUri;
     private String mallName;
     private String productName;
     private String manufactureCompany;
     private int discountRate;
-    private Long oldPrice;
-    private Long newPrice;
-    private float reviewScore;
-    private int reviewNum;
+    private long oldPrice;
+    private long newPrice;
+    private double reviewScore;
+    private long reviewNum;
     private int fee;
     private boolean adultCase;
+    private boolean attention;
 
+    public ProductListDto(long id, String thumbnailUri, String mallName,
+                          String productName, String manufactureCompany,
+                          int discountRate, long oldPrice, long newPrice,
+                          int fee, boolean adultCase,
+                          long reviewNum, double reviewScore, boolean attention) {
+        this.id = id;
+        this.thumbnailUri = thumbnailUri;
+        this.mallName = mallName;
+        this.productName = productName;
+        this.manufactureCompany = manufactureCompany;
+        this.discountRate = discountRate;
+        this.oldPrice = discountRate != 0 ? oldPrice : 0;
+        this.newPrice = discountRate != 0 ? (long) (newPrice * (1 - ((float)discountRate / 100))) : newPrice;
+        this.reviewScore = reviewScore;
+        this.reviewNum = reviewNum;
+        this.fee = fee;
+        this.adultCase = adultCase;
+        this.attention = attention;
+    }
 }

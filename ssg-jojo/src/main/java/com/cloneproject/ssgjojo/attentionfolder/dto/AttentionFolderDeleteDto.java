@@ -11,5 +11,4 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AttentionFolderDeleteDto {
     private Long folderId;
-    private Long userId;
 }

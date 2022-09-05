@@ -2,6 +2,7 @@ package com.cloneproject.ssgjojo.productoption.controller;
 
 import com.cloneproject.ssgjojo.productoption.domain.ProductOption;
 import com.cloneproject.ssgjojo.productoption.dto.ProductOptionAddDto;
+import com.cloneproject.ssgjojo.productoption.dto.ProductOptionListDto;
 import com.cloneproject.ssgjojo.productoption.service.IProductOptionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +28,7 @@ public class ProductOptionController {
     }
 
     @GetMapping("/productoptionbyproduct/{id}")
-    public List<ProductOption> getProductOptionByProduct(@PathVariable Long id) {
+    public ProductOptionListDto getProductOptionByProduct(@PathVariable Long id) {
         return iProductOptionService.getProductOptionByProductId(id);
     }
 }

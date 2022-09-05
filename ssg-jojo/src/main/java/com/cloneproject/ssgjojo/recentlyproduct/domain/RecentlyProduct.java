@@ -26,4 +26,6 @@ public class RecentlyProduct {
     @ManyToOne
     private User user;
 
+    @Column(nullable = false)
+    private Timestamp viewTime;
 }

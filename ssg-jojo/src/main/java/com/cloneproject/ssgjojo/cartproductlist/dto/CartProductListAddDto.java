@@ -22,7 +22,8 @@ public class CartProductListAddDto {
 
     private Long productOption;
     private String productOption1Contents; // 옵션1
-    private String productOption2Contents; // 옵션2
+    // 옵션 구조 변경으로 인하여 DTO에서 제거
+    // private String productOption2Contents; // 옵션2
     private int stock; // 재고
 
     private Long cart;

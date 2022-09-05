@@ -10,6 +10,13 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+/**
+ * id : Attention PK
+ * product : 상품
+ * user : 유저
+ * attentionFolder : 좋아요 폴더
+ */
+
 @Entity
 @Data
 @Builder

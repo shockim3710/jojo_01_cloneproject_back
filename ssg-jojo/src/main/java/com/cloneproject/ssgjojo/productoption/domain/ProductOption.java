@@ -25,11 +25,6 @@ public class ProductOption {
     @Column(name = "product_option1_contents")
     private String productOption1Contents;
 
-    @Column(name = "product_option2_name")
-    private String productOption2Name;
-    @Column(name = "product_option2_contents")
-    private String productOption2Contents;
-
     private int stock;
 
     @ManyToOne

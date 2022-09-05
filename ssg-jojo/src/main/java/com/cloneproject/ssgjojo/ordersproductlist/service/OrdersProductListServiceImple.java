@@ -57,7 +57,6 @@ public class OrdersProductListServiceImple implements IOrdersProductListService 
                     .thumbnail(temp.getProduct().getThumbnail())
                     .productOption(temp.getProductOption().getId())
                     .productOption1Contents(temp.getProductOption().getProductOption1Contents())
-                    .productOption2Contents(temp.getProductOption().getProductOption2Contents())
                     .build();
         }
 
@@ -84,7 +83,6 @@ public class OrdersProductListServiceImple implements IOrdersProductListService 
                                 .thumbnail(orders.getProduct().getThumbnail())
                                 .productOption(orders.getProductOption().getId())
                                 .productOption1Contents(orders.getProductOption().getProductOption1Contents())
-                                .productOption2Contents(orders.getProductOption().getProductOption2Contents())
                                 .build());
             });
 

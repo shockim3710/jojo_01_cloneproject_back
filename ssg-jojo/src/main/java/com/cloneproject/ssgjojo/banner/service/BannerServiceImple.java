@@ -51,7 +51,9 @@ public class BannerServiceImple implements IBannerService{
             return iBannerRepository.save(Banner.builder()
                     .id(banner.getId())
                     .bannerName(banner.getBannerName())
+                    .bannerContents(banner.getBannerContents())
                     .bannerPhotoPath(banner.getBannerPhotoPath())
+                    .bannerUri(banner.getBannerUri())
                     .build()
             );
         }
@@ -60,10 +62,15 @@ public class BannerServiceImple implements IBannerService{
 
     // 배너 삭제
     @Override
-    public void deleteBanner(Long id) {
+    public boolean deleteBanner(Long id) {
         Optional<Banner> banner = iBannerRepository.findById(id);
-        if(banner.isPresent())
+        if(banner.isPresent()) {
             iBannerRepository.deleteById(id);
+
+            return true;
+        }
+
+        return false;
     }
 
 }
