@@ -69,19 +69,18 @@ public class RecentSearchesServiceImple implements IRecentSearchesService {
 
     @Override
     @Transactional
-    public Optional<RecentSearches> deleteRecentSearches(Long id, HttpServletRequest request) { // 해당 사용자의 최근검색어 삭제
+    public boolean deleteRecentSearches(String histories, HttpServletRequest request) { // 해당 사용자의 최근검색어 삭제
 
         Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
         Optional<User> user = iUserRepository.findById(userId);
-        Optional<RecentSearches> recentSearches = iRecentSearchesRepository.findById(id);
 
-        if(recentSearches.isPresent() && user.isPresent()) {
-            iRecentSearchesRepository.deleteByIdAndUser(id, user.get());
+        if(user.isPresent()) {
+            iRecentSearchesRepository.deleteByHistoriesAndUser(histories, user.get());
 
-            return recentSearches;
+            return true;
         }
 
-        return null;
+        return false;
     }
 
     @Override

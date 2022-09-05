@@ -10,6 +10,6 @@ import java.util.Optional;
 public interface IRecentSearchesService {
     RecentSearches addRecentSearches(RecentSearchesAddDto recentSearchesAddDto, HttpServletRequest request);
     List<String> getRecentSearchesByUserId(HttpServletRequest request);
-    Optional<RecentSearches> deleteRecentSearches(Long id, HttpServletRequest request);
+    boolean deleteRecentSearches(String histories, HttpServletRequest request);
     boolean deleteAllByUser(HttpServletRequest request);
 }

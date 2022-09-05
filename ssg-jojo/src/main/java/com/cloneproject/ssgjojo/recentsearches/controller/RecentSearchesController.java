@@ -41,11 +41,11 @@ public class RecentSearchesController {
         }
     }
 
-    @DeleteMapping("/recentsearches/delete/{id}") // 해당 사용자의 최근검색어 삭제
-    public ResponseEntity<?> deleteRecentSearches(@PathVariable Long id, HttpServletRequest request) {
-        Optional<RecentSearches> recentSearches = iRecentSearchesService.deleteRecentSearches(id, request);
+    @DeleteMapping("/recentsearches/delete/{histories}") // 해당 사용자의 최근검색어 삭제
+    public ResponseEntity<?> deleteRecentSearches(@PathVariable String histories, HttpServletRequest request) {
+        boolean recentSearches = iRecentSearchesService.deleteRecentSearches(histories, request);
 
-        if(recentSearches.isPresent()){
+        if(recentSearches == true){
             return ResponseEntity.status(200).body("최근검색어가 삭제되었습니다.");
         }else {
             return ResponseEntity.status(400).body("error page");
