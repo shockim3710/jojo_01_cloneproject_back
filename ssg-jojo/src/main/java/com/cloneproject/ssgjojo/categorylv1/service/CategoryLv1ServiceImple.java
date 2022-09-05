@@ -39,23 +39,6 @@ public class CategoryLv1ServiceImple implements ICategoryLv1Service {
                 .build());
     }
 
-    // xl 카테고리 수정
-    @Override
-    public CategoryLv1 editCategory(CategoryLv1 categoryLv1) {
-
-        Optional<CategoryLv1> temp = iCategoryLv1Repository.findById(categoryLv1.getId());
-        if(temp.isPresent()) {
-            return iCategoryLv1Repository.save(CategoryLv1.builder()
-                    .id(temp.get().getId())
-                    .lv1name(categoryLv1.getLv1name())
-                    .lv1imgpath(categoryLv1.getLv1imgpath())
-                    .build());
-        }
-
-        return null;
-
-    }
-
     // xl 카테고리, l 카테고리 리스트 동시 호출, 순차 조회
     @Override
     public List<CategoryLv1Dto> findAllCategory() {
@@ -87,6 +70,23 @@ public class CategoryLv1ServiceImple implements ICategoryLv1Service {
         }
 
         return returnDto;
+
+    }
+
+    // xl 카테고리 수정
+    @Override
+    public CategoryLv1 editCategory(CategoryLv1 categoryLv1) {
+
+        Optional<CategoryLv1> temp = iCategoryLv1Repository.findById(categoryLv1.getId());
+        if(temp.isPresent()) {
+            return iCategoryLv1Repository.save(CategoryLv1.builder()
+                    .id(temp.get().getId())
+                    .lv1name(categoryLv1.getLv1name())
+                    .lv1imgpath(categoryLv1.getLv1imgpath())
+                    .build());
+        }
+
+        return null;
 
     }
 

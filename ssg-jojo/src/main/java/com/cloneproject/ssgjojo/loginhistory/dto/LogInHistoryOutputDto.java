@@ -15,7 +15,6 @@ public class LogInHistoryOutputDto {
 
     private Long id;
     private String logInIp;
-    private Long userId;
     private Timestamp logInTime;
 
 }

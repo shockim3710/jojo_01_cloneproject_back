@@ -15,13 +15,13 @@ import java.util.List;
 public class QnAController {
     private final IQnAService iQnAService;
 
-    // 유저가 상품문의글 작성
+    // 상품문의글 작성
     @PostMapping("/qna/qAdd")
     public QnAOutputDto addQ(@RequestBody QuestionInputDto questionInputDto, HttpServletRequest request) {
         return iQnAService.addQ(questionInputDto, request);
     }
 
-    // 유저가 작성한 기존 상품문의글 편집
+    // 기존 상품문의글 편집
     @PutMapping("/qna/qEdit")
     public QnAOutputDto editQ(@RequestBody QnAEditDto qnAEditDto, HttpServletRequest request) {
         return iQnAService.editQ(qnAEditDto, request);
@@ -33,7 +33,7 @@ public class QnAController {
         return iQnAService.sortedGetQnaByProductId(id);
     }
 
-    // 유저가 작성된 상품문의글 삭제
+    // 작성된 상품문의글 삭제
     @DeleteMapping("/qna/deleteQ")
     public void deleteQuestion(@RequestBody QnADeleteDto qnADeleteDto, HttpServletRequest request) {
         iQnAService.deleteQuestion(qnADeleteDto, request);

@@ -63,18 +63,7 @@ public class ReviewController {
         return iReviewService.findPossibleWrite(request);
     }
 
-    // 해당 유저가 작성한 리뷰 수정
-    @PutMapping("/review/edit")
-    public ReviewEditDto editReview(@RequestBody ReviewEditDto reviewEditDto, HttpServletRequest request) {
-        return iReviewService.editReview(reviewEditDto, request);
-    }
-
-    // 해당 유저가 작성한 리뷰 삭제
-    @DeleteMapping("/review/delete")
-    public void deleteReview(@RequestBody ReviewDeleteDto reviewDeleteDto, HttpServletRequest request) {
-        iReviewService.deleteReview(reviewDeleteDto, request);
-    }
-
+    // 리뷰 페이징
     @GetMapping("/review/paging/{productId}")
     public ResponseEntity<List<ReviewOutputDto>> reviewPage(@RequestParam(name = "page", defaultValue = "1") int page,
                                                             @RequestParam(name = "size", defaultValue = "10") int size,
@@ -94,4 +83,18 @@ public class ReviewController {
 
         return new ResponseEntity<>(reviewList, HttpStatus.OK);
     }
+
+    // 해당 유저가 작성한 리뷰 수정
+    @PutMapping("/review/edit")
+    public ReviewEditDto editReview(@RequestBody ReviewEditDto reviewEditDto, HttpServletRequest request) {
+        return iReviewService.editReview(reviewEditDto, request);
+    }
+
+    // 해당 유저가 작성한 리뷰 삭제
+    @DeleteMapping("/review/delete")
+    public void deleteReview(@RequestBody ReviewDeleteDto reviewDeleteDto, HttpServletRequest request) {
+        iReviewService.deleteReview(reviewDeleteDto, request);
+    }
+
+
 }

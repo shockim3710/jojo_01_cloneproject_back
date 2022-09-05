@@ -8,10 +8,9 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public interface IProductService {
-    Product addProduct(ProductAddDto ProductAddDto);
-    Product addProductWithPhoto(ProductAddDto productAddDto, MultipartFile thumbnail, List<MultipartFile> productPhoto, List<MultipartFile> productDetail);
-    ProductInfoDto getProductById(Long id);
-    List<ProductInfoDto> getAllProduct();
+    Product addProduct(ProductAddDto productAddDto, MultipartFile thumbnail, List<MultipartFile> productPhoto, List<MultipartFile> productDetail);
+//    ProductInfoDto getProductById(Long id);
+//    List<ProductInfoDto> getAllProduct();
     void deleteProduct(Long id);
     Product editProduct(ProductUpdateDto productUpdateDto);
     List<ProductListDto> getAllProductList();

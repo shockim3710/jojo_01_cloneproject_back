@@ -18,6 +18,5 @@ public class QnAEditDto {
     private String questionMain;
     private Timestamp questionDate;
     private boolean lockCase;
-
     private Long productId;
 }

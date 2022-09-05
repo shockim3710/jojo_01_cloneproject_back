@@ -6,11 +6,13 @@ import com.cloneproject.ssgjojo.attentionfolder.dto.AttentionFolderDeleteDto;
 import com.cloneproject.ssgjojo.attentionfolder.dto.AttentionFolderEditDto;
 import com.cloneproject.ssgjojo.attentionfolder.dto.AttentionFolderOutputDto;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public interface IAttentionFolderService {
-    AttentionFolderOutputDto addFolder(AttentionFolderAddDto addDto);
-    AttentionFolderOutputDto editFolder(AttentionFolderEditDto editDto);
-    void deleteFolderById(AttentionFolderDeleteDto deleteDto);
-    List<AttentionFolderOutputDto> findAllByUser(Long userId);
+    AttentionFolderOutputDto addFolder(AttentionFolderAddDto addDto, HttpServletRequest request);
+    List<AttentionFolderOutputDto> findAllByUser(HttpServletRequest request);
+    AttentionFolderOutputDto editFolder(AttentionFolderEditDto editDto, HttpServletRequest request);
+    void deleteFolderById(AttentionFolderDeleteDto deleteDto, HttpServletRequest request);
+
 }

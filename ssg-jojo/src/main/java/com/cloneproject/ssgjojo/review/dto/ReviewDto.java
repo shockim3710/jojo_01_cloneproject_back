@@ -18,7 +18,6 @@ public class ReviewDto {
     private String title;
     private String mainText;
     private int score;
-    private Long userId;
     private Long productId;
     private Long ordersId;
 
