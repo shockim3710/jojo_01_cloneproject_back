@@ -27,26 +27,19 @@ public class PayingCreditCardServiceImple implements IPayingCreditCardService {
     private final JwtTokenProvider jwtTokenProvider;
 
 
-
     // 결제 카드 등록
     @Override
-    public PayingCreditCardOutputDto addPayingCreditCard(PayingCreditCardInputDto payingCreditCardInputDto, HttpServletRequest request) {
+    public PayingCreditCard addPayingCreditCard(PayingCreditCardInputDto payingCreditCardInputDto, HttpServletRequest request) {
 
         Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
         Optional<User> user = iUserRepository.findById(userId);
 
         if(user.isPresent()) {
-            PayingCreditCard payingCreditCard = iPayingCreditCardRepository.save(PayingCreditCard.builder()
+            return iPayingCreditCardRepository.save(PayingCreditCard.builder()
                     .creditCardName(payingCreditCardInputDto.getCreditCardName())
                     .creditCardCompany(payingCreditCardInputDto.getCreditCardCompany())
                     .user(user.get())
                     .build());
-
-            return PayingCreditCardOutputDto.builder()
-                    .id(payingCreditCard.getId())
-                    .creditCardName(payingCreditCard.getCreditCardName())
-                    .creditCardCompany(payingCreditCard.getCreditCardCompany())
-                    .build();
         }
         return null;
     }

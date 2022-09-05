@@ -1,18 +1,13 @@
 package com.cloneproject.ssgjojo.review.controller;
 
-import com.cloneproject.ssgjojo.qna.dto.AnswerInputDto;
-import com.cloneproject.ssgjojo.qna.dto.QnAOutputDto;
 import com.cloneproject.ssgjojo.review.domain.Review;
 import com.cloneproject.ssgjojo.review.dto.*;
-import com.cloneproject.ssgjojo.review.repository.IReviewRepository;
 import com.cloneproject.ssgjojo.review.service.IReviewService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -29,43 +25,71 @@ import java.util.List;
 public class ReviewController {
 
     private final IReviewService iReviewService;
-    private final IReviewRepository iReviewRepository;
 
     // 리뷰 작성
     @PostMapping("/review/add")
-    public ReviewOutputDto addReview(@RequestBody ReviewDto reviewDto, HttpServletRequest request) {
+    public ResponseEntity<?> addReview(@RequestBody ReviewDto reviewDto, HttpServletRequest request) {
+        Review review = iReviewService.addReview(reviewDto, request);
 
-        return iReviewService.addReview(reviewDto, request);
+        if(review!=null){
+            return ResponseEntity.status(200).body("리뷰가 등록되었습니다.");
+        }else {
+            return ResponseEntity.status(400).body("error page");
+        }
     }
 
     // 리뷰 작성 시 이미지 첨부
     @PostMapping(value = "/review/addimg", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public boolean addReviewWithImg(@RequestParam("reviewPhoto") List<MultipartFile> reviewPhoto,
+    public ResponseEntity<?> addReviewWithImg(@RequestParam("reviewPhoto") List<MultipartFile> reviewPhoto,
                                     @RequestPart ReviewDto reviewDto, HttpServletRequest request) {
-        return iReviewService.addReviewWithImg(reviewDto, reviewPhoto, request);
+        boolean review = iReviewService.addReviewWithImg(reviewDto, reviewPhoto, request);
+
+        if(review == true){
+            return ResponseEntity.status(200).body("이미지가 첨부되었습니다.");
+        }else {
+            return ResponseEntity.status(400).body("error page");
+        }
     }
 
     // 해당 상품의 리뷰 목록 조회
     @GetMapping("/review/findAllByProduct/{productId}")
-    public List<ReviewOutputDto> findAllByProduct(@PathVariable Long productId) {
-        return iReviewService.findAllByProduct(productId);
+    public ResponseEntity<?> findAllByProduct(@PathVariable Long productId) {
+        List<ReviewOutputDto> review = iReviewService.findAllByProduct(productId);
+
+        if(review!=null){
+            return ResponseEntity.status(200).body(review);
+        }else {
+            return ResponseEntity.status(400).body("error page");
+        }
     }
 
     // 해당 유저가 작성한 리뷰 조회
     @GetMapping("/review/findAllByUser")
-    public List<ReviewOutputDto> findAllByUser(HttpServletRequest request) {
-        return iReviewService.findAllByUser(request);
+    public ResponseEntity<?> findAllByUser(HttpServletRequest request) {
+        List<ReviewOutputDto> review = iReviewService.findAllByUser(request);
+
+        if(review!=null){
+            return ResponseEntity.status(200).body(review);
+        }else {
+            return ResponseEntity.status(400).body("error page");
+        }
     }
 
     // 해당 유저가 작성 가능한 리뷰 조회
     @GetMapping("/review/possible")
-    public List<ReviewPossibleWriteDto> findPossibleReview(HttpServletRequest request) {
-        return iReviewService.findPossibleWrite(request);
+    public ResponseEntity<?> findPossibleReview(HttpServletRequest request) {
+        List<ReviewPossibleWriteDto> review = iReviewService.findPossibleWrite(request);
+
+        if(review!=null){
+            return ResponseEntity.status(200).body(review);
+        }else {
+            return ResponseEntity.status(400).body("error page");
+        }
     }
 
     // 리뷰 페이징
     @GetMapping("/review/paging/{productId}")
-    public ResponseEntity<List<ReviewOutputDto>> reviewPage(@RequestParam(name = "page", defaultValue = "1") int page,
+    public ResponseEntity<?> reviewPage(@RequestParam(name = "page", defaultValue = "1") int page,
                                                             @RequestParam(name = "size", defaultValue = "10") int size,
                                                             @RequestParam(name = "sort", defaultValue = "3") int sort,
                                                             @PathVariable Long productId) {
@@ -81,19 +105,35 @@ public class ReviewController {
 
         List<ReviewOutputDto> reviewList = iReviewService.pageList(pr, productId);
 
-        return new ResponseEntity<>(reviewList, HttpStatus.OK);
+        if(reviewList!=null){
+            return ResponseEntity.status(200).body(reviewList);
+        }else {
+            return ResponseEntity.status(400).body("error page");
+        }
     }
 
     // 해당 유저가 작성한 리뷰 수정
     @PutMapping("/review/edit")
-    public ReviewEditDto editReview(@RequestBody ReviewEditDto reviewEditDto, HttpServletRequest request) {
-        return iReviewService.editReview(reviewEditDto, request);
+    public ResponseEntity<?> editReview(@RequestBody ReviewEditDto reviewEditDto, HttpServletRequest request) {
+        Review review = iReviewService.editReview(reviewEditDto, request);
+
+        if(review!=null){
+            return ResponseEntity.status(200).body("리뷰가 수정되었습니다.");
+        }else {
+            return ResponseEntity.status(400).body("error page");
+        }
     }
 
     // 해당 유저가 작성한 리뷰 삭제
     @DeleteMapping("/review/delete")
-    public void deleteReview(@RequestBody ReviewDeleteDto reviewDeleteDto, HttpServletRequest request) {
-        iReviewService.deleteReview(reviewDeleteDto, request);
+    public ResponseEntity<?> deleteReview(@RequestBody ReviewDeleteDto reviewDeleteDto, HttpServletRequest request) {
+        Optional<Review> review = iReviewService.deleteReview(reviewDeleteDto, request);
+
+        if(review.isPresent()){
+            return ResponseEntity.status(200).body("리뷰가 삭제되었습니다.");
+        }else {
+            return ResponseEntity.status(400).body("error page");
+        }
     }
 
 

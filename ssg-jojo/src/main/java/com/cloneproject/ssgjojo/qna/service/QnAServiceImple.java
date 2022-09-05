@@ -33,14 +33,14 @@ public class QnAServiceImple implements IQnAService {
 
     // 상품문의글 작성
     @Override
-    public QnAOutputDto addQ(QuestionInputDto questionInputDto, HttpServletRequest request) {
+    public QnA addQ(QuestionInputDto questionInputDto, HttpServletRequest request) {
 
         Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
         Optional<User> user = iUserRepository.findById(userId);
         Optional<Product> product = iProductRepository.findById(questionInputDto.getProductId());
 
         if(product.isPresent()) {
-            QnA qna = iQnARepository.save(QnA.builder()
+            return iQnARepository.save(QnA.builder()
                     .title(questionInputDto.getTitle())
                     .questionMain(questionInputDto.getQuestionMain())
                     .questionDate(new Timestamp(System.currentTimeMillis()))
@@ -48,16 +48,6 @@ public class QnAServiceImple implements IQnAService {
                     .user(user.get())
                     .product(product.get())
                     .build());
-
-            return QnAOutputDto.builder()
-                    .id(qna.getId())
-                    .title(qna.getTitle())
-                    .questionMain(qna.getQuestionMain())
-                    .questionDate(qna.getQuestionDate())
-                    .userAccount(qna.getUser().getUserId().substring(0,3)+"******")
-                    .lockCase(qna.isLockCase())
-                    .productId(qna.getProduct().getId())
-                    .build();
         }
 
         return null;
@@ -66,7 +56,7 @@ public class QnAServiceImple implements IQnAService {
 
     // 기존 상품문의글 편집
     @Override
-    public QnAOutputDto editQ(QnAEditDto qnAEditDto, HttpServletRequest request) {
+    public QnA editQ(QnAEditDto qnAEditDto, HttpServletRequest request) {
 
         Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
         Optional<User> user = iUserRepository.findById(userId);
@@ -76,7 +66,7 @@ public class QnAServiceImple implements IQnAService {
         if (qnA.isPresent() && user.isPresent() && product.isPresent()) {
             if(qnA.get().getUser().getId() == userId) {
                 if(qnA.get().getAnswerMain() == null) {
-                    QnA qnaEdit = iQnARepository.save(QnA.builder()
+                    return iQnARepository.save(QnA.builder()
                             .id(qnAEditDto.getId())
                             .title(qnAEditDto.getTitle())
                             .questionMain(qnAEditDto.getQuestionMain())
@@ -85,16 +75,6 @@ public class QnAServiceImple implements IQnAService {
                             .user(user.get())
                             .product(product.get())
                             .build());
-
-                    return QnAOutputDto.builder()
-                            .id(qnA.get().getId())
-                            .title(qnaEdit.getTitle())
-                            .questionMain(qnaEdit.getQuestionMain())
-                            .questionDate(qnaEdit.getQuestionDate())
-                            .userAccount(qnaEdit.getUser().getUserId().substring(0,3)+"******")
-                            .lockCase(qnaEdit.isLockCase())
-                            .productId(qnaEdit.getProduct().getId())
-                            .build();
                 }
             }
         }
@@ -137,7 +117,7 @@ public class QnAServiceImple implements IQnAService {
 
     // 작성된 상품문의글 삭제
     @Override
-    public void deleteQuestion(QnADeleteDto qnADeleteDto, HttpServletRequest request) {
+    public Optional<QnA> deleteQuestion(QnADeleteDto qnADeleteDto, HttpServletRequest request) {
 
         Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
         Optional<User> user = iUserRepository.findById(userId);
@@ -146,9 +126,12 @@ public class QnAServiceImple implements IQnAService {
         if (user.isPresent() && qnA.isPresent()) {
             if(qnA.get().getUser().getId() == userId) {
                 iQnARepository.deleteById(qnADeleteDto.getId());
+
+                return qnA;
             }
         }
 
+        return null;
     }
 
 

@@ -7,10 +7,11 @@ import com.cloneproject.ssgjojo.accountpayment.dto.AccountPaymentOutputDto;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Optional;
 
 public interface IAccountPaymentService {
 
-    AccountPaymentOutputDto addAccountPayment(AccountPaymentDto accountPaymentDto, HttpServletRequest request);
+    AccountPayment addAccountPayment(AccountPaymentDto accountPaymentDto, HttpServletRequest request);
     List<AccountPaymentOutputDto> getAccountPaymentByUserId(HttpServletRequest request);
-    void deleteAccountPayment(AccountPaymentDeleteDto accountPaymentDeleteDto, HttpServletRequest request);
+    Optional<AccountPayment> deleteAccountPayment(AccountPaymentDeleteDto accountPaymentDeleteDto, HttpServletRequest request);
 }

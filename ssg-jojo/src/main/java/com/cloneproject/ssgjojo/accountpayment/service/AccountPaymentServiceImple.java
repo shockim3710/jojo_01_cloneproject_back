@@ -30,23 +30,17 @@ public class AccountPaymentServiceImple implements IAccountPaymentService{
 
     // 결제 계좌 등록
     @Override
-    public AccountPaymentOutputDto addAccountPayment(AccountPaymentDto accountPaymentDto, HttpServletRequest request) {
+    public AccountPayment addAccountPayment(AccountPaymentDto accountPaymentDto, HttpServletRequest request) {
 
         Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
         Optional<User> user = iUserRepository.findById(userId);
 
         if(user.isPresent()) {
-            AccountPayment accountPayment = iAccountPaymentRepository.save(AccountPayment.builder()
+            return iAccountPaymentRepository.save(AccountPayment.builder()
                     .accountNumber(accountPaymentDto.getAccountNumber())
                     .bank(accountPaymentDto.getBank())
                     .user(user.get())
                     .build());
-
-            return AccountPaymentOutputDto.builder()
-                    .id(accountPayment.getId())
-                    .accountNumber(accountPayment.getAccountNumber())
-                    .bank(accountPaymentDto.getBank())
-                    .build();
         }
 
         return null;
@@ -82,7 +76,7 @@ public class AccountPaymentServiceImple implements IAccountPaymentService{
 
     // 결제 계좌 삭제
     @Override
-    public void deleteAccountPayment(AccountPaymentDeleteDto accountPaymentDeleteDto, HttpServletRequest request) {
+    public Optional<AccountPayment> deleteAccountPayment(AccountPaymentDeleteDto accountPaymentDeleteDto, HttpServletRequest request) {
 
         Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
         Optional<AccountPayment> accountPayment = iAccountPaymentRepository.findById(accountPaymentDeleteDto.getId());
@@ -90,6 +84,10 @@ public class AccountPaymentServiceImple implements IAccountPaymentService{
 
         if(user.isPresent() && accountPayment.isPresent()) {
                 iAccountPaymentRepository.deleteById(accountPaymentDeleteDto.getId());
+
+                return accountPayment;
         }
+
+        return null;
     }
 }
