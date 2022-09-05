@@ -296,12 +296,13 @@ public class ReviewServiceImple implements IReviewService {
     public ReviewEditDto editReview(ReviewEditDto reviewEditDto, HttpServletRequest request) {
 
         Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
-        Optional<User> user = iUserRepository.findById(reviewEditDto.getUserId());
+        Optional<User> user = iUserRepository.findById(userId);
         Optional<Product> product = iProductRepository.findById(reviewEditDto.getProductId());
+        Optional<Orders> orders = iOrdersRepository.findById(reviewEditDto.getOrderId());
         Optional<Review> review = iReviewRepository.findById(reviewEditDto.getId());
 
-        if (review.isPresent() && user.isPresent() && product.isPresent()) {
-            if(review.get().getUser().getId() == reviewEditDto.getUserId()) {
+        if (review.isPresent() && user.isPresent() && product.isPresent() && orders.isPresent()) {
+            if(review.get().getUser().getId() == userId) {
                 Review reviewEdit = iReviewRepository.save(Review.builder()
                         .id(reviewEditDto.getId())
                         .title(reviewEditDto.getTitle())
@@ -309,6 +310,7 @@ public class ReviewServiceImple implements IReviewService {
                         .score(reviewEditDto.getScore())
                         .user(user.get())
                         .product(product.get())
+                        .orders(orders.get())
                         .build());
 
                 return ReviewEditDto.builder()
@@ -318,6 +320,7 @@ public class ReviewServiceImple implements IReviewService {
                         .score(reviewEdit.getScore())
                         .userId(reviewEdit.getUser().getId())
                         .productId(reviewEdit.getProduct().getId())
+                        .orderId(reviewEdit.getOrders().getId())
                         .build();
             }
         }
@@ -331,11 +334,11 @@ public class ReviewServiceImple implements IReviewService {
     public void deleteReview(ReviewDeleteDto reviewDeleteDto, HttpServletRequest request) {
 
         Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
-        Optional<User> user = iUserRepository.findById(reviewDeleteDto.getUserId());
+        Optional<User> user = iUserRepository.findById(userId);
         Optional<Review> review = iReviewRepository.findById(reviewDeleteDto.getId());
 
         if (user.isPresent() && review.isPresent()) {
-            if(review.get().getUser().getId() == reviewDeleteDto.getUserId()) {
+            if(review.get().getUser().getId() == userId) {
                 iReviewRepository.deleteById(reviewDeleteDto.getId());
             }
         }
