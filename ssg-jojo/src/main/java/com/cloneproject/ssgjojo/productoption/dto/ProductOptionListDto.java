@@ -1,6 +1,7 @@
 package com.cloneproject.ssgjojo.productoption.dto;
 
 import java.util.HashMap;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,5 +15,5 @@ import lombok.NoArgsConstructor;
 public class ProductOptionListDto {
     private String productOption1Name;
     private int optionCnt;
-    HashMap<Integer, ProductOptionInfoDto> options;
+    List<ProductOptionInfoDto> options;
 }

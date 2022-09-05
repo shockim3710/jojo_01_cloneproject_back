@@ -49,7 +49,7 @@ public class ProductOptionServiceImple implements IProductOptionService{
 
         if(product.isPresent()) {
             List<ProductOption> productOptionList = iProductOptionRepository.findAllByProduct(product.get());
-
+            List<ProductOptionInfoDto> returnDto = new ArrayList<>();
             if(productOptionList.size() == 0) {
                 return null;
             }
@@ -57,21 +57,19 @@ public class ProductOptionServiceImple implements IProductOptionService{
             int optionCnt = productOptionList.size();
             String optionName = productOptionList.get(0).getProductOption1Name();
 
-            int count = 1;
-            HashMap<Integer, ProductOptionInfoDto> map = new HashMap<>();
+
             for(ProductOption option : productOptionList) {
-                map.put(count,ProductOptionInfoDto.builder()
+                returnDto.add(ProductOptionInfoDto.builder()
                                 .optionId(option.getId())
                                 .productOption1Contents(option.getProductOption1Contents())
                                 .stock(option.getStock())
                                 .build());
-                count++;
             }
 
             return ProductOptionListDto.builder()
                     .productOption1Name(optionName)
                     .optionCnt(optionCnt)
-                    .options(map)
+                    .options(returnDto)
                     .build();
         }
 
