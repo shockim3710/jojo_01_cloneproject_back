@@ -223,6 +223,7 @@ public class AttentionServiceImple implements IAttentionService{
         return false;
     }
 
+
     // 특정 폴더에서 삭제
     @Override
     public boolean deleteAttentionInFolder(AttentionDeleteFolderDto deleteDto, HttpServletRequest request) {

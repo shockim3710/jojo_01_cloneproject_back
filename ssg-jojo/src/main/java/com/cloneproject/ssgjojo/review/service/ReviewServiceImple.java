@@ -288,10 +288,11 @@ public class ReviewServiceImple implements IReviewService {
         Long userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
         Optional<User> user = iUserRepository.findById(userId);
         Optional<Product> product = iProductRepository.findById(reviewEditDto.getProductId());
+        Optional<Orders> orders = iOrdersRepository.findById(reviewEditDto.getOrderId());
         Optional<Review> review = iReviewRepository.findById(reviewEditDto.getId());
 
-        if (review.isPresent() && user.isPresent() && product.isPresent()) {
-            if(review.get().getUser().getId() == reviewEditDto.getUserId()) {
+        if (review.isPresent() && user.isPresent() && product.isPresent() && orders.isPresent()) {
+            if(review.get().getUser().getId() == userId) {
                 return iReviewRepository.save(Review.builder()
                         .id(reviewEditDto.getId())
                         .title(reviewEditDto.getTitle())
@@ -299,6 +300,7 @@ public class ReviewServiceImple implements IReviewService {
                         .score(reviewEditDto.getScore())
                         .user(user.get())
                         .product(product.get())
+                        .orders(orders.get())
                         .build());
             }
         }
@@ -316,7 +318,7 @@ public class ReviewServiceImple implements IReviewService {
         Optional<Review> review = iReviewRepository.findById(reviewDeleteDto.getId());
 
         if (user.isPresent() && review.isPresent()) {
-            if(review.get().getUser().getId() == user.get().getId()) {
+            if(review.get().getUser().getId() == userId) {
                 iReviewRepository.deleteById(reviewDeleteDto.getId());
 
                 return review;
