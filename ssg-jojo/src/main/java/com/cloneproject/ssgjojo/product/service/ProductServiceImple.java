@@ -507,6 +507,12 @@ public class ProductServiceImple implements IProductService {
             userId = Long.valueOf(jwtTokenProvider.getUserPk(jwtTokenProvider.resolveToken(request)));
             Optional<User> user = iUserRepository.findById(userId);
 
+            Optional<RecentSearches> history = iRecentSearchesRepository.findByUserIdAndHistories(userId, keyword);
+
+            if(history.isPresent()) {
+                iRecentSearchesRepository.deleteById(history.get().getId());
+            }
+
             if(user.isPresent())
                 iRecentSearchesRepository.save(RecentSearches.builder()
                         .histories(keyword)

@@ -49,7 +49,6 @@ public class ProductOptionServiceImple implements IProductOptionService{
 
         if(product.isPresent()) {
             List<ProductOption> productOptionList = iProductOptionRepository.findAllByProduct(product.get());
-            List<ProductOptionOutputDto> outputDtoList = new ArrayList<>();
 
             if(productOptionList.size() == 0) {
                 return null;
