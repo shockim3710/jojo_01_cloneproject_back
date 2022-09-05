@@ -140,8 +140,6 @@ public class ProductServiceImple implements IProductService {
                         .product(product)
                         .productOption1Name(productOptionDto.getProductOption1Name())
                         .productOption1Contents(productOptionDto.getProductOption1Contents())
-                        .productOption2Name(productOptionDto.getProductOption2Name())
-                        .productOption2Contents(productOptionDto.getProductOption2Contents())
                         .stock(productOptionDto.getStock())
                         .build());
             }
@@ -246,8 +244,6 @@ public class ProductServiceImple implements IProductService {
                             .product(editProduct)
                             .productOption1Name(productOption.getProductOption1Name())
                             .productOption1Contents(productOption.getProductOption1Contents())
-                            .productOption2Name(productOption.getProductOption2Name())
-                            .productOption2Contents(productOption.getProductOption2Contents())
                             .stock(productOption.getStock())
                             .build());
                 }
@@ -257,8 +253,6 @@ public class ProductServiceImple implements IProductService {
                             .product(editProduct)
                             .productOption1Name(productOption.getProductOption1Name())
                             .productOption1Contents(productOption.getProductOption1Contents())
-                            .productOption2Name(productOption.getProductOption2Name())
-                            .productOption2Contents(productOption.getProductOption2Contents())
                             .stock(productOption.getStock())
                             .build());
                 }
@@ -350,62 +344,6 @@ public class ProductServiceImple implements IProductService {
                     .build());
         }
 
-        List<ProductOption> productOption = iProductOptionRepository.findAllByProduct(product.get());
-        List<Object> optionList = new ArrayList<Object>();
-        HashMap<String, Object> map = new HashMap<>();
-
-        if(productOption.size() != 0) {
-            HashMap<String, Object> opt1Map = new HashMap<>();
-            HashMap<String, Object> opt2Map = new HashMap<>();
-            List<Object> opt1List = new ArrayList<>();
-            List<Object> opt2List = new ArrayList<>();
-
-            if(productOption.get(0).getProductOption1Name() == null) {
-                map.put("productOption1Name", null);
-                map.put("productOption2Name", null);
-
-                opt2Map.put("productOption2Contents", null);
-                opt2Map.put("optionId", productOption.get(0).getId());
-                opt2Map.put("stock", productOption.get(0).getStock());
-
-                opt2List.add(opt2Map);
-
-                opt1Map.put("productOption1Contents", null);
-                opt1Map.put("option2", opt2Map);
-
-                opt1List.add(opt1Map);
-
-                map.put("options", opt1List);
-            } else {
-                String option1Name = productOption.get(0).getProductOption1Name();
-                String option2Name = productOption.get(0).getProductOption2Name();
-
-                map.put("productOption1Name", option1Name);
-                map.put("productOption2Name", option2Name);
-
-                List<String> opt1ContentsList = iProductOptionRepository.getOpt1(productId);
-
-                for(String opt1Contents : opt1ContentsList) {
-                    List<ProductOption> productOptionList = iProductOptionRepository.findAllByProductAndProductOption1Contents(product.get(), opt1Contents);
-
-                    opt1Map = new HashMap<>();
-                    opt2List = new ArrayList<>();
-                    for(ProductOption option : productOptionList) {
-                        opt2Map = new HashMap<>();
-                        opt2Map.put("productOption2Contents", option.getProductOption2Contents());
-                        opt2Map.put("optionId", option.getId());
-                        opt2Map.put("stock", option.getStock());
-
-                        opt2List.add(opt2Map);
-                    }
-                    opt1Map.put("productOption1Contents", opt1Contents);
-                    opt1Map.put("option2", opt2List);
-                    opt1List.add(opt1Map);
-                }
-                map.put("options", opt1List);
-            }
-        }
-
         List<ProductDetailPhoto> productDetailPhotoList = iProductDetailPhotoRepository.findAllByProduct(product.get());
         List<ProductDetailPhotoDto> detailPhotoDtoList = new ArrayList<>();
 
@@ -477,7 +415,6 @@ public class ProductServiceImple implements IProductService {
                 .productPhotoList(productPhotoDtoList)
                 .productDetailPhotoList(detailPhotoDtoList)
                 .reviewList(reviewOutputDtoList)
-                .productOptions(map)
                 .QnaList(qnAOutputDtoList)
                 .build();
     }

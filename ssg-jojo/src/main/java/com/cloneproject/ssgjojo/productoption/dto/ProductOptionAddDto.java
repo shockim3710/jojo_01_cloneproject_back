@@ -12,8 +12,6 @@ import lombok.NoArgsConstructor;
 public class ProductOptionAddDto {
     private String productOption1Name;
     private String productOption1Contents;
-    private String productOption2Name;
-    private String productOption2Contents;
 
     private int stock;
 

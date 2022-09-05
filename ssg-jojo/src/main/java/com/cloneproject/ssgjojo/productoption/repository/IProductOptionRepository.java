@@ -16,6 +16,10 @@ public interface IProductOptionRepository extends JpaRepository<ProductOption, L
 
     List<ProductOption> findAllByProductAndProductOption1Contents(Product product, String option1);
 
+    @Query(value = "select count(po.id) from ProductOption po " +
+            "where po.product.id = :productId ")
+    int getOptCount(@Param("productId") Long productId);
+
     @Query(value = "select distinct po.productOption1Contents from ProductOption po " +
             "where po.product.id = :productId ")
     List<String> getOpt1(@Param("productId") Long productId);
