@@ -16,8 +16,8 @@ public class QnAOutputDto {
     private String title;
     private String questionMain;
     private String answerMain;
-    private Timestamp questionDate;
-    private Timestamp answerDate;
+    private String questionDate;
+    private String answerDate;
     private boolean lockCase;
     private String userAccount;
     private Long productId;

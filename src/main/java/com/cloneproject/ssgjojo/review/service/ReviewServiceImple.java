@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -139,7 +140,7 @@ public class ReviewServiceImple implements IReviewService {
                         .score(review.getScore())
                         .userAccount(review.getUser().getUserId())
                         .productId(review.getProduct().getId())
-                        .createdTime(review.getCreatedDate())
+                        .createdTime(new SimpleDateFormat("yyyy-MM-dd").format(review.getCreatedDate()))
                         .build());
             }
 
@@ -186,7 +187,7 @@ public class ReviewServiceImple implements IReviewService {
                         .title(review.getTitle())
                         .mainText(review.getMainText())
                         .score(review.getScore())
-                        .createdTime(review.getCreatedDate())
+                        .createdTime(new SimpleDateFormat("yyyy-MM-dd").format(review.getCreatedDate()))
                         .reviewPhotoDtoList(reviewPhotoDtoList)
                         .build());
             }
@@ -270,7 +271,7 @@ public class ReviewServiceImple implements IReviewService {
                         .score(review.getScore())
                         .userAccount(review.getUser().getUserId())
                         .productId(review.getProduct().getId())
-                        .createdTime(review.getCreatedDate())
+                        .createdTime(new SimpleDateFormat("yyyy-MM-dd").format(review.getCreatedDate()))
                         .build());
             }
 

@@ -59,6 +59,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Slf4j
@@ -379,7 +380,7 @@ public class ProductServiceImple implements IProductService {
                     .score(review.getScore())
                     .userAccount(review.getUser().getUserId().substring(3)+"******")
                     .productId(review.getProduct().getId())
-                    .createdTime(review.getCreatedDate())
+                    .createdTime(new SimpleDateFormat("yyyy-MM-dd").format(review.getCreatedDate()))
                     .reviewPhotoDtoList(reviewPhotoDtoList)
                     .build());
         }
@@ -393,9 +394,9 @@ public class ProductServiceImple implements IProductService {
                     .id(qnA.getId())
                     .title(qnA.getTitle())
                     .questionMain(qnA.getQuestionMain())
-                    .questionDate(qnA.getQuestionDate())
+                    .questionDate(new SimpleDateFormat("yyyy-MM-dd").format(qnA.getQuestionDate()))
                     .answerMain(qnA.getAnswerMain())
-                    .answerDate(qnA.getAnswerDate())
+                    .answerDate(qnA.getAnswerDate() == null ? null : new SimpleDateFormat("yyyy-MM-dd").format(qnA.getAnswerDate()))
                     .lockCase(qnA.isLockCase())
                     .userAccount(qnA.getUser().getUserId().substring(3)+"******")
                     .productId(qnA.getProduct().getId())

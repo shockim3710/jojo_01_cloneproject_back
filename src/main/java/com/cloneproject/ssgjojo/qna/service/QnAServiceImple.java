@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -101,9 +102,9 @@ public class QnAServiceImple implements IQnAService {
                     .userAccount(qnA.getUser().getName())
                     .title(qnA.getTitle())
                     .questionMain(qnA.getQuestionMain())
-                    .questionDate(qnA.getQuestionDate())
+                    .questionDate(new SimpleDateFormat("yyyy-MM-dd").format(qnA.getQuestionDate()))
                     .answerMain(qnA.getAnswerMain())
-                    .answerDate(qnA.getAnswerDate())
+                    .answerDate(qnA.getAnswerDate() == null ? null : new SimpleDateFormat("yyyy-MM-dd").format(qnA.getAnswerDate()))
                     .lockCase(qnA.isLockCase())
                     .build());
             }
@@ -155,9 +156,9 @@ public class QnAServiceImple implements IQnAService {
                     .id(aAdd.get().getId())
                     .title(aAdd.get().getTitle())
                     .questionMain(aAdd.get().getQuestionMain())
-                    .questionDate(aAdd.get().getQuestionDate())
+                    .questionDate(new SimpleDateFormat("yyyy-MM-dd").format(aAdd.get().getQuestionDate()))
                     .answerMain(aAdd.get().getAnswerMain())
-                    .answerDate(aAdd.get().getAnswerDate())
+                    .answerDate(aAdd.get().getAnswerDate() == null ? null : new SimpleDateFormat("yyyy-MM-dd").format(aAdd.get().getAnswerDate()))
                     .lockCase(aAdd.get().isLockCase())
                     .userAccount(aAdd.get().getUser().getUserId().substring(0, 3)+"******")
                     .productId(aAdd.get().getProduct().getId())

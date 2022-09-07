@@ -20,7 +20,7 @@ public class ReviewOutputDto {
     private int score;
     private String userAccount;
     private Long productId;
-    private Timestamp createdTime;
+    private String createdTime;
 
     List<ReviewPhotoDto> reviewPhotoDtoList;
 
