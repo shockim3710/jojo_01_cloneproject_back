@@ -17,6 +17,7 @@
 ## About Project
 ### ⚒ Languages & Platforms
 <img src="https://img.shields.io/badge/Java-007396?&style=for-the-badge&logo=Java&logoColor=white"/></a>
+<img src="https://img.shields.io/badge/JPA-007396?&style=for-the-badge&logo=JPA&logoColor=white"/></a>
 <img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white"></a>
 <img src="https://img.shields.io/badge/Spring%20Boot-6DB33F?style=for-the-badge&logo=Spring%20Boot&logoColor=white"> </a>
 <img src="https://img.shields.io/badge/Spring%20Security-6DB33F?style=for-the-badge&logo=Spring%20Security&logoColor=white"></a>
