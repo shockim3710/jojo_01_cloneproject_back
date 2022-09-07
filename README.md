@@ -78,4 +78,4 @@
   
 　  
 ## [API definition](https://docs.google.com/spreadsheets/d/1hM8PR1Gooo6hjINPKSwMS9sOXrUBAVZxQLKrA-TetUg/edit#gid=2003183701)
-![image](https://user-images.githubusercontent.com/60650967/188803762-0f0bf7ea-a99d-4ea8-bd80-ed134d2d672d.png)
+![image](https://user-images.githubusercontent.com/60650967/188804721-b5630dbc-8c80-47b2-954a-633d319a0bef.png)
