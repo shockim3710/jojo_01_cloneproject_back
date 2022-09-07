@@ -39,3 +39,4 @@ out/
 !**/src/main/**/order/
 ssg-jojo/src/main/java/com/cloneproject/ssgjojo/orders/
 ssg-jojo/src/main/java/com/cloneproject/ssgjojo/category*
+/log/
