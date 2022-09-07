@@ -26,9 +26,9 @@ import java.util.List;
 @Component
 @Slf4j
 public class JwtTokenProvider {
-    private String secretKey = "myprojectsecret";
+    private String secretKey = "jojogdhkshmgsjhycjs";
 
-    // 토큰 유효시간 30분
+    // 토큰 유효시간 3시간
 
     private long tokenValidTime = 180 * 60 * 1000L;
 
