@@ -71,7 +71,13 @@
   
 　  
 ## [ER diagram](https://www.erdcloud.com/d/xp3SgQBEqHSjAohSq)
-![image](https://user-images.githubusercontent.com/60650967/188565314-7512a89e-b559-4bc3-a555-82889bd3d6db.png)
+![image](https://user-images.githubusercontent.com/60650967/188565314-7512a89e-b559-4bc3-a555-82889bd3d6db.png)  
+  
+  
+  
+　  
+## [Requirements Specification](https://docs.google.com/spreadsheets/d/1a1PtRp8t8666hi3sDFDErzg1yBqVUA4YbWo16KLUy4g/edit#gid=1334477929)
+![image](https://user-images.githubusercontent.com/60650967/188920653-605962f1-349c-4b08-85ed-0c38e3fecdfc.png)
   
   
   
