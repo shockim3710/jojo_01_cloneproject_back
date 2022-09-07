@@ -40,6 +40,7 @@ public class Orders extends BaseTimeEntity {
     private String ordersEmail; // 주문자 이메일
 
     @Column(nullable = false)
+    @Temporal(TemporalType.DATE)
     private Date deliveryDate; // 배송날짜
     // 타임스탬프는 시간을 더해주거나 빼주는 그런게 따로 없어서
     // Calendar 객체를 사용
