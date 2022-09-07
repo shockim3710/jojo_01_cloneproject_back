@@ -1,4 +1,4 @@
-# SSG.com 클론코딩  - 조조 (백엔드)
+# SSG.com 클론코딩  - 팀 조조 (백엔드)
   
   
   
@@ -45,11 +45,11 @@
 
 | * | Specification |
 |:------:| :- |
-| OS | Windows 10 |
+| Platform | React 18.2.0 |
 | WAS | Spring Boot 2.7.2 |
 | DB | Mysql DB  |
-| 언어 | Java (JDK 11.0.15) |
-| IDE | Intellij IDEA |
+| 언어 | Java (JDK 11.0.15) </br>JavaScript |
+| IDE | Intellij IDEA </br>Visual Studio Code |
 | 형상관리 | GIT |
   
   
