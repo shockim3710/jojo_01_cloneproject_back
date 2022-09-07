@@ -44,7 +44,6 @@
 
 | * | Specification |
 |:------:| :- |
-| Platform | Android |
 | OS | Windows 10 |
 | WAS | Spring Boot 2.7.2 |
 | DB | Mysql DB  |
